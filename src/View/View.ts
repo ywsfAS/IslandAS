@@ -1,9 +1,13 @@
-
+import * as THREE from 'three';
+import { Camera } from './Camera/Camera';
 export class View {
 
     public static instance: View;
 
-    public getInstance(): View {
+    private _scene!: THREE.Scene;
+    private _camera!: Camera;
+
+    public static getInstance(): View {
         return View.instance;
     }
 
@@ -14,5 +18,16 @@ export class View {
         }
 
         View.instance = this;
+
+        this._scene = new THREE.Scene();
+
+        this._camera = new Camera(new THREE.PerspectiveCamera());
     }
+    get scene() {
+        return this._scene;
+    }
+    get camera() {
+        return this._camera;
+    }
+
 }
