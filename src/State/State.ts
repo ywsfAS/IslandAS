@@ -1,27 +1,28 @@
-import { Time } from "./Time";
+import { Time } from "./time";
+import { Viewport } from './viewport/viewport';
 export class State {
     public static instance: State;
 
-    public time! : Time;
+    private _time: Time;
+    private _viewport: Viewport;
 
     public static getInstance(): State {
-        return State.instance;
+        return State.instance ?? new State();
     };
 
-    constructor() {
-        if (State.instance) {
-            return State.instance;
-        }
-
+    private constructor() {
         State.instance = this;
 
-        this.time = new Time();
+        this._time = new Time();
+        this._viewport = new Viewport();
 
+    }
 
-
-
-
-
+    get time() {
+        return this._time;
+    }
+    get viewport() {
+        return this._viewport;
     }
 
 

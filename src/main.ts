@@ -1,9 +1,5 @@
 import { Game } from './game';
 
-const game = new Game(
-  window.innerHeight,
-  window.innerWidth,
-  'app'
-);
+const game = new Game();
 
-game.Run();
+game.run();
