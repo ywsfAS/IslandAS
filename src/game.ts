@@ -30,6 +30,7 @@ export class Game {
         this.update();
     }
     private update(): void {
+        this._state.update();
         this._view.update();
         requestAnimationFrame(this.update);
     }

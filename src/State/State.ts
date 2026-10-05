@@ -1,4 +1,5 @@
 import { Controls } from "./controls/controls";
+import { Player } from "./player/player";
 import { Time } from "./time";
 import { Viewport } from './viewport/viewport';
 export class State {
@@ -7,6 +8,7 @@ export class State {
     private readonly _time: Time;
     private readonly _viewport: Viewport;
     private readonly _controls: Controls;
+    private readonly _player: Player;
 
     public static getInstance(): State {
         return State.instance ?? new State();
@@ -18,6 +20,7 @@ export class State {
         this._time = new Time();
         this._viewport = new Viewport();
         this._controls = new Controls();
+        this._player = new Player();
 
     }
 
@@ -30,9 +33,13 @@ export class State {
     get controls() {
         return this._controls;
     }
+    get player() {
+        return this._player;
+    }
 
     public update() {
         this._controls.update();
+        this._player.update();
         this._time.Update();
     }
 

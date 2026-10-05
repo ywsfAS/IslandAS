@@ -1,5 +1,12 @@
 import type { PlayerOptions, Position } from './types';
 import { DEFAULT_PLAYER_OPTIONS } from './default';
+import { State } from '../state';
+import type { Controls } from '../controls/controls';
+import type { Time } from '../time';
+import { Vector3 } from 'three';
+import type { Camera } from '../../view/camera/camera';
+import { View } from '../../view/view';
+
 export class Player {
 
     private _rotation: number;
@@ -8,8 +15,20 @@ export class Player {
     private _speed: number;
 
     private _position: Position;
+    private _controls: Controls;
+    private _time: Time;
+    private _camera: Camera;
+
 
     constructor(options: Partial<PlayerOptions> = {}) {
+
+        const state = State.getInstance();
+        const view = View.getInstance();
+
+        this._controls = state.controls;
+        this._time = state.time;
+        this._camera = view.camera;
+
 
         const { rotation, normalAcceleration, boostAcceleration, speed, position } = DEFAULT_PLAYER_OPTIONS;
 
@@ -21,10 +40,65 @@ export class Player {
         this._position = options.position ?? position;
 
     }
+    get position() {
+        return this._position;
+    }
+    get rotation() {
+        return this._rotation;
+    }
 
     public update(): void {
         // this section will fill player movement using controles
-        console.log("player state is updated ...");
+        const is = this._controls.down;
+        const isAnyKeyPressed = is.forward || is.strafeRight || is.backward || is.strafeLeft;
+        if (isAnyKeyPressed) {
+
+            if (is.forward) {
+
+                if (is.strafeLeft) {
+                    this._rotation += Math.PI * 0.25;
+                }
+                else if (is.strafeRight) {
+                    this._rotation -= Math.PI * 0.25;
+                }
+            }
+            else if (is.backward) {
+                if (is.strafeLeft) {
+                    this._rotation += Math.PI * 0.75;
+                }
+                else if (is.strafeRight) {
+                    this._rotation -= Math.PI * 0.75;
+                }
+                else {
+                    this._rotation -= Math.PI;
+                }
+
+            }
+            else if (is.strafeLeft) {
+                this._rotation += Math.PI * 0.5;
+            }
+            else if (is.strafeRight) {
+                this._rotation -= Math.PI * 0.5;
+            }
+
+            const speed = is.boost ? this._boostAcceleration : this._normalAcceleration;
+
+            const x = Math.sin(this._rotation) * this._time.deltaTime * speed;
+            const z = Math.cos(this._rotation) * this._time.deltaTime * speed;
+
+            const curr = this._position.cur;
+            const prev = this._position.prev;
+
+            curr.x -= x;
+            curr.z -= z;
+
+            this._position.delta = new Vector3(curr.x - prev.x, curr.y - prev.y, curr.z - prev.z);
+            this._position.prev = new Vector3(curr.x, curr.y, curr.z);
+
+            this._speed = this._position.delta.length();
+
+
+        }
     }
 
 

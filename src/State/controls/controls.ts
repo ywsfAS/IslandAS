@@ -27,6 +27,9 @@ export class Controls {
     get events(): Readonly<EventEmitter> {
         return this._events;
     }
+    get down() {
+        return this._down;
+    }
 
     private resetKeysDown(): void {
 

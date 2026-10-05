@@ -1,13 +1,18 @@
 import * as THREE from 'three';
 import { View } from '../view';
+import { State } from '../../state/state';
+import { curlNoise } from 'three/examples/jsm/tsl/math/curlNoise.js';
 export class Player {
 
     private _mesh!: THREE.Mesh<THREE.CapsuleGeometry, THREE.MeshBasicMaterial>;
     private readonly _group = new THREE.Group();
+    private readonly _player;
 
     constructor() {
 
         const view = View.getInstance();
+        const state = State.getInstance();
+        this._player = state.player;
 
         view.scene.add(this._group);
 
@@ -27,7 +32,10 @@ export class Player {
     }
 
     public update() {
-        this._mesh.position.x += 0;
+        const pos = this._player.position.cur;
+        const rot = this._player.rotation;
+        this._mesh.position.set(pos.x, pos.y, pos.z);
+        this._mesh.rotation.y = rot;
     }
     public dispose() {
         this._group.remove(this._mesh);
