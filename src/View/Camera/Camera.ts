@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import type { CameraOptions } from './types';
 import { DEFAULT_CAMERA_CONFIG } from './default';
-import type { Viewport } from '../../State/viewport/viewport';
-import { State } from '../../State/state';
+import type { Viewport } from '../../state/viewport/viewport';
+import { State } from '../../state/state';
 
 export class Camera {
     private _camera: THREE.PerspectiveCamera;
@@ -21,6 +21,8 @@ export class Camera {
             options.near ?? near,
             options.far ?? far
         );
+        this._camera.position.set(0, 0, 10);
+        this._camera.lookAt(0, 0, 0);
     }
     get instance() {
         return this._camera;

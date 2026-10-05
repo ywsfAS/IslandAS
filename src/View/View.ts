@@ -1,13 +1,16 @@
 import * as THREE from 'three';
-import { Camera } from './Camera/camera';
-import { Renderer } from './Renderer/renderer';
+import { Camera } from './camera/camera';
+import { Renderer } from './renderer/renderer';
+import { Player } from './player/player';
 export class View {
 
     private static instance: View;
 
-    private _scene: THREE.Scene;
-    private _camera: Camera;
-    private _renderer: Renderer;
+    private readonly _scene: THREE.Scene;
+    private readonly _camera: Camera;
+    private readonly _renderer: Renderer;
+
+    private readonly _player: Player;
 
     public static getInstance(): View {
         return View.instance ?? new View();
@@ -19,6 +22,7 @@ export class View {
         this._scene = new THREE.Scene();
         this._camera = new Camera(new THREE.PerspectiveCamera());
         this._renderer = new Renderer();
+        this._player = new Player();
     }
     get scene() {
         return this._scene;
@@ -29,8 +33,12 @@ export class View {
     get renderer() {
         return this._renderer;
     }
+    get player() {
+        return this._player;
+    }
 
     public update() {
+        this._player.update();
         this._renderer.update();
     }
     public resize() {

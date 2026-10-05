@@ -1,10 +1,10 @@
 import * as THREE from 'three';
 import type { RendererOptions } from './types';
 import { DEFAULT_RENDERER_OPTIONS } from './default'
-import { View } from '../View';
-import { Camera } from '../Camera/camera';
-import type { Viewport } from '../../State/viewport/viewport';
-import { State } from '../../State/state';
+import { View } from '../view';
+import { Camera } from '../camera/camera';
+import type { Viewport } from '../../state/viewport/viewport';
+import { State } from '../../state/state';
 
 
 export class Renderer {
