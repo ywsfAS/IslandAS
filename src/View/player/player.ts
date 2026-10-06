@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import { View } from '../view';
 import { State } from '../../state/state';
-import { curlNoise } from 'three/examples/jsm/tsl/math/curlNoise.js';
+
+// TODO : create player material and shaders with configs
 export class Player {
 
     private _mesh!: THREE.Mesh<THREE.CapsuleGeometry, THREE.MeshBasicMaterial>;

@@ -4,7 +4,6 @@ import { State } from '../state';
 import type { Controls } from '../controls/controls';
 import type { Time } from '../time';
 import { Vector3 } from 'three';
-import type { Camera } from '../../view/camera/camera';
 import { View } from '../../view/view';
 
 export class Player {
@@ -74,11 +73,14 @@ export class Player {
                 }
 
             }
+            // TODO : if we rotate the object no mouvement at all 
             else if (is.strafeLeft) {
                 this._rotation += Math.PI * 0.5;
+                return;
             }
             else if (is.strafeRight) {
                 this._rotation -= Math.PI * 0.5;
+                return;
             }
 
             const speed = is.boost ? this._boostAcceleration : this._normalAcceleration;
