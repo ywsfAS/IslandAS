@@ -6,6 +6,8 @@ import type { GrassOptions } from './types';
 import { View } from '../view';
 import * as THREE from 'three';
 import createGrassMaterial from '../materials/grassMaterial';
+import type { Player } from '../../state/player/player';
+import type { CameraState } from '../../state/camera/camera';
 
 export class Grass {
 
@@ -22,6 +24,8 @@ export class Grass {
 
     private readonly _time: Time;
     private readonly _scene: Scene;
+    private readonly _player: Player;
+    private readonly _camera: CameraState;
 
     private _geometry!: THREE.BufferGeometry;
     private _material!: THREE.ShaderMaterial;
@@ -38,6 +42,8 @@ export class Grass {
 
         this._time = state.time;
         this._scene = view.scene;
+        this._player = state.player;
+        this._camera = state.camera;
 
         this._grassGridCount = options.grassGridCount ?? grassGridCount;
         this._bladeHeightRandomnessRatio = options.bladeHeightRandomRatio ?? bladeHeightRandomRatio;
@@ -61,8 +67,8 @@ export class Grass {
         const size = this._chunkSize;
         const grassSize = this._grassSize;
 
-        const centers = new Float32Array(count * 3 * 2);  //center btw two bottom vertices in 2D plan 
-        const positions = new Float32Array(count * 3 * 3);
+        const centers = new Float32Array(count * count * 3 * 2);  //center btw two bottom vertices in 2D plan 
+        const positions = new Float32Array(count * count * 3 * 3);
 
         for (let row = 0; row < count; row++) {
 
@@ -71,7 +77,7 @@ export class Grass {
                 const fragementcenterZ = col * grassSize - (size * 0.5) + (grassSize * 0.5);
 
                 const centerX = fragementcenterX + ((Math.random() - 0.3) * grassSize * this._bladePositionRandomnessRatio);
-                const centerZ = fragementcenterZ + ((Math.random() - 0.4) * grassSize * this._bladePositionRandomnessRatio);
+                const centerZ = fragementcenterZ + ((Math.random() - 0.9) * grassSize * this._bladePositionRandomnessRatio);
 
                 const indexOfCenterInBuffer = (row * count + col) * 6;
                 const indexOfPositionInBuffer = (row * count + col) * 9;
@@ -86,7 +92,7 @@ export class Grass {
                 centers[indexOfCenterInBuffer + 5] = centerZ;
 
                 const halfBladeWidth = grassSize * this._grassWidthRatio * 0.5;
-                const bladeHeight = grassSize * this._grassHeightRatio * (Math.random()) * this._bladeHeightRandomnessRatio;
+                const bladeHeight = grassSize * this._grassHeightRatio * (Math.random() + 0.8) * this._bladeHeightRandomnessRatio;
 
                 positions[indexOfPositionInBuffer] = -halfBladeWidth;
                 positions[indexOfPositionInBuffer + 1] = 0;
@@ -120,6 +126,8 @@ export class Grass {
 
         this._material.uniforms.uTime.value = 0;
         this._material.uniforms.uPlayerPosition.value = new THREE.Vector3();
+        this._material.uniforms.uGrassDistance.value = this._chunkSize;
+        this._material.uniforms.uCameraPosition.value = new THREE.Vector3();
 
 
     }
@@ -128,6 +136,8 @@ export class Grass {
         this._scene.add(mesh);
     }
     public update() {
+        this._material.uniforms.uPlayerPosition.value = this._player.position.cur;
+        this._material.uniforms.uCameraPosition.value = this._camera.position;
         console.log("updating ...");
     }
 

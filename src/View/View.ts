@@ -44,7 +44,7 @@ export class View {
     }
 
     public update() {
-        //this._grass.update();
+        this._grass.update();
         this._world.update();
         this._player.update();
         this._camera.update();
