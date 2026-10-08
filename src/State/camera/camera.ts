@@ -14,7 +14,7 @@ export class CameraState {
 
     private _minPhi: number = 0.1;
     private _maxPhi: number = Math.PI - 0.1;
-    private _verOffset: number = 40;
+    private _verOffset: number = 10;
 
     private _distance: number;
 
