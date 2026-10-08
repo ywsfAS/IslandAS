@@ -18,6 +18,7 @@ export class World {
         const worldGeometry = new THREE.PlaneGeometry(600, 600);
         const worldMaterial = new THREE.MeshBasicMaterial({
             color: "#0077b6",
+            side: THREE.DoubleSide
         })
 
         this._mesh = new THREE.Mesh(worldGeometry, worldMaterial);

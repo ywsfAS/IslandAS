@@ -5,6 +5,7 @@ import { DEFAULT_GRASS_CONFIG } from './default';
 import type { GrassOptions } from './types';
 import { View } from '../view';
 import * as THREE from 'three';
+import createGrassMaterial from '../materials/grassMaterial';
 
 export class Grass {
 
@@ -22,7 +23,8 @@ export class Grass {
     private readonly _time: Time;
     private readonly _scene: Scene;
 
-    private _geometry! : THREE.BufferGeometry;
+    private _geometry!: THREE.BufferGeometry;
+    private _material!: THREE.ShaderMaterial;
 
     // TODO introduce noise 
 
@@ -42,17 +44,20 @@ export class Grass {
         this._cellCount = this._grassGridCount * this._grassGridCount;
         this._chunkSize = options.chunkSize ?? chunkSize;
         this._bladePositionRandomnessRatio = options.bladePositionRandomRatio ?? bladePositionRandomRatio;
-        this._grassSize = this._grassGridCount / this._chunkSize;
+        this._grassSize = this._chunkSize / this._grassGridCount;
         this._grassWidthRatio = options.grassWidthRatio ?? grassWidthRatio;
         this._grassHeightRatio = options.grassHeightRatio ?? grassHeightRatio;
 
-        this.setGeometry()
+        console.log("before set geometry");
+        this.setGeometry();
+        this.setMaterial();
+        this.setMesh();
 
     }
 
     public setGeometry() {
 
-        const count = this._cellCount;
+        const count = this._grassGridCount;
         const size = this._chunkSize;
         const grassSize = this._grassSize;
 
@@ -95,10 +100,6 @@ export class Grass {
                 positions[indexOfPositionInBuffer + 7] = 0;
                 positions[indexOfPositionInBuffer + 8] = 0;
 
-                this._geometry = new THREE.BufferGeometry()
-
-                this._geometry.setAttribute('positions', new THREE.BufferAttribute(positions, 3));
-                this._geometry.setAttribute('centers', new THREE.BufferAttribute(centers, 2));
 
 
 
@@ -107,8 +108,27 @@ export class Grass {
 
 
         }
+        this._geometry = new THREE.BufferGeometry();
+
+        this._geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        this._geometry.setAttribute('center', new THREE.BufferAttribute(centers, 2));
 
     }
 
+    public setMaterial() {
+        this._material = createGrassMaterial();
+
+        this._material.uniforms.uTime.value = 0;
+        this._material.uniforms.uPlayerPosition.value = new THREE.Vector3();
+
+
+    }
+    public setMesh() {
+        const mesh = new THREE.Mesh(this._geometry, this._material);
+        this._scene.add(mesh);
+    }
+    public update() {
+        console.log("updating ...");
+    }
 
 }

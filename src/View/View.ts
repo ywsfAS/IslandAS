@@ -3,6 +3,7 @@ import { Camera } from './camera/camera';
 import { Renderer } from './renderer/renderer';
 import { Player } from './player/player';
 import { World } from './world/world';
+import { Grass } from './grass/grass';
 export class View {
 
     private static instance: View;
@@ -13,6 +14,7 @@ export class View {
 
     private readonly _player: Player;
     private readonly _world: World;
+    private readonly _grass: Grass;
 
     public static getInstance(): View {
         return View.instance ?? new View();
@@ -26,6 +28,7 @@ export class View {
         this._renderer = new Renderer();
         this._player = new Player();
         this._world = new World();
+        this._grass = new Grass();
     }
     get scene() {
         return this._scene;
@@ -41,6 +44,7 @@ export class View {
     }
 
     public update() {
+        //this._grass.update();
         this._world.update();
         this._player.update();
         this._camera.update();

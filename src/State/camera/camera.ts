@@ -63,7 +63,6 @@ export class CameraState {
             // clap value in the accpeted range
             this._phi = Math.min(Math.max(this._phi, this._minPhi), this._maxPhi);
 
-            console.log(this._phi, this._theta);
         }
         // calculate position from spheric coord
         const sinPhiRadius = Math.sin(this._phi) * this._distance
