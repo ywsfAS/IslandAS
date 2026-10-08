@@ -30,6 +30,9 @@ export class Controls {
     get down() {
         return this._down;
     }
+    get cursor() {
+        return this._cursor;
+    }
 
     private resetKeysDown(): void {
 
@@ -46,8 +49,8 @@ export class Controls {
 
         window.addEventListener('keydown', (event) => this.onKeyDown(event));
         window.addEventListener('keyup', (event) => this.onkeyUp(event));
-        window.addEventListener('pointerdown', () => this.onCursorDown);
-        window.addEventListener('pointerup', () => this.onCursorUp);
+        window.addEventListener('pointerdown', () => this.onCursorDown());
+        window.addEventListener('pointerup', () => this.onCursorUp());
         window.addEventListener('pointermove', (event) => this.onCursorMove(event))
 
     }

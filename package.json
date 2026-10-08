@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "events": "^3.3.0",
+    "gl-matrix": "^3.4.4",
     "lil-gui": "^0.21.0",
     "three": "^0.186.1"
   }

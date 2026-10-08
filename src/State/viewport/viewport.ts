@@ -1,5 +1,6 @@
 import type { ViewportOptions } from './types';
 import { DEFAULT_VIEWPORT_OPTIONS } from './default';
+import { Vector2 } from 'three';
 
 export class Viewport {
 
@@ -40,6 +41,12 @@ export class Viewport {
         this._width = window.innerWidth;
         this._height = window.innerHeight;
         this._pixelRatio = Math.min(window.devicePixelRatio, this._maxPixelRatio);
+    }
+    public normilize(vec2: Vector2): Vector2 {
+
+        const minSize = Math.min(this._width, this._height);
+
+        return new Vector2(vec2.x / minSize, vec2.y / minSize);
     }
 
 

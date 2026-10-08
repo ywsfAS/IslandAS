@@ -4,6 +4,8 @@ import { DEFAULT_CAMERA_CONFIG } from './default';
 import type { Viewport } from '../../state/viewport/viewport';
 import { State } from '../../state/state';
 import type { Player } from '../../state/player/player';
+import type { CameraState } from '../../state/camera/camera';
+import { vec2 } from 'three/tsl';
 
 export class Camera {
     private readonly _camera: THREE.PerspectiveCamera;
@@ -11,14 +13,14 @@ export class Camera {
 
     private readonly _diff: number = 10;
 
-    private readonly _player: Player;
+    private readonly _state: CameraState;
 
     constructor(options: Partial<CameraOptions> = {}) {
 
         const state = State.getInstance();
 
         this._viewport = state.viewport;
-        this._player = state.player;
+        this._state = state.camera;
 
         const { far, near, fov } = DEFAULT_CAMERA_CONFIG;
 
@@ -40,9 +42,11 @@ export class Camera {
 
     public update(): void {
 
-        const curr = this._player.position.cur;
-        this._camera.position.set(curr.x, curr.y + this._diff, curr.z + this._diff);
-        this._camera.lookAt(curr);
+        const [x, y, z] = this._state.position;
+        const [qx, qy, qz, qw] = this._state.quaterion;
+
+        this._camera.position.set(x, y, z);
+        this._camera.quaternion.set(qx, qy, qz, qw)
     }
 
 

@@ -17,7 +17,7 @@ export class World {
 
         const worldGeometry = new THREE.PlaneGeometry(600, 600);
         const worldMaterial = new THREE.MeshBasicMaterial({
-            color: 0xff0000,
+            color: "#0077b6",
         })
 
         this._mesh = new THREE.Mesh(worldGeometry, worldMaterial);
@@ -28,7 +28,6 @@ export class World {
     }
 
     public update() {
-        console.log("world", this._mesh);
     }
 
 

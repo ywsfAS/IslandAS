@@ -16,7 +16,7 @@ export class Player {
     private _position: Position;
     private _controls: Controls;
     private _time: Time;
-    private _camera: Camera;
+    private _camera: any;
 
 
     constructor(options: Partial<PlayerOptions> = {}) {

@@ -1,3 +1,4 @@
+import { CameraState } from "./camera/camera";
 import { Controls } from "./controls/controls";
 import { Player } from "./player/player";
 import { Time } from "./time";
@@ -9,6 +10,7 @@ export class State {
     private readonly _viewport: Viewport;
     private readonly _controls: Controls;
     private readonly _player: Player;
+    private readonly _camera: CameraState;
 
     public static getInstance(): State {
         return State.instance ?? new State();
@@ -22,6 +24,11 @@ export class State {
         this._controls = new Controls();
         this._player = new Player();
 
+        this._camera = new CameraState();
+
+    }
+    get camera() {
+        return this._camera;
     }
 
     get time() {
@@ -40,6 +47,7 @@ export class State {
     public update() {
         this._controls.update();
         this._player.update();
+        this._camera.update();
         this._time.Update();
     }
 
