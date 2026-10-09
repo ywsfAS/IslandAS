@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 import { vec2 } from "gl-matrix";
-import { Terrains } from "../terrains/terrains";
+import { TerrainsState } from "../terrains/terrains";
 import { ReadbackBuffer } from "three/webgpu";
 
 export interface TerrainOptions {
@@ -10,22 +10,23 @@ export interface TerrainOptions {
     center: vec2;
     precision: number;
 
-    terrains: Terrains;
+    terrains: TerrainsState;
 }
 
 
 
-export class Terrain {
+export class TerrainState {
     private _id: number;
     private _size: number;
     private _center: vec2;
     private _precision: number;
     private _events: EventEmitter = new EventEmitter();
-    private _terrains: Terrains;
+    private _terrains: TerrainsState;
 
 
     private _normals: any;
-    private _positions: any;
+    private _positions: Float32Array = new Float32Array();
+    private _indices: Float32Array = new Float32Array();
     private _uv: any;
     private _textures: any;
 
@@ -46,11 +47,18 @@ export class Terrain {
     get events() {
         return this._events;
     }
+    get position() {
+        return this._positions;
+    }
+    get indices() {
+        return this._indices;
+    }
 
     // fill the terrain chunk with data assigned to it from terrains
     public fill(data: any) {
 
         this._positions = data.positions;
+        this._indices = data.indices;
         this._normals = data.normals;
         this._uv = data.uv;
         this._textures = data.textures;

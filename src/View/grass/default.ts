@@ -1,7 +1,7 @@
 import type { GrassOptions } from "./types";
 
 export const DEFAULT_GRASS_CONFIG: GrassOptions = {
-    grassGridCount: 100,
+    grassGridCount: 0,
     chunkSize: 50,
 
     grassHeightRatio: 3,

@@ -1,11 +1,11 @@
 import { IterationMode, type TerrainsOptions } from "./types";
 import { DEFAULT_TERRAINS_CONFIGS } from './default';
-import { Terrain } from '../terrain/terrain'
+import { TerrainState } from '../terrain/terrain'
 import { vec2 } from "gl-matrix";
 import { EventEmitter } from "events";
 import TerrainWorker from '../../workers/terrainWorker?worker';
 
-export class Terrains {
+export class TerrainsState {
 
     private _subdivisions: number;
     private _lacunarity: number;
@@ -20,7 +20,7 @@ export class Terrains {
     private readonly _iterationsOffsets: number[][] = [];
 
     // holds map of terrain refs (id,terrian)
-    private _terrains: Map<number, Terrain> = new Map();
+    private _terrains: Map<number, TerrainState> = new Map();
     private _id: number = 0;
     private _events: EventEmitter = new EventEmitter();
 
@@ -48,11 +48,23 @@ export class Terrains {
         this.setWorker();
 
 
-        this.create(this._subdivisions, vec2.fromValues(0, 0), 1);
     }
+
     get subdivisions() {
         return this._subdivisions;
     }
+
+    get terrains() {
+        return this._terrains;
+    }
+
+    get events() {
+        return this._events;
+    }
+    public initialize() {
+        this.create(this._subdivisions, vec2.fromValues(0, 0), 1);
+    }
+
     public setWorker() {
 
         this._worker.onmessage = (event) => {
@@ -80,7 +92,7 @@ export class Terrains {
         this._id++;
 
         const iter = this.getIterations(precision);
-        const terrain = new Terrain({ id: this._id, size: size, center: center, precision: precision, terrains: this });
+        const terrain = new TerrainState({ id: this._id, size: size, center: center, precision: precision, terrains: this });
         this._terrains.set(this._id, terrain);
 
         this._worker.postMessage({
@@ -102,6 +114,7 @@ export class Terrains {
         })
 
 
+        console.log("emit create");
 
         // publish terrian event creation
         this._events.emit('create', terrain);

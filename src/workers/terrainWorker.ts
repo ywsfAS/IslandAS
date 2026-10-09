@@ -41,7 +41,7 @@ onmessage = (event) => {
     const baseEmplitude = event.data.baseEmplitude;
     console.log(baseEmplitude);
 
-    const positions = [];
+    const positions = new Float32Array(Math.pow(subdivisions, 2) * 3);
 
     // generates positions for each right top corner 
     for (let x = 0; x <= subdivisions; x++) {
@@ -52,15 +52,51 @@ onmessage = (event) => {
             const pz = (z / subdivisions) * size + center[1];
             const py = getElevation(px, pz, lacunarity, persistence, iterations, frequency, baseEmplitude, power, terrainOffsets);
 
-            positions.push(px, py, pz);
+            const index = (z * (subdivisions + 1) + x) * 3;
+
+            positions[index] = px;
+            positions[index + 1] = py;
+            positions[index + 2] = pz;
         }
     }
     console.log(positions);
 
+    const cellsCount = subdivisions * subdivisions;
+    const vertexCount = (subdivisions + 1) * (subdivisions + 1);
+
+    const IndexArray = vertexCount <= 65536
+        ? Uint16Array
+        : Uint32Array;
+
+    const indices = new IndexArray(cellsCount * 6);
+    const segments = subdivisions + 1;
+
+    for (let z = 0; z < subdivisions; z++) {
+        for (let x = 0; x < subdivisions; x++) {
+            const a = z * segments + x;
+            const b = a + 1;
+            const d = (z + 1) * segments + x;
+            const c = d + 1;
+
+            const index = (z * subdivisions + x) * 6;
+
+            indices[index] = a;
+            indices[index + 1] = d;
+            indices[index + 2] = b;
+
+            indices[index + 3] = d;
+            indices[index + 4] = a;
+            indices[index + 5] = c;
+        }
+    }
+
+    console.log(indices);
+
     postMessage({
 
         id,
-        positions
+        positions,
+        indices
 
     });
 
