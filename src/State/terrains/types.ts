@@ -7,6 +7,9 @@ export interface TerrainsOptions {
     subdivisions: number;
     lacunarity: number;
     persistence: number;
+    baseEmplitude: number;
+    power: number;
+    frequency: number;
 
     maxIteration: number;
     minIteration: number;
