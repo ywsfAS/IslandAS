@@ -102,7 +102,7 @@ onmessage = (event) => {
         positions,
         center
     }
-    const sample = 100;
+    const sample = 20;
     const resolution = subdivisions * sample + 1;
     const textures = new Float32Array(resolution * resolution);
 
@@ -115,7 +115,7 @@ onmessage = (event) => {
             const px = center[0] + ((x / (resolution - 1)) - 0.5) * size;
             const pz = center[1] + ((z / (resolution - 1)) - 0.5) * size;
 
-            textures[z * resolution + x] = getTerrainHeight(vec2.fromValues(px, pz), options);
+            textures[z * resolution + x] = getTerrainHeight(vec2.fromValues(px, pz), options) + 0.8;
         }
 
     }

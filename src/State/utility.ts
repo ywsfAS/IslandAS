@@ -12,7 +12,7 @@ export function getTerrainHeight(point: vec2, { size, subdivisions, center, posi
     const halfSize = size * 0.5;
 
     const segments = subdivisions + 1;
-    const segmentSize = segments / size;
+    const segmentSize = size / subdivisions;
 
     const relativeX = point[0] - center[0] + halfSize;
     const relativeZ = point[1] - center[1] + halfSize;
@@ -22,7 +22,7 @@ export function getTerrainHeight(point: vec2, { size, subdivisions, center, posi
     const ZIndexA = Math.floor(relativeZ / segmentSize);
 
     const XIndexC = XIndexA + 1;
-    const ZIndexC = XIndexA + 1;
+    const ZIndexC = ZIndexA + 1;
 
     const ratioX = (relativeX / segmentSize) % 1;
     const ratioZ = (relativeZ / segmentSize) % 1;
@@ -39,9 +39,9 @@ export function getTerrainHeight(point: vec2, { size, subdivisions, center, posi
     const cPositionZVal = positions[indexPosC + 1];
 
 
-    const w1 = 1 - ratioX;
-    const w2 = ratioX - ratioZ;
-    const w3 = ratioZ
+    const w1 = ratioX >= ratioZ ? 1 - ratioX : 1 - ratioZ;
+    const w2 = ratioX >= ratioZ ? ratioX - ratioZ : ratioZ - ratioX;
+    const w3 = ratioX >= ratioZ ? ratioZ : ratioX;
 
     const finalZ = w1 * aPositionZVal + w2 * bPositionZVal + w3 * cPositionZVal;
 
