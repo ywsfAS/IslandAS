@@ -8,6 +8,11 @@ import * as THREE from 'three';
 import createGrassMaterial from '../materials/grassMaterial';
 import type { Player } from '../../state/player/player';
 import type { CameraState } from '../../state/camera/camera';
+import type { TerrainState } from '../../state/terrain/terrain';
+import { vec2 } from 'gl-matrix';
+import { Terrains } from '../terrains/terrains';
+import { TileShadowNode } from 'three/examples/jsm/tsl/shadows/TileShadowNode.js';
+import type { Terrain } from '../terrain/terrain';
 
 export class Grass {
 
@@ -15,6 +20,7 @@ export class Grass {
     private _chunkSize: number;
     private _cellCount: number;
     private _grassSize: number;
+
 
     private _grassWidthRatio: number;
     private _grassHeightRatio: number;
@@ -26,6 +32,9 @@ export class Grass {
     private readonly _scene: Scene;
     private readonly _player: Player;
     private readonly _camera: CameraState;
+    private _terrainState!: TerrainState;
+    private _terrain!: Terrain;
+    private _terrains: Terrains;
 
     private _geometry!: THREE.BufferGeometry;
     private _material!: THREE.ShaderMaterial;
@@ -44,6 +53,7 @@ export class Grass {
         this._scene = view.scene;
         this._player = state.player;
         this._camera = state.camera;
+        this._terrains = view.terrains;
 
         this._grassGridCount = options.grassGridCount ?? grassGridCount;
         this._bladeHeightRandomnessRatio = options.bladeHeightRandomRatio ?? bladeHeightRandomRatio;
@@ -54,10 +64,21 @@ export class Grass {
         this._grassWidthRatio = options.grassWidthRatio ?? grassWidthRatio;
         this._grassHeightRatio = options.grassHeightRatio ?? grassHeightRatio;
 
-        console.log("before set geometry");
-        this.setGeometry();
-        this.setMaterial();
-        this.setMesh();
+        // retrieve terrain state
+        view.terrains.events.on('terrain-view-created', (terrain: Terrain) => {
+            this._terrain = terrain;
+            const terrainState = terrain.state();
+            this._terrainState = terrainState;
+            terrainState.events.on('ready', () => {
+
+                this.setGeometry();
+                this.setMaterial();
+                this.setMesh();
+
+
+            })
+        });
+
 
     }
 
@@ -76,8 +97,8 @@ export class Grass {
             for (let col = 0; col < count; col++) {
                 const fragementcenterZ = col * grassSize - (size * 0.5) + (grassSize * 0.5);
 
-                const centerX = fragementcenterX + ((Math.random() - 0.3) * grassSize * this._bladePositionRandomnessRatio);
-                const centerZ = fragementcenterZ + ((Math.random() - 0.9) * grassSize * this._bladePositionRandomnessRatio);
+                const centerX = fragementcenterX + ((Math.random() - 0.5) * grassSize * this._bladePositionRandomnessRatio);
+                const centerZ = fragementcenterZ + ((Math.random() - 0.5) * grassSize * this._bladePositionRandomnessRatio);
 
                 const indexOfCenterInBuffer = (row * count + col) * 6;
                 const indexOfPositionInBuffer = (row * count + col) * 9;
@@ -108,12 +129,12 @@ export class Grass {
 
 
 
-
             }
 
 
 
         }
+        console.log("grass poisiton", positions);
         this._geometry = new THREE.BufferGeometry();
 
         this._geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -128,6 +149,7 @@ export class Grass {
         this._material.uniforms.uPlayerPosition.value = new THREE.Vector3();
         this._material.uniforms.uGrassDistance.value = this._chunkSize;
         this._material.uniforms.uCameraPosition.value = new THREE.Vector3();
+        this._material.uniforms.uHeightMap.value = this._terrain.getHeightTexture();
 
 
     }
@@ -136,6 +158,7 @@ export class Grass {
         this._scene.add(mesh);
     }
     public update() {
+        if (!this._geometry) return;
         this._material.uniforms.uPlayerPosition.value = this._player.position.cur;
         this._material.uniforms.uCameraPosition.value = this._camera.position;
         console.log("updating ...");

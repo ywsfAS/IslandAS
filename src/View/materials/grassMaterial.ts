@@ -10,7 +10,8 @@ export default function createGrassMaterial() {
             uTime: { value: null },
             uPlayerPosition: { value: null },
             uGrassDistance: { value: null },
-            uCameraPosition: { value: null }
+            uCameraPosition: { value: null },
+            uHeightMap: { value: null },
         },
         vertexShader: vertexShader,
         fragmentShader: fragementShader,

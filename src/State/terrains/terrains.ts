@@ -64,7 +64,7 @@ export class TerrainsState {
         return this._events;
     }
     public initialize() {
-        this.create(30, vec2.fromValues(0, 0), 1);
+        this.create(50, vec2.fromValues(0, 0), 1);
     }
 
     public setWorker() {
@@ -113,7 +113,7 @@ export class TerrainsState {
             power: this._power,
             terrainOffsets: this._iterationsOffsets,
 
-            verticalOffset: this._verticalOffset
+            verticalOffset: this._verticalOffset,
 
         })
 

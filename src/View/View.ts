@@ -5,6 +5,7 @@ import { Player } from './player/player';
 import { World } from './world/world';
 import { Grass } from './grass/grass';
 import { Terrains } from './terrains/terrains';
+import type { Terrain } from './terrain/terrain';
 export class View {
 
     private static instance: View;
@@ -14,7 +15,7 @@ export class View {
     private readonly _renderer: Renderer;
 
     private readonly _player: Player;
-    private readonly _world: World;
+    //private readonly _world: World;
     private readonly _grass: Grass;
     private readonly _terrains: Terrains;
 
@@ -29,9 +30,10 @@ export class View {
         this._camera = new Camera(new THREE.PerspectiveCamera());
         this._renderer = new Renderer();
         this._player = new Player();
-        this._world = new World();
-        this._grass = new Grass();
+        //this._world = new World();
         this._terrains = new Terrains();
+
+        this._grass = new Grass();
         console.log("view", this._terrains);
     }
     get scene() {
@@ -52,7 +54,7 @@ export class View {
 
     public update() {
         this._grass.update();
-        this._world.update();
+        //   this._world.update();
         this._player.update();
         this._camera.update();
         this._renderer.update();

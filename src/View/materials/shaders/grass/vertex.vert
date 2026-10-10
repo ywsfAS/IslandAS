@@ -1,14 +1,14 @@
 uniform float uGrassDistance;
 uniform vec3 uPlayerPosition;
 uniform vec3 uCameraPosition;
+uniform sampler2D uHeightMap;
+
 attribute vec2 center;
 
-
 #include "../utilities/pivot.glsl";
+
 void main()
 {
-
-
     vec2 relativeCenter = center;
     relativeCenter -= uPlayerPosition.xz;
     
@@ -20,14 +20,19 @@ void main()
 
     vec4 spaceCenter = modelMatrix * vec4(relativeCenter.x , 0.0 , relativeCenter.y ,1.0);
 
+    vec2 terrainUV = (spaceCenter.xz + uGrassDistance * 0.5) / uGrassDistance;
+    float height = texture2D(uHeightMap,terrainUV).r;
+
+    spaceCenter.y += height;
+
     vec4 worldPosition = modelMatrix * vec4(position,1.0);
 
-    float angle = atan(spaceCenter.x - uCameraPosition.x,spaceCenter.z - uCameraPosition.z);
-    worldPosition.xz = pivot2D(worldPosition.xz,angle,spaceCenter.xz);
+    //float angle = atan(spaceCenter.x - uCameraPosition.x,spaceCenter.z - uCameraPosition.z);
+    //worldPosition.xz = pivot2D(worldPosition.xz,angle,spaceCenter.xz);
     
 
-
-    worldPosition.xz += relativeCenter;
+    worldPosition.xz += spaceCenter.xz;
+    worldPosition.y += height;
 
     gl_Position = projectionMatrix * viewMatrix * worldPosition;
 }

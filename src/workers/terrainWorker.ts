@@ -1,4 +1,6 @@
+import { vec2 } from 'gl-matrix';
 import SimplexNoise from './noise.js';
+import { type TerrainHeight, getTerrainHeight } from '../state/utility.ts'
 
 
 const simplexNoise = new SimplexNoise();
@@ -58,9 +60,10 @@ onmessage = (event) => {
             positions[index] = px;
             positions[index + 1] = py;
             positions[index + 2] = pz;
+
+
         }
     }
-    console.log(positions);
 
     const cellsCount = subdivisions * subdivisions;
     const vertexCount = (subdivisions + 1) * (subdivisions + 1);
@@ -91,13 +94,40 @@ onmessage = (event) => {
         }
     }
 
-    console.log(indices);
+
+    // get height for 10 times in each subdivision
+    const options: TerrainHeight = {
+        size,
+        subdivisions,
+        positions,
+        center
+    }
+    const sample = 100;
+    const resolution = subdivisions * sample + 1;
+    const textures = new Float32Array(resolution * resolution);
+
+
+
+    for (let x = 0; x < resolution; x++) {
+
+        for (let z = 0; z < resolution; z++) {
+
+            const px = center[0] + ((x / (resolution - 1)) - 0.5) * size;
+            const pz = center[1] + ((z / (resolution - 1)) - 0.5) * size;
+
+            textures[z * resolution + x] = getTerrainHeight(vec2.fromValues(px, pz), options);
+        }
+
+    }
+
 
     postMessage({
 
         id,
         positions,
-        indices
+        indices,
+        textures,
+        resolution,
 
     });
 

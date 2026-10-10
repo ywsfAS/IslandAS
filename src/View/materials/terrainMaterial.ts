@@ -9,6 +9,7 @@ export default function createTerrainMaterial(): ShaderMaterial {
 
         uniforms: {
             uTime: { value: null },
+            uHeightMap: { value: null }
         },
         vertexShader: vertexShader,
         fragmentShader: fragementShader,

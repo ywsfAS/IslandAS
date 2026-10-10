@@ -2,8 +2,8 @@ import * as THREE from 'three';
 import type { TerrainState } from '../../state/terrain/terrain';
 import { View } from '../view';
 import { State } from '../../state/state';
-import type { TerrainsState } from '../../state/terrains/terrains';
-import type { Terrains } from '../terrains/terrains';
+import { TerrainsState } from '../../state/terrains/terrains';
+import { Terrains } from '../terrains/terrains';
 
 
 
@@ -37,15 +37,41 @@ export class Terrain {
     private listen() {
         this._state.events.on('ready', () => this.create());
     }
+    public state() {
+        return this._state;
+    }
 
+    public getHeightTexture() {
+
+        const heightTexture = new THREE.DataTexture(
+            this._state.textures,
+            this._state.resolution,
+            this._state.resolution,
+            THREE.RedFormat,
+            THREE.FloatType
+        );
+        heightTexture.magFilter = THREE.LinearFilter;
+        heightTexture.minFilter = THREE.LinearFilter;
+
+        heightTexture.wrapS = THREE.ClampToEdgeWrapping;
+        heightTexture.wrapT = THREE.ClampToEdgeWrapping;
+
+        heightTexture.needsUpdate = true;
+
+
+        return heightTexture;
+
+    }
     private create() {
 
         this._geometry = new THREE.BufferGeometry();
         this._geometry.setAttribute('position', new THREE.BufferAttribute(this._state.position, 3));
         this._geometry.setIndex(new THREE.BufferAttribute(this._state.indices, 1, false));
+        this._geometry.computeVertexNormals();
         this._material = this._terrains.material;
 
-        this._geometry.computeVertexNormals();
+        this._material.uniforms.uHeightMap.value = this.getHeightTexture();
+
         const mesh = new THREE.Mesh(this._geometry, this._material);
         this._scene.add(mesh);
 
