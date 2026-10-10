@@ -61,6 +61,16 @@ export class TerrainState {
     get resolution() {
         return this._resolution;
     }
+    public contains(point: vec2): boolean {
+        const halfSize = this._size * 0.5;
+        return point[0] >= this._center[0] - halfSize
+            && point[0] <= this._center[0] + halfSize
+            && point[1] >= this._center[1] - halfSize
+            && point[1] <= this._center[1] + halfSize;
+    }
+    public get isReady(): boolean {
+        return this._isReady;
+    }
 
     // fill the terrain chunk with data assigned to it from terrains
     public fill(data: any) {

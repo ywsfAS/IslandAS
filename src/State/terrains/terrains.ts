@@ -60,6 +60,15 @@ export class TerrainsState {
         return this._terrains;
     }
 
+    public getHeightAt(point: vec2): number | undefined {
+        for (const terrain of this._terrains.values()) {
+            if (terrain.contains(point) && terrain.isReady) {
+                return terrain.getHeight(point);
+            }
+        }
+        return undefined;
+    }
+
     get events() {
         return this._events;
     }

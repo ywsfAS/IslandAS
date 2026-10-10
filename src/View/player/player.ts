@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { View } from '../view';
 import { State } from '../../state/state';
+import { PLAYER_CAPSULE_LENGTH, PLAYER_RADIUS } from '../../state/player/default';
 
 // TODO : create player material and shaders with configs
 export class Player {
@@ -22,7 +23,13 @@ export class Player {
 
     private setMesh(): void {
 
-        const playerGeometry = new THREE.CapsuleGeometry(1, 1, 8, 10, 10);
+        const playerGeometry = new THREE.CapsuleGeometry(
+            PLAYER_RADIUS,
+            PLAYER_CAPSULE_LENGTH,
+            8,
+            10,
+            10
+        );
         const playerMaterial = new THREE.MeshBasicMaterial({
             color: '#219ebc'
         });

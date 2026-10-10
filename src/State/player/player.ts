@@ -1,10 +1,10 @@
 import type { PlayerOptions, Position } from './types';
-import { DEFAULT_PLAYER_OPTIONS } from './default';
+import { DEFAULT_PLAYER_OPTIONS, PLAYER_CAPSULE_LENGTH, PLAYER_RADIUS, easeTowards, PLAYER_ROTATION_SPEED } from './default';
 import { State } from '../state';
 import type { Controls } from '../controls/controls';
 import type { Time } from '../time';
-import { Vector3 } from 'three';
-import { View } from '../../view/view';
+import { vec2 } from 'gl-matrix';
+
 
 export class Player {
 
@@ -16,17 +16,14 @@ export class Player {
     private _position: Position;
     private _controls: Controls;
     private _time: Time;
-    private _camera: any;
 
 
     constructor(options: Partial<PlayerOptions> = {}) {
 
         const state = State.getInstance();
-        const view = View.getInstance();
 
         this._controls = state.controls;
         this._time = state.time;
-        this._camera = view.camera;
 
 
         const { rotation, normalAcceleration, boostAcceleration, speed, position } = DEFAULT_PLAYER_OPTIONS;
@@ -47,60 +44,41 @@ export class Player {
     }
 
     public update(): void {
-        // this section will fill player movement using controles
         const is = this._controls.down;
-        const isAnyKeyPressed = is.forward || is.strafeRight || is.backward || is.strafeLeft;
-        if (isAnyKeyPressed) {
+        const deltaTime = this._time.deltaTime;
+        const turnDirection = Number(is.strafeLeft) - Number(is.strafeRight);
+        this._rotation += turnDirection * PLAYER_ROTATION_SPEED * deltaTime;
 
-            if (is.forward) {
-
-                if (is.strafeLeft) {
-                    this._rotation += Math.PI * 0.25;
-                }
-                else if (is.strafeRight) {
-                    this._rotation -= Math.PI * 0.25;
-                }
-            }
-            else if (is.backward) {
-                if (is.strafeLeft) {
-                    this._rotation += Math.PI * 0.75;
-                }
-                else if (is.strafeRight) {
-                    this._rotation -= Math.PI * 0.75;
-                }
-                else {
-                    this._rotation -= Math.PI;
-                }
-
-            }
-            // TODO : if we rotate the object no mouvement at all 
-            else if (is.strafeLeft) {
-                this._rotation += Math.PI * 0.5;
-                return;
-            }
-            else if (is.strafeRight) {
-                this._rotation -= Math.PI * 0.5;
-                return;
-            }
-
-            const speed = is.boost ? this._boostAcceleration : this._normalAcceleration;
-
-            const x = Math.sin(this._rotation) * this._time.deltaTime * speed;
-            const z = Math.cos(this._rotation) * this._time.deltaTime * speed;
-
-            const curr = this._position.cur;
-            const prev = this._position.prev;
-
-            curr.x -= x;
-            curr.z -= z;
-
-            this._position.delta = new Vector3(curr.x - prev.x, curr.y - prev.y, curr.z - prev.z);
-            this._position.prev = new Vector3(curr.x, curr.y, curr.z);
-
-            this._speed = this._position.delta.length();
-
-
+        const moveDirection = Number(is.backward) - Number(is.forward);
+        if (moveDirection !== 0) {
+            this._speed = is.boost ? this._boostAcceleration : this._normalAcceleration;
+            const distance = moveDirection * this._speed * deltaTime;
+            this._position.cur.x += Math.sin(this._rotation) * distance;
+            this._position.cur.z += Math.cos(this._rotation) * distance;
         }
+
+        const terrainHeight = State.getInstance().Terrains.getHeightAt(vec2.fromValues(
+            this._position.cur.x,
+            this._position.cur.z
+        ));
+
+        // update height offset
+        if (terrainHeight !== undefined) {
+            const groundOffset = PLAYER_RADIUS + PLAYER_CAPSULE_LENGTH * 0.5;
+            this._position.cur.y = easeTowards(
+                this._position.cur.y,
+                terrainHeight + groundOffset,
+                deltaTime
+            );
+        }
+
+        this._position.delta.set(
+            this._position.cur.x - this._position.prev.x,
+            this._position.cur.y - this._position.prev.y,
+            this._position.cur.z - this._position.prev.z
+        );
+        this._position.prev.copy(this._position.cur);
+        this._speed = Math.hypot(this._position.delta.x, this._position.delta.z);
     }
 
 
