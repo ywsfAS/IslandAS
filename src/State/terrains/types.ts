@@ -12,6 +12,6 @@ export interface TerrainsOptions {
     frequency: number;
 
     maxIteration: number;
-    minIteration: number;
+    verticalOffset: number;
 
 }

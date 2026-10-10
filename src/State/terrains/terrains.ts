@@ -1,9 +1,9 @@
 import { IterationMode, type TerrainsOptions } from "./types";
 import { DEFAULT_TERRAINS_CONFIGS } from './default';
 import { TerrainState } from '../terrain/terrain'
-import { vec2 } from "gl-matrix";
 import { EventEmitter } from "events";
 import TerrainWorker from '../../workers/terrainWorker?worker';
+import { vec2 } from 'gl-matrix';
 
 export class TerrainsState {
 
@@ -13,6 +13,7 @@ export class TerrainsState {
     private _baseEmplitude: number;
     private _power: number;
     private _frequency: number;
+    private _verticalOffset: number;
 
     private readonly _iterationMode: IterationMode = IterationMode.MAX_INTERATION_MODE;
 
@@ -28,7 +29,7 @@ export class TerrainsState {
 
     constructor(options: Partial<TerrainsOptions> = {}) {
 
-        const { maxIteration, subdivisions, lacunarity, persistence, baseEmplitude, power, frequency } = DEFAULT_TERRAINS_CONFIGS;
+        const { maxIteration, subdivisions, lacunarity, persistence, baseEmplitude, power, frequency, verticalOffset } = DEFAULT_TERRAINS_CONFIGS;
 
         this._subdivisions = options.subdivisions ?? subdivisions;
         this._lacunarity = options.lacunarity ?? lacunarity;
@@ -38,6 +39,7 @@ export class TerrainsState {
         this._frequency = options.frequency ?? frequency;
 
         this._maxIteration = options.maxIteration ?? maxIteration;
+        this._verticalOffset = options.verticalOffset ?? verticalOffset;
 
 
         // generates random offset for terrains
@@ -62,7 +64,7 @@ export class TerrainsState {
         return this._events;
     }
     public initialize() {
-        this.create(this._subdivisions, vec2.fromValues(0, 0), 1);
+        this.create(30, vec2.fromValues(0, 0), 1);
     }
 
     public setWorker() {
@@ -109,7 +111,9 @@ export class TerrainsState {
             baseEmplitude: this._baseEmplitude,
             frequency: this._frequency,
             power: this._power,
-            terrainOffsets: this._iterationsOffsets
+            terrainOffsets: this._iterationsOffsets,
+
+            verticalOffset: this._verticalOffset
 
         })
 

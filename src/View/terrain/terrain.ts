@@ -45,6 +45,7 @@ export class Terrain {
         this._geometry.setIndex(new THREE.BufferAttribute(this._state.indices, 1, false));
         this._material = this._terrains.material;
 
+        this._geometry.computeVertexNormals();
         const mesh = new THREE.Mesh(this._geometry, this._material);
         this._scene.add(mesh);
 

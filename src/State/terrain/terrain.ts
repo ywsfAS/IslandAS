@@ -26,7 +26,7 @@ export class TerrainState {
 
     private _normals: any;
     private _positions: Float32Array = new Float32Array();
-    private _indices: Float32Array = new Float32Array();
+    private _indices = new Uint32Array();
     private _uv: any;
     private _textures: any;
 
