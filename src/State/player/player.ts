@@ -52,7 +52,8 @@ export class Player {
         const moveDirection = Number(is.backward) - Number(is.forward);
         if (moveDirection !== 0) {
             this._speed = is.boost ? this._boostAcceleration : this._normalAcceleration;
-            const distance = moveDirection * this._speed * deltaTime;
+            const distance = moveDirection * this._speed * this._time.deltaTime;
+            console.log(distance);
             this._position.cur.x += Math.sin(this._rotation) * distance;
             this._position.cur.z += Math.cos(this._rotation) * distance;
         }

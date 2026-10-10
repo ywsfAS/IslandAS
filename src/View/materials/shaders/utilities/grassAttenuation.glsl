@@ -1,0 +1,4 @@
+float grassAttenuation(vec2 pos){
+    float dist = distance(uPlayerPosition.xz,pos) / uGrassDistance;
+    return 1.0 - smoothstep(0.15,0.7,dist);
+}

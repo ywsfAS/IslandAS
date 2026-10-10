@@ -10,6 +10,7 @@ export default function createGrassMaterial() {
             uTime: { value: null },
             uPlayerPosition: { value: null },
             uGrassDistance: { value: null },
+            uHeightMapTexelSize: { value: null },
             uCameraPosition: { value: null },
             uHeightMap: { value: null },
         },

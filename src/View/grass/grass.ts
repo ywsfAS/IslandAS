@@ -148,6 +148,7 @@ export class Grass {
         this._material.uniforms.uTime.value = 0;
         this._material.uniforms.uPlayerPosition.value = new THREE.Vector3();
         this._material.uniforms.uGrassDistance.value = this._chunkSize;
+        this._material.uniforms.uHeightMapTexelSize.value = 1 / Math.max(1, this._terrainState.resolution - 1);
         this._material.uniforms.uCameraPosition.value = new THREE.Vector3();
         this._material.uniforms.uHeightMap.value = this._terrain.getHeightTexture();
 

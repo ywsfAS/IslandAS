@@ -40,6 +40,9 @@ export class Terrain {
     public state() {
         return this._state;
     }
+    get normals() {
+        return this._geometry.getAttribute('normal');
+    }
 
     public getHeightTexture() {
 
@@ -68,6 +71,8 @@ export class Terrain {
         this._geometry.setAttribute('position', new THREE.BufferAttribute(this._state.position, 3));
         this._geometry.setIndex(new THREE.BufferAttribute(this._state.indices, 1, false));
         this._geometry.computeVertexNormals();
+
+        console.log("normal", this._geometry.getAttribute('normal'));
         this._material = this._terrains.material;
 
         this._material.uniforms.uHeightMap.value = this.getHeightTexture();

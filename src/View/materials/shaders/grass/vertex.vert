@@ -1,11 +1,15 @@
 uniform float uGrassDistance;
+uniform float uHeightMapTexelSize;
 uniform vec3 uPlayerPosition;
 uniform vec3 uCameraPosition;
 uniform sampler2D uHeightMap;
 
 attribute vec2 center;
+varying vec3 vColor;
+varying float vDebugValue;
 
 #include "../utilities/pivot.glsl";
+#include "../utilities/grassAttenuation.glsl";
 
 void main()
 {
@@ -33,6 +37,40 @@ void main()
 
     worldPosition.xz = rotatedOffset + spaceCenter.xz;
     worldPosition.y += height;
+
+    float leftHeight = texture2D(uHeightMap,terrainUV - vec2(uHeightMapTexelSize,0.0)).r;
+    float rightHeight = texture2D(uHeightMap,terrainUV + vec2(uHeightMapTexelSize,0.0)).r;
+    float forwardHeight = texture2D(uHeightMap,terrainUV + vec2(0.0,uHeightMapTexelSize)).r;
+    float backwardHeight = texture2D(uHeightMap,terrainUV - vec2(0.0,uHeightMapTexelSize)).r;
+
+    vec3 terrainNormal = normalize(vec3(
+        leftHeight - rightHeight,
+        2.0 * uGrassDistance + uHeightMapTexelSize,
+        forwardHeight - backwardHeight
+    ));
+    float slope = 1.0 - abs(terrainNormal.y);
+
+    // attenuation = 0 means too far
+    float attenuation = grassAttenuation(spaceCenter.xz);
+    float slopeScale = 1.0 - smoothstep(0.4,0.5,slope);
+
+    float scale = slopeScale * attenuation;
+    float isPeak = step(2.0,mod(float(gl_VertexID) + 1.0,3.0));
+
+    vec3 grassLightColor = vec3(0.52, 0.65, 0.26);
+    vec3 grassDarkColor  = vec3(0.30, 0.40, 0.12);
+
+    vec3 color1 = mix(grassDarkColor,grassLightColor,scale);
+    vec3 color2 = mix(color1,grassDarkColor,isPeak);
+
+    vColor = color2;
+
+    // hide distant or high slop places blades
+    worldPosition.xyz = mix(spaceCenter.xyz,worldPosition.xyz,scale);
+
+
+
+
 
     gl_Position = projectionMatrix * viewMatrix * worldPosition;
 }
