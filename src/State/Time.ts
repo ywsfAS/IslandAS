@@ -15,7 +15,7 @@ export class Time {
         this.elapsedTime = 0;
     }
 
-    public Update() {
+    public update() {
 
         const current = Date.now() / 1000;
 
@@ -24,8 +24,8 @@ export class Time {
         this.elapsedTime += this.deltaTime;
 
         // lock in 20 fps
-        if (this.deltaTime > 1 / 20) {
-            this.deltaTime = 1 / 20
+        if (this.deltaTime > 1 / 80) {
+            this.deltaTime = 1 / 80
         }
 
     }

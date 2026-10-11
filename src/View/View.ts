@@ -2,10 +2,9 @@ import * as THREE from 'three';
 import { Camera } from './camera/camera';
 import { Renderer } from './renderer/renderer';
 import { Player } from './player/player';
-import { World } from './world/world';
 import { Grass } from './grass/grass';
 import { Terrains } from './terrains/terrains';
-import type { Terrain } from './terrain/terrain';
+import { Sun } from './sun/sun';
 export class View {
 
     private static instance: View;
@@ -18,6 +17,7 @@ export class View {
     //private readonly _world: World;
     private readonly _grass: Grass;
     private readonly _terrains: Terrains;
+    private readonly _sun: Sun;
 
     public static getInstance(): View {
         return View.instance ?? new View();
@@ -30,10 +30,10 @@ export class View {
         this._camera = new Camera(new THREE.PerspectiveCamera());
         this._renderer = new Renderer();
         this._player = new Player();
-        //this._world = new World();
         this._terrains = new Terrains();
 
         this._grass = new Grass();
+        this._sun = new Sun();
         console.log("view", this._terrains);
     }
     get scene() {
@@ -54,10 +54,13 @@ export class View {
     get grass() {
         return this._grass;
     }
+    get sun() {
+        return this._sun;
+    }
 
     public update() {
         this._grass.update();
-        //   this._world.update();
+        this._sun.update();
         this._terrains.update();
         this._player.update();
         this._camera.update();
