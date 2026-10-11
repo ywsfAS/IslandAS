@@ -3,6 +3,7 @@ uniform float uHeightMapTexelSize;
 uniform vec3 uPlayerPosition;
 uniform vec3 uCameraPosition;
 uniform sampler2D uHeightMap;
+uniform float uTime;
 
 attribute vec2 center;
 varying vec3 vColor;
@@ -60,8 +61,14 @@ void main()
     vec3 grassLightColor = vec3(0.52, 0.65, 0.26);
     vec3 grassDarkColor  = vec3(0.30, 0.40, 0.12);
 
+
+    // wind effect 
+    float wind = sin(uTime * 2.0 + worldPosition.x * 0.5 + worldPosition.z * 0.5) * 0.2;
+    worldPosition.x += wind * position.y;
+
     vec3 color1 = mix(grassDarkColor,grassLightColor,scale);
     vec3 color2 = mix(color1,grassDarkColor,isPeak);
+
 
     vColor = color2;
 

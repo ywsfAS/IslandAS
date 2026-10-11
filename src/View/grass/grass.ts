@@ -13,6 +13,7 @@ import { vec2 } from 'gl-matrix';
 import { Terrains } from '../terrains/terrains';
 import { TileShadowNode } from 'three/examples/jsm/tsl/shadows/TileShadowNode.js';
 import type { Terrain } from '../terrain/terrain';
+import { thickness } from 'three/tsl';
 
 export class Grass {
 
@@ -165,7 +166,8 @@ export class Grass {
         if (!this._geometry) return;
         this._material.uniforms.uPlayerPosition.value = this._player.position.cur;
         this._material.uniforms.uCameraPosition.value = this._camera.position;
-        console.log("updating ...");
+        this._material.uniforms.uTime.value = this._time.elapsedTime;
+        console.log("time now ", this._time.current);
     }
 
 }

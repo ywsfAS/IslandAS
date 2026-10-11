@@ -73,7 +73,7 @@ export class TerrainsState {
         return this._events;
     }
     public initialize() {
-        this.create(200, vec2.fromValues(0, 0), 1);
+        this.create(100, vec2.fromValues(0, 0), 1);
     }
 
     public setWorker() {

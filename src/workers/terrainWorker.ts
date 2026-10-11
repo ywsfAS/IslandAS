@@ -115,7 +115,7 @@ onmessage = (event) => {
             const px = center[0] + ((x / (resolution - 1)) - 0.5) * size;
             const pz = center[1] + ((z / (resolution - 1)) - 0.5) * size;
 
-            textures[z * resolution + x] = getTerrainHeight(vec2.fromValues(px, pz), options) + 0.8;
+            textures[z * resolution + x] = getTerrainHeight(vec2.fromValues(px, pz), options);
         }
 
     }

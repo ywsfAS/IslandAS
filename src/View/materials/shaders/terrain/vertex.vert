@@ -1,5 +1,6 @@
 uniform vec3 uPlayerPosition;
 uniform float uGrassDistance;
+uniform float uTime;
 
 varying vec3 vColor;
 
@@ -15,11 +16,14 @@ void main(){
 
     float result = attenuation * slopeScale;
 
-    
-    vec3 terrainLightColor = vec3(0.58, 0.55, 0.32);
-    vec3 terrainDarkColor  = vec3(0.34, 0.32, 0.19);
 
-    vec3 color = mix(terrainDarkColor,terrainLightColor,result);
+
+    
+    
+    vec3 terrainLightColor = vec3(0.55, 0.78, 0.35);
+    vec3 terrainDarkColor  = vec3(0.20, 0.38, 0.18);
+
+    vec3 color = mix(terrainDarkColor,terrainLightColor,attenuation);
 
     vColor = color;
 
