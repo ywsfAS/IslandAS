@@ -4,6 +4,7 @@ import { View } from '../view';
 import { State } from '../../state/state';
 import { TerrainsState } from '../../state/terrains/terrains';
 import { Terrains } from '../terrains/terrains';
+import type { Sun } from '../sun/sun';
 
 
 
@@ -18,6 +19,8 @@ export class Terrain {
     private _geometry!: THREE.BufferGeometry;
     private _material!: THREE.ShaderMaterial;
 
+    private readonly _sun: Sun;
+
     constructor(terrainState: TerrainState) {
 
         const view = View.getInstance();
@@ -27,6 +30,7 @@ export class Terrain {
         this._terrainsState = state.Terrains;
         this._state = terrainState;
         this._terrains = view.terrains;
+        this._sun = view.sun;
 
 
         console.log("this", this._terrains);
@@ -76,6 +80,9 @@ export class Terrain {
         this._material = this._terrains.material;
 
         this._material.uniforms.uHeightMap.value = this.getHeightTexture();
+        this._material.uniforms.uDirectionLight.value = this._sun.lightDirection;
+        this._material.uniforms.uSunIntensity.value = this._sun.intensity;
+        this._material.uniforms.uSunColor.value = this._sun.color;
 
         const mesh = new THREE.Mesh(this._geometry, this._material);
         this._scene.add(mesh);

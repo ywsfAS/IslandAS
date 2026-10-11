@@ -1,6 +1,6 @@
 import { vec3 } from "gl-matrix";
 import type { SunStateOptions } from "./types";
-import { mx_bilerp_0 } from "three/src/nodes/materialx/MaterialXNoise.js";
+import { vec2 } from "three/tsl";
 
 
 export const DEFAULT_SUN_CONFIG: SunStateOptions = {
@@ -9,9 +9,12 @@ export const DEFAULT_SUN_CONFIG: SunStateOptions = {
     initDirection: vec3.fromValues(1, 0, 1),
     initColor: vec3.fromValues(1, 1, 1),
 
-    distance: 20,
-    intensity: 5,
+    intensity: 4,
+    radius: 30,
+    initAngle: 0,
+    initOrbitSpeed: .4,
+    orbitRadius: 200,
+    center: vec3.fromValues(0, 0, 0)
 
-    radius: 10
 
 }

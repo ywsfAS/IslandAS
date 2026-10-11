@@ -3,6 +3,7 @@ import type { SunStateOptions } from './types';
 import { DEFAULT_SUN_CONFIG } from './default';
 import type { Time } from '../time';
 import { State } from '../state';
+import { thickness } from 'three/tsl';
 
 
 export class SunState {
@@ -12,9 +13,12 @@ export class SunState {
     private _direction: vec3;
 
     private _intensity: number;
-    private _distance: number;
 
     private _radius: number;
+    private _angle: number;
+    private _orbitSpeed: number;
+    private _orbitRadius: number;
+    private _center: vec3;
 
     private readonly _time: Time;
 
@@ -25,25 +29,46 @@ export class SunState {
         this._time = state.time;
 
 
-        const { initColor, initDirection, initPosition, radius, distance, intensity } = DEFAULT_SUN_CONFIG;
+        const { initColor, initDirection, center, initPosition, radius, intensity, initAngle, initOrbitSpeed, orbitRadius } = DEFAULT_SUN_CONFIG;
 
         this._position = options.initPosition ?? initPosition;
         this._color = options.initColor ?? initColor;
         this._direction = options.initDirection ?? initDirection;
         this._radius = options.radius ?? radius;
-        this._distance = options.distance ?? distance;
         this._intensity = options.intensity ?? intensity;
+        this._angle = options.initAngle ?? initAngle;
+        this._orbitSpeed = options.initOrbitSpeed ?? initOrbitSpeed;
+        this._orbitRadius = options.orbitRadius ?? orbitRadius;
+        this._center = options.center ?? center;
 
 
     }
     get radius() {
         return this._radius;
     }
+    get position() {
+        return this._position;
+    }
     get time() {
         return this._time;
     }
+    get direction() {
+        return this._direction;
+    }
+    get color() {
+        return this._color;
+    }
+    get intensity() {
+        return this._intensity;
+    }
+    get center() {
+        return this._center;
+    }
     public update() {
-        console.log("updating sun ...");
+
+        this._angle += this.time.deltaTime * this._orbitSpeed;
+        this._position[0] = Math.cos(this._angle) * this._orbitRadius;
+        this._position[1] = Math.sin(this._angle) * this._orbitRadius;
 
     }
 

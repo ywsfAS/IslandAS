@@ -9,11 +9,9 @@ import createGrassMaterial from '../materials/grassMaterial';
 import type { Player } from '../../state/player/player';
 import type { CameraState } from '../../state/camera/camera';
 import type { TerrainState } from '../../state/terrain/terrain';
-import { vec2 } from 'gl-matrix';
 import { Terrains } from '../terrains/terrains';
-import { TileShadowNode } from 'three/examples/jsm/tsl/shadows/TileShadowNode.js';
 import type { Terrain } from '../terrain/terrain';
-import { thickness } from 'three/tsl';
+import type { Sun } from '../sun/sun';
 
 export class Grass {
 
@@ -33,6 +31,7 @@ export class Grass {
     private readonly _scene: Scene;
     private readonly _player: Player;
     private readonly _camera: CameraState;
+    private readonly _sun: Sun;
     private _terrainState!: TerrainState;
     private _terrain!: Terrain;
     private _terrains: Terrains;
@@ -55,6 +54,7 @@ export class Grass {
         this._player = state.player;
         this._camera = state.camera;
         this._terrains = view.terrains;
+        this._sun = view.sun;
 
         this._grassGridCount = options.grassGridCount ?? grassGridCount;
         this._bladeHeightRandomnessRatio = options.bladeHeightRandomRatio ?? bladeHeightRandomRatio;
@@ -155,6 +155,7 @@ export class Grass {
         this._material.uniforms.uHeightMapTexelSize.value = 1 / Math.max(1, this._terrainState.resolution - 1);
         this._material.uniforms.uCameraPosition.value = new THREE.Vector3();
         this._material.uniforms.uHeightMap.value = this._terrain.getHeightTexture();
+        this._material.uniforms.uSunColor.value = this._sun.color;
 
 
     }
@@ -166,6 +167,8 @@ export class Grass {
         if (!this._geometry) return;
         this._material.uniforms.uPlayerPosition.value = this._player.position.cur;
         this._material.uniforms.uCameraPosition.value = this._camera.position;
+        this._material.uniforms.uDirectionLight.value = this._sun.lightDirection;
+        this._material.uniforms.uSunIntensity.value = this._sun.intensity;
         this._material.uniforms.uTime.value = this._time.elapsedTime;
         console.log("time now ", this._time.current);
     }

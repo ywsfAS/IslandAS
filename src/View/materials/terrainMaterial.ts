@@ -11,7 +11,10 @@ export default function createTerrainMaterial(): ShaderMaterial {
             uTime: { value: null },
             uHeightMap: { value: null },
             uPlayerPosition: { value: null },
-            uGrassDistance: { value: null }
+            uGrassDistance: { value: null },
+            uDirectionLight: { value: null },
+            uSunIntensity: { value: null },
+            uSunColor: { value: null }
         },
         vertexShader: vertexShader,
         fragmentShader: fragementShader,

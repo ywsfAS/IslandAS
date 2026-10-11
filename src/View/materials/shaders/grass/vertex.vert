@@ -1,5 +1,8 @@
 uniform float uGrassDistance;
 uniform float uHeightMapTexelSize;
+uniform vec3 uDirectionLight;
+uniform vec3 uSunColor;
+uniform float uSunIntensity;
 uniform vec3 uPlayerPosition;
 uniform vec3 uCameraPosition;
 uniform sampler2D uHeightMap;
@@ -69,8 +72,11 @@ void main()
     vec3 color1 = mix(grassDarkColor,grassLightColor,scale);
     vec3 color2 = mix(color1,grassDarkColor,isPeak);
 
+    float diffuse = max(dot(normalize(uDirectionLight), normalize(terrainNormal)), 0.0);
+    float brightness = 0.6 + diffuse * min(uSunIntensity * 0.13, 0.65);
 
-    vColor = color2;
+
+    vColor = color2 * brightness * uSunColor;
 
     // hide distant or high slop places blades
     worldPosition.xyz = mix(spaceCenter.xyz,worldPosition.xyz,scale);

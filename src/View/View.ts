@@ -14,7 +14,6 @@ export class View {
     private readonly _renderer: Renderer;
 
     private readonly _player: Player;
-    //private readonly _world: World;
     private readonly _grass: Grass;
     private readonly _terrains: Terrains;
     private readonly _sun: Sun;
@@ -32,8 +31,8 @@ export class View {
         this._player = new Player();
         this._terrains = new Terrains();
 
-        this._grass = new Grass();
         this._sun = new Sun();
+        this._grass = new Grass();
         console.log("view", this._terrains);
     }
     get scene() {

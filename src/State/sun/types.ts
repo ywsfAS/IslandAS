@@ -7,8 +7,11 @@ export interface SunStateOptions {
     initDirection: vec3;
 
     intensity: number;
-    distance: number;
 
     radius: number;
+    initOrbitSpeed: number;
+    initAngle: number;
+    orbitRadius : number;
+    center : vec3
 
 }

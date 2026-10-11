@@ -13,6 +13,9 @@ export default function createGrassMaterial() {
             uHeightMapTexelSize: { value: null },
             uCameraPosition: { value: null },
             uHeightMap: { value: null },
+            uDirectionLight: { value: null },
+            uSunIntensity: { value: null },
+            uSunColor: { value: null }
         },
         vertexShader: vertexShader,
         fragmentShader: fragementShader,

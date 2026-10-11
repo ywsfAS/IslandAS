@@ -7,8 +7,7 @@ export function createSunMaterial() {
     const material = new THREE.ShaderMaterial({
 
         uniforms: {
-            uTime: { value: null }
-
+            uColor: { value: new THREE.Color(0xfff0d0) }
         },
 
         vertexShader: vertexShader,
