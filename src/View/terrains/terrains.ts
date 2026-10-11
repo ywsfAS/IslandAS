@@ -5,6 +5,10 @@ import { View } from "../view";
 import { Terrain } from '../terrain/terrain';
 import createTerrainMaterial from "../materials/terrainMaterial";
 import { EventEmitter } from "events";
+import type { Player } from "../../state/player/player";
+import { vec3 } from "gl-matrix";
+import { Grass } from "../grass/grass";
+import { DEFAULT_GRASS_CONFIG } from "../grass/default";
 
 
 export class Terrains {
@@ -17,6 +21,9 @@ export class Terrains {
     private _id = 0;
     private readonly _terrains: Map<number, Terrain> = new Map();
 
+    private readonly _player: Player;
+
+
     constructor() {
 
         const state = State.getInstance();
@@ -24,6 +31,8 @@ export class Terrains {
 
         this._state = state.Terrains;
         this._scene = view.scene;
+        this._player = state.player;
+
 
         this.setMaterial();
 
@@ -56,12 +65,17 @@ export class Terrains {
         })
     }
     private setMaterial() {
+        const { chunkSize } = DEFAULT_GRASS_CONFIG;
         const material = createTerrainMaterial();
+        material.uniforms.uPlayerPosition.value = vec3.fromValues(0, 0, 0);
+        material.uniforms.uGrassDistance.value = chunkSize;
         material.uniforms.uTime.value = 1;
-
-
         this._material = material;
 
+    }
+    public update() {
+        const position = this._player.position.cur;
+        this._material.uniforms.uPlayerPosition.value = vec3.fromValues(position.x, position.y, position.z);
     }
 
 }

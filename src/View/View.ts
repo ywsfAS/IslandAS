@@ -51,6 +51,9 @@ export class View {
     get terrains() {
         return this._terrains;
     }
+    get grass() {
+        return this._grass;
+    }
 
     public update() {
         this._grass.update();
