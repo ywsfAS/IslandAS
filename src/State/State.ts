@@ -5,6 +5,7 @@ import { SunState } from "./sun/sun";
 import { TerrainsState } from "./terrains/terrains";
 import { Time } from "./time";
 import { Viewport } from './viewport/viewport';
+import { WaterState } from "./water/water";
 export class State {
     public static instance: State;
 
@@ -15,6 +16,7 @@ export class State {
     private readonly _camera: CameraState;
     private readonly _terrains: TerrainsState;
     private readonly _sun: SunState;
+    private readonly _water: WaterState;
 
     public static getInstance(): State {
         return State.instance ?? new State();
@@ -31,6 +33,7 @@ export class State {
 
         this._camera = new CameraState();
         this._sun = new SunState();
+        this._water = new WaterState();
 
     }
     get camera() {
@@ -55,6 +58,9 @@ export class State {
     get Terrains() {
         return this._terrains;
     }
+    get water() {
+        return this._water;
+    }
 
     public update() {
         this._controls.update();
@@ -62,6 +68,7 @@ export class State {
         this._camera.update();
         this._time.update();
         this._sun.update();
+        this._water.update();
     }
 
 }
