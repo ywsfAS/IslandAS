@@ -6,6 +6,7 @@ import { Grass } from './grass/grass';
 import { Terrains } from './terrains/terrains';
 import { Sun } from './sun/sun';
 import { Water } from './water/water';
+import { Sky } from './sky/sky';
 export class View {
 
     private static instance: View;
@@ -19,6 +20,7 @@ export class View {
     private readonly _terrains: Terrains;
     private readonly _sun: Sun;
     private readonly _water: Water;
+    private readonly _sky: Sky;
 
     public static getInstance(): View {
         return View.instance ?? new View();
@@ -34,6 +36,7 @@ export class View {
         this._terrains = new Terrains();
 
         this._sun = new Sun();
+        this._sky = new Sky(this._scene, this._camera.instance, this._sun);
         this._grass = new Grass();
         this._water = new Water();
         console.log("view", this._terrains);
@@ -70,6 +73,7 @@ export class View {
         this._terrains.update();
         this._player.update();
         this._camera.update();
+        this._sky.update();
         this._renderer.update();
     }
     public resize() {

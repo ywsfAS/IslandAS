@@ -14,7 +14,7 @@ export const DEFAULT_WATER_OPTIONS: WaterStateOptions = {
     angularFrequency: vec3.fromValues(1.2, 0.4, 1.5),
     waveAmplitude: vec3.fromValues(0.5, 0.3, 0.6),
     randomizationInterval: 5,
-    transitionDuration: 3,
+    transitionDuration: 2,
     directions: [vec2.fromValues(1, 0), vec2.fromValues(0.845, 0.567), vec2.fromValues(-0.463, 0.765)]
 
 }
