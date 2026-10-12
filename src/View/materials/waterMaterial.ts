@@ -10,8 +10,14 @@ export function createWaterMaterial() {
             uTime: { value: null },
             uSpatialFrequency: { value: null },
             uAngularFrequency: { value: null },
-            uWaveAmplitude: { value: null }
-
+            uWaveAmplitude: { value: null },
+            uDirectionLight: { value: null },
+            uSunIntensity: { value: null },
+            uSunColor: { value: null },
+            uCameraPosition: { value: null },
+            uDirection1: { value: null },
+            uDirection2: { value: null },
+            uDirection3: { value: null }
         },
         vertexShader: vertexShader,
         fragmentShader: fragementShader,

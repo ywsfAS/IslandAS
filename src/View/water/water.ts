@@ -4,6 +4,8 @@ import type { WaterState } from '../../state/water/water';
 import { createWaterMaterial } from '../materials/waterMaterial';
 import { View } from '../view';
 import type { Time } from '../../state/time';
+import type { Sun } from '../sun/sun';
+import type { CameraState } from '../../state/camera/camera';
 
 export class Water {
 
@@ -14,6 +16,8 @@ export class Water {
     private readonly _state: WaterState;
     private readonly _scene: THREE.Scene;
     private readonly _time: Time;
+    private readonly _sun: Sun;
+    private readonly _camera: CameraState;
 
 
     constructor() {
@@ -24,7 +28,8 @@ export class Water {
         this._state = state.water;
         this._scene = view.scene;
         this._time = state.time;
-
+        this._sun = view.sun;
+        this._camera = state.camera;
 
         this.setGeometry();
         this.setMaterial();
@@ -47,9 +52,7 @@ export class Water {
         this._material = createWaterMaterial();
 
         this._material.uniforms.uTime.value = this._time.elapsedTime;
-        this._material.uniforms.uAngularFrequency.value = this._state.angularFrequency;
-        this._material.uniforms.uSpatialFrequency.value = this._state.spatialFrequency;
-        this._material.uniforms.uWaveAmplitude.value = this._state.waveAmplitude;
+        this.setWaveUniforms();
 
     }
     public setMesh() {
@@ -60,9 +63,22 @@ export class Water {
     }
 
     public update() {
-        console.log("updating the water view ");
         this._material.uniforms.uTime.value = this._time.elapsedTime;
+        this.setWaveUniforms();
+        this._material.uniforms.uDirectionLight.value = this._sun.lightDirection;
+        this._material.uniforms.uSunColor.value = this._sun.color;
+        this._material.uniforms.uSunIntensity.value = this._sun.intensity;
+        this._material.uniforms.uCameraPosition.value = this._camera.position;
 
+    }
+
+    private setWaveUniforms() {
+        this._material.uniforms.uAngularFrequency.value = this._state.angularFrequency;
+        this._material.uniforms.uSpatialFrequency.value = this._state.spatialFrequency;
+        this._material.uniforms.uWaveAmplitude.value = this._state.waveAmplitude;
+        this._material.uniforms.uDirection1.value = this._state.directions[0];
+        this._material.uniforms.uDirection2.value = this._state.directions[1];
+        this._material.uniforms.uDirection3.value = this._state.directions[2];
     }
 
 }

@@ -14,7 +14,9 @@ export default function createTerrainMaterial(): ShaderMaterial {
             uGrassDistance: { value: null },
             uDirectionLight: { value: null },
             uSunIntensity: { value: null },
-            uSunColor: { value: null }
+            uSunColor: { value: null },
+            uDirections: { value: null }
+
         },
         vertexShader: vertexShader,
         fragmentShader: fragementShader,
