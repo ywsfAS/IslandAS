@@ -5,7 +5,7 @@ export const DEFAULT_GRASS_CONFIG: GrassOptions = {
     chunkSize: 100,
 
     grassHeightRatio: 5,
-    grassWidthRatio: 1.6,
+    grassWidthRatio: 2.0,
 
     bladeHeightRandomRatio: 0.4,
     bladePositionRandomRatio: 0.5

@@ -1,5 +1,5 @@
 import type { Controls } from "../controls/controls";
-import type { Player } from "../player/player";
+import type { PlayerState } from "../player/player";
 import { State } from "../state";
 import { DEFAULT_CAMERA_STATE_CONFIG } from './default';
 import type { Viewport } from "../viewport/viewport";
@@ -21,7 +21,7 @@ export class CameraState {
     private _position: vec3;
     private _quaterion: quat2;
 
-    private readonly _player: Player;
+    private readonly _player: PlayerState;
     private readonly _viewport: Viewport;
     private readonly _controls: Controls;
 

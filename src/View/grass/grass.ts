@@ -6,7 +6,7 @@ import type { GrassOptions } from './types';
 import { View } from '../view';
 import * as THREE from 'three';
 import createGrassMaterial from '../materials/grassMaterial';
-import type { Player } from '../../state/player/player';
+import type { PlayerState } from '../../state/player/player';
 import type { CameraState } from '../../state/camera/camera';
 import type { TerrainState } from '../../state/terrain/terrain';
 import { Terrains } from '../terrains/terrains';
@@ -29,7 +29,7 @@ export class Grass {
 
     private readonly _time: Time;
     private readonly _scene: Scene;
-    private readonly _player: Player;
+    private readonly _player: PlayerState;
     private readonly _camera: CameraState;
     private readonly _sun: Sun;
     private _terrainState!: TerrainState;

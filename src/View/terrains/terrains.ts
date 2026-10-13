@@ -5,7 +5,7 @@ import { View } from "../view";
 import { Terrain } from '../terrain/terrain';
 import createTerrainMaterial from "../materials/terrainMaterial";
 import { EventEmitter } from "events";
-import type { Player } from "../../state/player/player";
+import type { PlayerState } from "../../state/player/player";
 import { vec3 } from "gl-matrix";
 import { Grass } from "../grass/grass";
 import { DEFAULT_GRASS_CONFIG } from "../grass/default";
@@ -21,7 +21,7 @@ export class Terrains {
     private _id = 0;
     private readonly _terrains: Map<number, Terrain> = new Map();
 
-    private readonly _player: Player;
+    private readonly _player: PlayerState;
 
 
     constructor() {

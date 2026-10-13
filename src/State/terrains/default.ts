@@ -5,7 +5,7 @@ export const DEFAULT_TERRAINS_CONFIGS: TerrainsOptions = {
     lacunarity: 1,
     persistence: 2,
     frequency: 0.06,
-    baseEmplitude: 5.2,
+    baseEmplitude: 10,
     power: 1,
 
     maxIteration: 10,

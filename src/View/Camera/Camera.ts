@@ -3,7 +3,7 @@ import type { CameraOptions } from './types';
 import { DEFAULT_CAMERA_CONFIG } from './default';
 import type { Viewport } from '../../state/viewport/viewport';
 import { State } from '../../state/state';
-import type { Player } from '../../state/player/player';
+import type { PlayerState } from '../../state/player/player';
 import type { CameraState } from '../../state/camera/camera';
 import { vec2 } from 'three/tsl';
 

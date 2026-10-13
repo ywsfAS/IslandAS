@@ -5,7 +5,7 @@ varying vec3 vSkyDirection;
 void main()
 {
     vec3 skyDirection = normalize(vSkyDirection);
-    float height = smoothstep(-0.12, 0.7, skyDirection.y);
+    float height = smoothstep(0.0, 0.8, skyDirection.y);
     float sunHeight = uSunDirection.y;
     float daylight = smoothstep(-0.12, 0.16, sunHeight);
     float sunset = (1.0 - smoothstep(0.015, 0.28, abs(sunHeight))) * (1.0 - daylight * 0.35);

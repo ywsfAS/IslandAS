@@ -6,7 +6,7 @@ import type { Time } from '../time';
 import { vec2 } from 'gl-matrix';
 
 
-export class Player {
+export class PlayerState {
 
     private _rotation: number;
     private _normalAcceleration: number;

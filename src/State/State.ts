@@ -1,6 +1,6 @@
 import { CameraState } from "./camera/camera";
 import { Controls } from "./controls/controls";
-import { Player } from "./player/player";
+import { PlayerState } from "./player/player";
 import { SunState } from "./sun/sun";
 import { TerrainsState } from "./terrains/terrains";
 import { Time } from "./time";
@@ -12,7 +12,7 @@ export class State {
     private readonly _time: Time;
     private readonly _viewport: Viewport;
     private readonly _controls: Controls;
-    private readonly _player: Player;
+    private readonly _player: PlayerState;
     private readonly _camera: CameraState;
     private readonly _terrains: TerrainsState;
     private readonly _sun: SunState;
@@ -28,7 +28,7 @@ export class State {
         this._time = new Time();
         this._viewport = new Viewport();
         this._controls = new Controls();
-        this._player = new Player();
+        this._player = new PlayerState();
         this._terrains = new TerrainsState();
 
         this._camera = new CameraState();
