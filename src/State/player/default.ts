@@ -15,6 +15,9 @@ export const DEFAULT_PLAYER_OPTIONS: PlayerOptions = {
     normalAcceleration: 10,
     boostAcceleration: 30,
     speed: 0,
+    jumpPower: 20,
+    minHeight: 0.1,
+    maxHeight: 5,
     position: defaultPosition
 
 

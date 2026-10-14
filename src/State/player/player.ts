@@ -12,6 +12,9 @@ export class PlayerState {
     private _normalAcceleration: number;
     private _boostAcceleration: number;
     private _speed: number;
+    private _jumpPower: number;
+    private _minHeight: number;
+    private _maxHeight: number;
 
     private _position: Position;
     private _controls: Controls;
@@ -26,12 +29,15 @@ export class PlayerState {
         this._time = state.time;
 
 
-        const { rotation, normalAcceleration, boostAcceleration, speed, position } = DEFAULT_PLAYER_OPTIONS;
+        const { rotation, normalAcceleration, boostAcceleration, jumpPower, speed, position, maxHeight, minHeight } = DEFAULT_PLAYER_OPTIONS;
 
         this._rotation = options.rotation ?? rotation;
         this._normalAcceleration = options.normalAcceleration ?? normalAcceleration;
         this._boostAcceleration = options.boostAcceleration ?? boostAcceleration;
         this._speed = options.speed ?? speed;
+        this._jumpPower = options.jumpPower ?? jumpPower;
+        this._minHeight = options.minHeight ?? minHeight;
+        this._maxHeight = options.maxHeight ?? maxHeight;
 
         this._position = options.position ?? position;
 
@@ -56,6 +62,17 @@ export class PlayerState {
             console.log(distance);
             this._position.cur.x += Math.sin(this._rotation) * distance;
             this._position.cur.z += Math.cos(this._rotation) * distance;
+        }
+        // jump 
+        if (is.jump) {
+            this._position.cur.y += this._jumpPower * deltaTime;
+        } else {
+            this._position.cur.y -= (this._jumpPower / 4) * deltaTime;
+        }
+
+        // clipping out of bounds 
+        if (this._position.cur.y < this._minHeight || this._position.cur.y >= this._maxHeight) {
+            this._position.cur.y = Math.max(Math.min(this._position.cur.y, this._maxHeight), this._minHeight);
         }
 
         const terrainHeight = State.getInstance().Terrains.getHeightAt(vec2.fromValues(

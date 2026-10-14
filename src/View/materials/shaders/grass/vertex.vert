@@ -35,8 +35,8 @@ void main()
 
     vec4 worldPosition = modelMatrix * vec4(position,1.0);
 
-    float angle = atan(uCameraPosition.x - spaceCenter.x,uCameraPosition.z - spaceCenter.z);
-    vec2 rotatedOffset = pivot2D(worldPosition.xz,angle,vec2(0.0));
+    float angle = atan(spaceCenter.x - uCameraPosition.x , spaceCenter.z - uCameraPosition.z);
+    vec2 rotatedOffset = pivot2D(worldPosition.xz,angle,vec2(0,0));
     
 
     worldPosition.xz = rotatedOffset + spaceCenter.xz;

@@ -170,7 +170,6 @@ export class Grass {
         this._material.uniforms.uDirectionLight.value = this._sun.lightDirection;
         this._material.uniforms.uSunIntensity.value = this._sun.intensity;
         this._material.uniforms.uTime.value = this._time.elapsedTime;
-        console.log("time now ", this._time.current);
     }
 
 }

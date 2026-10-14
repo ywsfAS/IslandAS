@@ -4,6 +4,9 @@ export interface PlayerOptions {
     rotation: number,
     normalAcceleration: number,
     boostAcceleration: number,
+    jumpPower: number,
+    minHeight: number,
+    maxHeight: number,
     speed: number,
 
     position: Position
