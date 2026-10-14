@@ -8,9 +8,11 @@ uniform vec2 uDirection3;
 
 varying vec3 vWorldPosition;
 varying vec3 vWorldNormal;
+varying vec2 vUv;
 
 void main()
 {
+    vUv = uv;
     vec4 modelPosition = modelMatrix * vec4(position, 1.0);
 
     vec3 phase = uAngularFrequency * uTime;

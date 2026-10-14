@@ -15,6 +15,9 @@ export function createWaterMaterial() {
             uSunIntensity: { value: null },
             uSunColor: { value: null },
             uCameraPosition: { value: null },
+            uTerrainCenter: { value: null },
+            uTerrainSize: { value: null },
+            uNoiseTexture: { value: null },
             uDirection1: { value: null },
             uDirection2: { value: null },
             uDirection3: { value: null }

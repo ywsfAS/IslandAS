@@ -61,7 +61,7 @@ export class Player {
         // update uniforms for mesh material 
         this._material.uniforms.uTime.value = this._time.elapsedTime;
         this._material.uniforms.uSunColor.value = this._sun.color;
-        this._material.uniforms.uLightDirection.value = this._sun.direction;
+        this._material.uniforms.uLightDirection.value = View.getInstance().sun.lightDirection;
         this._material.uniforms.uSunIntensity.value = this._sun.intensity;
 
     }

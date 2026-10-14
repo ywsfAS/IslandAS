@@ -61,6 +61,12 @@ export class TerrainState {
     get resolution() {
         return this._resolution;
     }
+    get size() {
+        return this._size;
+    }
+    get center() {
+        return this._center;
+    }
     public contains(point: vec2): boolean {
         const halfSize = this._size * 0.5;
         return point[0] >= this._center[0] - halfSize

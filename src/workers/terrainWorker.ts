@@ -42,7 +42,6 @@ onmessage = (event) => {
     const power = event.data.power;
     const baseEmplitude = event.data.baseEmplitude;
     const verticalOffset = event.data.verticalOffset;
-    console.log(verticalOffset);
 
     const positions = new Float32Array(Math.pow(subdivisions + 1, 2) * 3);
 
@@ -119,7 +118,6 @@ onmessage = (event) => {
         }
 
     }
-
 
     postMessage({
 
