@@ -4,6 +4,9 @@ import { View } from '../view';
 import type { StandOptions } from './types';
 import { DEFAULT_STAND_CONFIGS } from './default';
 import { vec2 } from 'gl-matrix';
+import { CSS3DObject, CSS3DRenderer } from 'three/examples/jsm/Addons.js';
+import type { Camera } from '../camera/camera';
+import type { Viewport } from '../../state/viewport/viewport';
 
 export interface S {
     width: number;
@@ -25,7 +28,6 @@ export class Stand {
     constructor(options: Partial<StandOptions> = {}) {
 
         const { width, height, depth } = DEFAULT_STAND_CONFIGS;
-        const state = State.getInstance();
         const view = View.getInstance();
 
         this._scene = view.scene;
@@ -34,16 +36,8 @@ export class Stand {
         this._height = options.height ?? height;
         this._depth = options.depth ?? depth;
 
-        this.setGeometry();
-        this.setMaterial();
-        this.setMesh();
-        this.addEntrance();
     }
 
-    public update() {
-        console.log("here is the stand ");
-
-    }
     public setGeometry() {
         this._geometery = new THREE.BoxGeometry(this._width, this._height, this._depth);
     }
@@ -98,6 +92,8 @@ export class Stand {
         }
 
 
+    }
+    public update() {
     }
 
 }

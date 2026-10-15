@@ -8,6 +8,8 @@ import { Sun } from './sun/sun';
 import { Water } from './water/water';
 import { Sky } from './sky/sky';
 import { Stand } from './stand/stand';
+import { cssRenderer } from './cssRenderer/cssRenderer';
+import { Menu } from './menu/menu';
 export class View {
 
     private static instance: View;
@@ -15,6 +17,7 @@ export class View {
     private readonly _scene: THREE.Scene;
     private readonly _camera: Camera;
     private readonly _renderer: Renderer;
+    private readonly _cssRenderer: cssRenderer;
 
     private readonly _player: Player;
     private readonly _grass: Grass;
@@ -23,6 +26,7 @@ export class View {
     private readonly _water: Water;
     private readonly _sky: Sky;
     private readonly _stand: Stand;
+    private readonly _menu : Menu;
 
     public static getInstance(): View {
         return View.instance ?? new View();
@@ -34,6 +38,7 @@ export class View {
         this._scene = new THREE.Scene();
         this._camera = new Camera(new THREE.PerspectiveCamera());
         this._renderer = new Renderer();
+        this._cssRenderer = new cssRenderer();
         this._player = new Player();
         this._terrains = new Terrains();
 
@@ -42,6 +47,7 @@ export class View {
         this._grass = new Grass();
         this._water = new Water();
         this._stand = new Stand();
+        this._menu = new Menu();
 
         console.log("view", this._terrains);
     }
@@ -53,6 +59,9 @@ export class View {
     }
     get renderer() {
         return this._renderer;
+    }
+    get cssRenderer() {
+        return this._cssRenderer;
     }
     get player() {
         return this._player;
@@ -74,14 +83,16 @@ export class View {
     }
 
     public update() {
-        this._stand.update();
         this._water.update();
         this._grass.update();
         this._sun.update();
         this._terrains.update();
         this._player.update();
         this._camera.update();
+        this._stand.update();
         this._sky.update();
+        this._menu.update();
+        this._cssRenderer.update();
         this._renderer.update();
     }
     public resize() {
