@@ -1,7 +1,7 @@
 import { CSS3DRenderer } from 'three/examples/jsm/Addons.js';
 import { View } from '../view';
 import { State } from '../../state/state';
-import type { Camera } from '../camera/camera';
+import type { Camera } from '../Camera/camera';
 import type { Viewport } from '../../state/viewport/viewport';
 import type { Scene } from 'three';
 
