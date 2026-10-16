@@ -27,8 +27,8 @@ export class View {
     private readonly _water: Water;
     private readonly _sky: Sky;
     private readonly _stand: Stand;
-    private readonly _menu : Menu;
-    private readonly _rocks : Rocks;
+    private readonly _menu: Menu;
+    private readonly _rocks: Rocks;
 
     public static getInstance(): View {
         return View.instance ?? new View();
@@ -41,10 +41,10 @@ export class View {
         this._camera = new Camera(new THREE.PerspectiveCamera());
         this._renderer = new Renderer();
         this._cssRenderer = new cssRenderer();
+        this._sun = new Sun();
         this._player = new Player();
         this._terrains = new Terrains();
 
-        this._sun = new Sun();
         this._sky = new Sky(this._scene, this._camera.instance, this._sun);
         this._grass = new Grass();
         this._water = new Water();
@@ -95,6 +95,7 @@ export class View {
         this._stand.update();
         this._sky.update();
         this._menu.update();
+        this._rocks.update();
         this._cssRenderer.update();
         this._renderer.update();
     }

@@ -1,8 +1,11 @@
 attribute float aRandom;
+varying vec3 vNormal;
+
 void main() {
 
-    vec4 randomPosition = aRandom * vec4(position,1.0);
-    vec4 modelPosition = instanceMatrix * modelMatrix * randomPosition ;
+    vec4 instancePosition = vec4(position * aRandom, 1.0);
+    vec4 worldPosition = modelMatrix * instanceMatrix * instancePosition;
 
-    gl_Position = projectionMatrix * viewMatrix * modelPosition; 
+    vNormal = normalize(mat3(modelMatrix * instanceMatrix) * normal);
+    gl_Position = projectionMatrix * viewMatrix * worldPosition;
 }

@@ -4,6 +4,7 @@ import { View } from '../view';
 import type { RockOptions } from './types';
 import { DEFAULT_ROCKS_CONFIGS } from './default';
 import type { Grass } from '../grass/grass';
+import type { Sun } from '../sun/sun';
 
 export class Rocks {
 
@@ -14,6 +15,7 @@ export class Rocks {
     private _count: number;
     private _detail: number;
     private _radius: number;
+    private _sun : Sun;
 
 
     constructor(options: Partial<RockOptions> = {}) {
@@ -23,6 +25,7 @@ export class Rocks {
 
         this._scene = view.scene;
         this._grass = view.grass;
+        this._sun = view.sun;
 
         this._count = options.count ?? count;
         this._radius = options.radius ?? radius;
@@ -61,6 +64,14 @@ export class Rocks {
         instancedMesh.geometry.setAttribute('aRandom', new THREE.InstancedBufferAttribute(randomValues, 1));
 
         return instancedMesh;
+
+    }
+
+    public update() {
+
+        this._mesh.material.uniforms.uLightDirection.value = this._sun.lightDirection;
+        this._mesh.material.uniforms.uSunColor.value = this._sun.color;
+        this._mesh.material.uniforms.uSunIntensity.value = this._sun.intensity;
 
     }
 

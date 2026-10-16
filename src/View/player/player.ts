@@ -6,6 +6,7 @@ import { createPlayerMaterial } from '../materials/playerMaterial';
 import type { SunState } from '../../state/sun/sun';
 import type { Time } from '../../state/time';
 import type { PlayerState } from '../../state/player/player';
+import type { Sun } from '../sun/sun';
 
 // TODO : create player material and shaders with configs
 export class Player {
@@ -18,7 +19,7 @@ export class Player {
     private readonly _group = new THREE.Group();
     private readonly _player: PlayerState;
     private readonly _time: Time;
-    private readonly _sun: SunState;
+    private readonly _sun: Sun;
 
     constructor() {
 
@@ -27,7 +28,7 @@ export class Player {
 
         this._player = state.player;
         this._time = state.time;
-        this._sun = state.sun;
+        this._sun = view.sun;
 
         view.scene.add(this._group);
 
@@ -61,7 +62,7 @@ export class Player {
         // update uniforms for mesh material 
         this._material.uniforms.uTime.value = this._time.elapsedTime;
         this._material.uniforms.uSunColor.value = this._sun.color;
-        this._material.uniforms.uLightDirection.value = View.getInstance().sun.lightDirection;
+        this._material.uniforms.uLightDirection.value = this._sun.lightDirection;
         this._material.uniforms.uSunIntensity.value = this._sun.intensity;
 
     }

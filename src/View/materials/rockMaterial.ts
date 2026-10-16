@@ -7,6 +7,9 @@ export function createRockMaterial(): THREE.ShaderMaterial {
     const material = new THREE.ShaderMaterial({
 
         uniforms: {
+            uLightDirection : {value : null},
+            uSunColor : {value : null},
+            uSunIntensity : {value : null}
 
         },
         vertexShader: vertexShader,
