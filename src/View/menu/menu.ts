@@ -3,6 +3,7 @@ import { View } from "../view";
 import { CSS3DObject } from "three/examples/jsm/Addons.js";
 import { State } from "../../state/state";
 import type { Time } from "../../state/time";
+import { KEYS } from "../../state/controls/default";
 
 export interface MenuConf {
     MenuSpeed: number;
@@ -16,6 +17,7 @@ export class Menu {
     private _time: Time;
 
     private _isOpen: boolean = false;
+    private _infoPanel?: CSS3DObject;
 
     constructor() {
 
@@ -137,14 +139,124 @@ export class Menu {
         for (const element of menuElements) {
             element.addEventListener('pointerenter', openMenu);
             element.addEventListener('pointerleave', deferCloseMenu);
-            element.addEventListener('click',this.showInfos);
+            element.addEventListener('click', () => this.showInfos());
         }
 
         return menuObj;
 
     }
-    public showInfos(){
+    public showInfos() {
 
+        if (this._infoPanel) {
+            this._scene.remove(this._infoPanel);
+            this._infoPanel = undefined;
+            return;
+        }
+
+        const panel = document.createElement('section');
+
+        Object.assign(panel.style, {
+            width: '300px',
+            padding: '14px',
+            borderRadius: '8px',
+            backgroundColor: 'white',
+            color: '#263238',
+            fontFamily: 'Inter, "Segoe UI", Arial, sans-serif',
+            fontSize: '13px',
+        })
+
+        const header = document.createElement('div');
+
+        Object.assign(header.style, {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '12px',
+        })
+        const closeBtn = document.createElement('button');
+        closeBtn.innerText = 'X';
+        Object.assign(closeBtn.style, {
+            cursor: 'pointer',
+            backgroundColor : 'transparent',
+            outline : 'none',
+            border : 'none'
+        })
+
+
+        const title = document.createElement('h2');
+        title.innerText = 'IslandAS Controls';
+        Object.assign(title.style, {
+            margin: '0',
+            fontSize: '16px',
+            fontWeight: '600',
+        });
+
+        header.append(title, closeBtn);
+
+        const list = document.createElement('ul');
+        Object.assign(list.style, {
+            display: 'grid',
+            gap: '6px',
+            margin: '12px 0 0',
+            padding: '0',
+            listStyle: 'none',
+        });
+
+        const controlsList: Record<string, string>[] = [
+            { name: "Forward", key: "W / Arrow Up", code: "KeyW" },
+            { name: "Back", key: "S / Arrow Down", code: "KeyS" },
+            { name: "Left", key: "A / Arrow Left", code: "KeyA" },
+            { name: "Right", key: "D / Arrow Right", code: "KeyD" },
+            { name: "Jump", key: "Space", code: "Space" },
+            { name: "Boost", key: "Shift", code: "ShiftLeft" }
+        ];
+
+        for (let i = 0; i < controlsList.length; i++) {
+            const control = controlsList[i];
+            const li = document.createElement('li');
+
+            Object.assign(li.style, {
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '12px',
+                padding: '7px 9px',
+                borderRadius: '5px',
+                backgroundColor: '#f1f4f6',
+            });
+            const name = document.createElement('div');
+            name.textContent = control.name;
+
+            const key = document.createElement('div');
+            key.textContent = control.key;
+            Object.assign(key.style, {
+                color: '#60717d',
+                fontSize: '12px',
+                textAlign: 'right',
+            });
+
+            li.append(name, key);
+            list.append(li);
+
+        }
+
+        panel.append(header, list);
+
+        const panelObject = new CSS3DObject(panel);
+
+        panelObject.position.set(0, 13, 0);
+        panelObject.scale.set(0.03, 0.03, 0.03);
+
+        this._infoPanel = panelObject;
+        this._scene.add(panelObject);
+
+        closeBtn.addEventListener('click', () => {
+            console.log("here is infopael", this._infoPanel);
+            if (this._infoPanel) {
+                this._scene.remove(panelObject);
+            };
+            this._infoPanel = undefined;
+        });
     }
     public animate() {
 
