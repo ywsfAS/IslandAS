@@ -85,6 +85,9 @@ export class Grass {
     get grassSize() {
         return this._grassSize;
     }
+    get chunkSize() {
+        return this._chunkSize;
+    }
 
     public setGeometry() {
 

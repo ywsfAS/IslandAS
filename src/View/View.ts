@@ -10,6 +10,7 @@ import { Sky } from './sky/sky';
 import { Stand } from './stand/stand';
 import { cssRenderer } from './cssRenderer/cssRenderer';
 import { Menu } from './menu/menu';
+import { Rocks } from './rocks/rocks';
 export class View {
 
     private static instance: View;
@@ -27,6 +28,7 @@ export class View {
     private readonly _sky: Sky;
     private readonly _stand: Stand;
     private readonly _menu : Menu;
+    private readonly _rocks : Rocks;
 
     public static getInstance(): View {
         return View.instance ?? new View();
@@ -48,6 +50,7 @@ export class View {
         this._water = new Water();
         this._stand = new Stand();
         this._menu = new Menu();
+        this._rocks = new Rocks();
 
         console.log("view", this._terrains);
     }

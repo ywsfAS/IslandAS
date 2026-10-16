@@ -137,9 +137,13 @@ export class Menu {
         for (const element of menuElements) {
             element.addEventListener('pointerenter', openMenu);
             element.addEventListener('pointerleave', deferCloseMenu);
+            element.addEventListener('click',this.showInfos);
         }
 
         return menuObj;
+
+    }
+    public showInfos(){
 
     }
     public animate() {
