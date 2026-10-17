@@ -1,20 +1,17 @@
 import type { Scene } from "three";
 import { View } from "../view";
 import { CSS3DObject } from "three/examples/jsm/Addons.js";
-import { State } from "../../state/state";
-import type { Time } from "../../state/time";
-import { KEYS } from "../../state/controls/default";
+import * as THREE from 'three';
+import { Github } from "../logos/github/github";
+import { Linkedin } from "../logos/linkedin/linkedin";
+import { TypeScriptLogo } from "../logos/typescript/typescript";
 
-export interface MenuConf {
-    MenuSpeed: number;
-
-}
 export class Menu {
 
     private _menu: CSS3DObject;
     private _menuHtml!: HTMLElement;
     private _scene: Scene;
-    private _time: Time;
+    private readonly _logos: [Github, Linkedin, TypeScriptLogo];
 
     private _isOpen: boolean = false;
     private _infoPanel?: CSS3DObject;
@@ -22,13 +19,13 @@ export class Menu {
     constructor() {
 
         const view = View.getInstance();
-        const state = State.getInstance();
-
         this._scene = view.scene;
-        this._time = state.time;
-
-
         this._menu = this.setMenuIcon();
+        this._logos = [
+            new Github(),
+            new Linkedin(),
+            new TypeScriptLogo(),
+        ];
     }
     public setMenuIcon(): CSS3DObject {
         console.log("set menu icon");
@@ -177,9 +174,9 @@ export class Menu {
         closeBtn.innerText = 'X';
         Object.assign(closeBtn.style, {
             cursor: 'pointer',
-            backgroundColor : 'transparent',
-            outline : 'none',
-            border : 'none'
+            backgroundColor: 'transparent',
+            outline: 'none',
+            border: 'none'
         })
 
 
@@ -262,6 +259,7 @@ export class Menu {
 
     }
     public update() {
+        this._logos.forEach(logo => logo.update());
         this.animate();
     }
 
