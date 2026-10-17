@@ -3,8 +3,11 @@ uniform vec3 uLightDirection;
 uniform vec3 uSunColor;
 uniform float uSunIntensity;
 uniform float uHover;
+uniform vec3 uCameraPosition;
+uniform vec3 uRimColor;
 
 varying vec3 vWorldNormal;
+varying vec3 vWorldPosition;
 
 void main() {
     vec3 normal = normalize(vWorldNormal);
@@ -26,6 +29,10 @@ void main() {
     finalColor = mix(finalColor, lightColor, reflection);
     vec3 hoverColor = min(finalColor * 1.4 + vec3(0.08), vec3(1.0));
     finalColor = mix(finalColor, hoverColor, uHover);
+
+    vec3 viewDirection = normalize(uCameraPosition - vWorldPosition);
+    float rim = pow(1.0 - max(dot(normal, viewDirection), 0.0), 3.0);
+    finalColor += uRimColor * rim * 0.35;
 
     gl_FragColor = vec4(finalColor, 1.0);
 }

@@ -49,7 +49,7 @@ void main()
     float surfaceRipples = smoothstep(0.68, 0.96, surfaceBands) * smoothstep(0.2, 0.92, noisySurface);
     float brokenShoreRings = ring * smoothstep(0.28, 0.7, noisySurface) * shoreMask;
     color += vec3(0.045, 0.19, 0.25) * surfaceRipples * 0.42;
-    color += vec3(1.12, 1.39, 1.44) * brokenShoreRings * 0.72;
+    color += vec3(1.12, 1.39, 1.44) * brokenShoreRings * 0.38;
 
     float shorelineFoam = 1.0 - smoothstep(0.035, 0.24, waterDistance);
     color = mix(color, vec3(0.22, 0.72, 0.74), shorelineFoam * 0.42);

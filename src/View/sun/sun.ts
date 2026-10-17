@@ -56,6 +56,16 @@ export class Sun {
         const intensity = this._state.intensity;
         const color = new THREE.Color(colorState[0], colorState[1], colorState[2]);
         this._light = new THREE.DirectionalLight(color, intensity);
+        this._light.castShadow = true;
+        this._light.shadow.mapSize.set(2048, 2048);
+        this._light.shadow.camera.left = -60;
+        this._light.shadow.camera.right = 60;
+        this._light.shadow.camera.top = 60;
+        this._light.shadow.camera.bottom = -60;
+        this._light.shadow.camera.near = 0.5;
+        this._light.shadow.camera.far = 500;
+        this._light.shadow.camera.updateProjectionMatrix();
+        this._light.shadow.bias = -0.0001;
 
         // target of light is at center of the world
         const center = this._state.center;

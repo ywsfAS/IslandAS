@@ -47,6 +47,7 @@ export class Camera {
 
         this._camera.position.set(x, y, z);
         this._camera.quaternion.set(qx, qy, qz, qw)
+        this._camera.rotateZ(0.012);
     }
 
 

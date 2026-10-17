@@ -9,6 +9,7 @@ import { LogoHoverCard } from './hoverCard';
 export abstract class Logo {
     protected readonly _scene: THREE.Scene;
     protected readonly _sun: Sun;
+    protected readonly _camera: THREE.Camera;
     protected readonly _options: LogoOptions;
     protected readonly _materials: THREE.ShaderMaterial[] = [];
 
@@ -19,6 +20,7 @@ export abstract class Logo {
         const view = View.getInstance();
         this._scene = view.scene;
         this._sun = view.sun;
+        this._camera = view.camera.instance;
         this._options = {
             ...defaults,
             ...options,
@@ -117,6 +119,7 @@ export abstract class Logo {
             material.uniforms.uLightDirection.value = this._sun.lightDirection;
             material.uniforms.uSunColor.value = this._sun.color;
             material.uniforms.uSunIntensity.value = this._sun.intensity;
+            material.uniforms.uCameraPosition.value.copy(this._camera.position);
         }
     }
 
