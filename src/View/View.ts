@@ -11,6 +11,8 @@ import { Stand } from './stand/stand';
 import { cssRenderer } from './cssRenderer/cssRenderer';
 import { Menu } from './menu/menu';
 import { Rocks } from './rocks/rocks';
+import { Raycaster } from './raycaster/raycaster';
+import { State } from '../state/state';
 export class View {
 
     private static instance: View;
@@ -29,6 +31,7 @@ export class View {
     private readonly _stand: Stand;
     private readonly _menu: Menu;
     private readonly _rocks: Rocks;
+    private readonly _raycaster: Raycaster;
 
     public static getInstance(): View {
         return View.instance ?? new View();
@@ -45,6 +48,7 @@ export class View {
         this._player = new Player();
         this._terrains = new Terrains();
 
+        this._raycaster = new Raycaster();
         this._sky = new Sky(this._scene, this._camera.instance, this._sun);
         this._grass = new Grass();
         this._water = new Water();
@@ -84,6 +88,9 @@ export class View {
     get stand() {
         return this._stand;
     }
+    get raycaster() {
+        return this._raycaster;
+    }
 
     public update() {
         this._water.update();
@@ -96,10 +103,12 @@ export class View {
         this._sky.update();
         this._menu.update();
         this._rocks.update();
+        this._raycaster.update();
         this._cssRenderer.update();
         this._renderer.update();
     }
     public resize() {
+        State.getInstance().viewport.resize();
         this._camera.resize();
         this._renderer.resize();
     }

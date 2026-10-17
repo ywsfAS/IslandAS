@@ -6,6 +6,7 @@ export type Cursor = {
     down: boolean;
     curr: Vector2;
     origin: Vector2;
+    position: Vector2;
 }
 export class Controls {
     private readonly _keys = KEYS;
@@ -18,7 +19,8 @@ export class Controls {
         this._cursor = {
             down: false,
             curr: new Vector2(),
-            origin: new Vector2()
+            origin: new Vector2(),
+            position: new Vector2()
         }
 
         this.resetKeysDown();
@@ -49,7 +51,7 @@ export class Controls {
 
         window.addEventListener('keydown', (event) => this.onKeyDown(event));
         window.addEventListener('keyup', (event) => this.onkeyUp(event));
-        window.addEventListener('pointerdown', () => this.onCursorDown());
+        window.addEventListener('pointerdown', (event) => this.onCursorDown(event));
         window.addEventListener('pointerup', () => this.onCursorUp());
         window.addEventListener('pointermove', (event) => this.onCursorMove(event))
 
@@ -73,8 +75,9 @@ export class Controls {
             this._down[item.name] = false;
         }
     }
-    private onCursorDown(): void {
+    private onCursorDown(event: PointerEvent): void {
         this._cursor.down = true
+        this._cursor.position.set(event.clientX, event.clientY);
     }
     private onCursorUp(): void {
         this._cursor.down = false;
@@ -82,6 +85,7 @@ export class Controls {
     private onCursorMove(event: PointerEvent): void {
         this._cursor.curr.x += event.movementX;
         this._cursor.curr.y += event.movementY;
+        this._cursor.position.set(event.clientX, event.clientY);
     }
     public update(): void {
         this._cursor.origin.x = this._cursor.curr.x

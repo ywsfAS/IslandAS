@@ -6,10 +6,10 @@ import type { Sun } from '../sun/sun';
 import type { LogoOptions } from './types';
 
 export abstract class Logo {
-    private readonly _scene: THREE.Scene;
-    private readonly _sun: Sun;
-    private readonly _options: LogoOptions;
-    private readonly _materials: THREE.ShaderMaterial[] = [];
+    protected readonly _scene: THREE.Scene;
+    protected readonly _sun: Sun;
+    protected readonly _options: LogoOptions;
+    protected readonly _materials: THREE.ShaderMaterial[] = [];
 
     protected constructor(
         defaults: LogoOptions,
@@ -84,6 +84,8 @@ export abstract class Logo {
         group.rotateX(-Math.PI);
         group.position.copy(this._options.position);
         this._scene.add(group);
+        View.getInstance().raycaster.subscribe(group);
+
     }
 
     public update(): void {
