@@ -8,4 +8,10 @@ export const DEFAULT_LINKEDIN_OPTIONS: LogoOptions = {
     height: 2.4,
     depth: 0.6,
     layerSpacing: 0.015,
+    interaction: {
+        id: 'linkedin',
+        message: 'Connect with me on LinkedIn.',
+        linkText: 'Visit LinkedIn',
+        url: 'https://www.linkedin.com/',
+    },
 };

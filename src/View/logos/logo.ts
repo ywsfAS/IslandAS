@@ -4,6 +4,7 @@ import { View } from '../view';
 import { createLogoMaterial } from '../materials/logoMaterial';
 import type { Sun } from '../sun/sun';
 import type { LogoOptions } from './types';
+import { LogoHoverCard } from './hoverCard';
 
 export abstract class Logo {
     protected readonly _scene: THREE.Scene;
@@ -84,7 +85,30 @@ export abstract class Logo {
         group.rotateX(-Math.PI);
         group.position.copy(this._options.position);
         this._scene.add(group);
-        View.getInstance().raycaster.subscribe(group);
+
+        const cardPosition = group.position.clone();
+        cardPosition.y += this._options.height / 2 + 3;
+        cardPosition.z += this._options.depth / 2;
+        const hoverCard = new LogoHoverCard(
+            this._scene,
+            this._options.interaction,
+            cardPosition,
+        );
+
+        View.getInstance().raycaster.subscribe(
+            group,
+            intersection => {
+                const hovered = intersection !== null;
+                this.setHovered(hovered);
+                if (hovered) {
+                    hoverCard.show();
+                } else {
+                    hoverCard.hide();
+                }
+                this.onHover(hovered);
+            },
+            this._options.interaction.id,
+        );
 
     }
 
@@ -95,4 +119,12 @@ export abstract class Logo {
             material.uniforms.uSunIntensity.value = this._sun.intensity;
         }
     }
+
+    protected setHovered(hovered: boolean): void {
+        for (const material of this._materials) {
+            material.uniforms.uHover.value = hovered ? 1 : 0;
+        }
+    }
+
+    protected onHover(_hovered: boolean): void { }
 }

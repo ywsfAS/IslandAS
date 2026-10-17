@@ -2,6 +2,7 @@ uniform vec3 uBaseColor;
 uniform vec3 uLightDirection;
 uniform vec3 uSunColor;
 uniform float uSunIntensity;
+uniform float uHover;
 
 varying vec3 vWorldNormal;
 
@@ -23,6 +24,8 @@ void main() {
 
     vec3 finalColor = mix(nightColor, daylightColor, daylight);
     finalColor = mix(finalColor, lightColor, reflection);
+    vec3 hoverColor = min(finalColor * 1.4 + vec3(0.08), vec3(1.0));
+    finalColor = mix(finalColor, hoverColor, uHover);
 
     gl_FragColor = vec4(finalColor, 1.0);
 }

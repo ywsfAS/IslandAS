@@ -8,4 +8,10 @@ export const DEFAULT_GITHUB_OPTIONS: LogoOptions = {
     height: 2.4,
     depth: 0.6,
     layerSpacing: 0.015,
+    interaction: {
+        id: 'github',
+        message: 'Explore my projects and source code.',
+        linkText: 'Visit GitHub',
+        url: 'https://github.com/ywsfAS/IslandAS',
+    },
 };

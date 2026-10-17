@@ -6,4 +6,12 @@ export interface LogoOptions {
     height: number;
     depth: number;
     layerSpacing: number;
+    interaction: LogoInteractionOptions;
+}
+
+export interface LogoInteractionOptions {
+    id: string;
+    message: string;
+    linkText: string;
+    url: string;
 }

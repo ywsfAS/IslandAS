@@ -9,6 +9,7 @@ export function createLogoMaterial(baseColor: THREE.ColorRepresentation): THREE.
             uLightDirection: { value: new THREE.Vector3() },
             uSunColor: { value: new THREE.Color(0xffffff) },
             uSunIntensity: { value: 0 },
+            uHover: { value: 0 },
         },
         vertexShader,
         fragmentShader,
