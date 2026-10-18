@@ -13,6 +13,7 @@ import { Menu } from './menu/menu';
 import { Rocks } from './rocks/rocks';
 import { Raycaster } from './raycaster/raycaster';
 import { State } from '../state/state';
+import { Text } from './text/Text';
 export class View {
 
     private static instance: View;
@@ -32,6 +33,7 @@ export class View {
     private readonly _menu: Menu;
     private readonly _rocks: Rocks;
     private readonly _raycaster: Raycaster;
+    private readonly _text : Text;
 
     public static getInstance(): View {
         return View.instance ?? new View();
@@ -41,6 +43,7 @@ export class View {
         View.instance = this;
 
         this._scene = new THREE.Scene();
+        this._scene.fog = new THREE.FogExp2(0x0f111a, 5.025);
         this._camera = new Camera(new THREE.PerspectiveCamera());
         this._renderer = new Renderer();
         this._cssRenderer = new cssRenderer();
@@ -55,6 +58,7 @@ export class View {
         this._stand = new Stand();
         this._menu = new Menu();
         this._rocks = new Rocks();
+        this._text = new Text();
 
         console.log("view", this._terrains);
     }

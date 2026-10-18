@@ -11,6 +11,7 @@ import { BokehPass } from 'three/addons/postprocessing/BokehPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { VignetteShader } from 'three/addons/shaders/VignetteShader.js';
+import { TileShadowNode } from 'three/examples/jsm/tsl/shadows/TileShadowNode.js';
 
 
 export class Renderer {
@@ -46,34 +47,14 @@ export class Renderer {
 
         renderer.setPixelRatio(this._viewport.pixelRatio);
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1;
+        renderer.toneMappingExposure = 9;
         renderer.setSize(this._viewport.width, this._viewport.height);
         renderer.shadowMap.enabled = true;
         this._renderer = renderer;
 
-        const composer = new EffectComposer(renderer);
-        composer.setPixelRatio(this._viewport.pixelRatio);
-        composer.setSize(this._viewport.width, this._viewport.height);
-        composer.addPass(new RenderPass(this._scene, this._camera.instance));
-        composer.addPass(new BokehPass(this._scene, this._camera.instance, {
-            focus: 50.0,
-            aperture: 0.000001,
-            maxblur: 0.001,
-        }));
-        composer.addPass(new UnrealBloomPass(
-            new THREE.Vector2(this._viewport.width, this._viewport.height),
-            0.25,
-            0.5,
-            0.85,
-        ));
-        const vignette = new ShaderPass(VignetteShader);
-        vignette.uniforms['offset'].value = 1.05;
-        vignette.uniforms['darkness'].value = 0.22;
-        composer.addPass(vignette);
-        this._composer = composer;
     }
     public update(): void {
-        this._composer.render();
+        this._renderer.render(this._scene, this._camera.instance);
     }
     public resize(): void {
         this._renderer.setPixelRatio(this._viewport.pixelRatio);

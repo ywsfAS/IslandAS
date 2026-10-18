@@ -16,3 +16,17 @@ canvas #app {
     width: 100%;
     outline: none;
 }
+
+.vignette {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 50%,
+            rgba(0, 0, 0, 0.3) 80%,
+            rgba(0, 0, 0, 0.6) 100%);
+
+}

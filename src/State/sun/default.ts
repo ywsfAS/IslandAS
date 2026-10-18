@@ -9,8 +9,8 @@ export const DEFAULT_SUN_CONFIG: SunStateOptions = {
     initDirection: vec3.fromValues(1, 0, 1),
     initColor: vec3.fromValues(1, 1, 1),
 
-    intensity: 4,
-    radius: 30,
+    intensity: 10,
+    radius: 60,
     initAngle: 0,
     initOrbitSpeed: .4,
     orbitRadius: 200,
