@@ -10,6 +10,7 @@ export const DEFAULT_GITHUB_OPTIONS: LogoOptions = {
     layerSpacing: 0.015,
     interaction: {
         id: 'github',
+        intro: 'This island is built from code you can explore on GitHub.',
         message: 'Explore my projects and source code.',
         linkText: 'Visit GitHub',
         url: 'https://github.com/ywsfAS/IslandAS',

@@ -167,7 +167,7 @@ export class Menu {
             borderRadius: '8px',
             backgroundColor: 'white',
             color: '#263238',
-            fontFamily: 'Inter, "Segoe UI", Arial, sans-serif',
+            fontFamily: '"Nunito", sans-serif',
             fontSize: '13px',
         })
 
@@ -199,11 +199,20 @@ export class Menu {
 
         header.append(title, closeBtn);
 
+        const intro = document.createElement('p');
+        intro.textContent = 'Use these controls to move around and explore the island.';
+        Object.assign(intro.style, {
+            margin: '8px 0 12px',
+            color: '#60717d',
+            fontSize: '12px',
+            lineHeight: '1.4',
+        });
+
         const list = document.createElement('ul');
         Object.assign(list.style, {
             display: 'grid',
             gap: '6px',
-            margin: '12px 0 0',
+            margin: '0',
             padding: '0',
             listStyle: 'none',
         });
@@ -246,7 +255,7 @@ export class Menu {
 
         }
 
-        panel.append(header, list);
+        panel.append(header, intro, list);
 
         const panelObject = new CSS3DObject(panel);
 

@@ -11,6 +11,7 @@ export interface LogoOptions {
 
 export interface LogoInteractionOptions {
     id: string;
+    intro: string;
     message: string;
     linkText: string;
     url: string;

@@ -8,7 +8,7 @@ html,
 body {
     height: 100vh;
     overflow: hidden;
-    font-family: Impact, Haettenschweiler, ' Arial Narrow Bold', sans-serif;
+    font-family: 'Nunito', sans-serif;
 }
 
 canvas #app {

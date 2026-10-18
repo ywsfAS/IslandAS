@@ -10,6 +10,7 @@ export const DEFAULT_LINKEDIN_OPTIONS: LogoOptions = {
     layerSpacing: 0.015,
     interaction: {
         id: 'linkedin',
+        intro: 'Let’s connect and keep in touch about my work.',
         message: 'Connect with me on LinkedIn.',
         linkText: 'Visit LinkedIn',
         url: 'https://www.linkedin.com/',

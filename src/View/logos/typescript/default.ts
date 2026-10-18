@@ -10,6 +10,7 @@ export const DEFAULT_TYPESCRIPT_OPTIONS: LogoOptions = {
     layerSpacing: 0.015,
     interaction: {
         id: 'typescript',
+        intro: 'TypeScript is the wonderful language I used to build this app.',
         message: 'Learn more about TypeScript.',
         linkText: 'Visit TypeScript',
         url: 'https://www.typescriptlang.org/',

@@ -32,13 +32,22 @@ export class LogoHoverCard {
             borderRadius: '8px',
             backgroundColor: '#fff',
             color: '#263238',
-            fontFamily: 'Inter, "Segoe UI", Arial, sans-serif',
+            fontFamily: '"Nunito", sans-serif',
             fontSize: '13px',
             boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
             pointerEvents: 'auto',
             opacity: '0',
             visibility: 'hidden',
             transition: 'opacity 120ms ease',
+        });
+
+        const intro = document.createElement('p');
+        intro.textContent = options.intro;
+        Object.assign(intro.style, {
+            margin: '0 0 8px',
+            color: '#60717d',
+            fontSize: '12px',
+            lineHeight: '1.4',
         });
 
         const message = document.createElement('div');
@@ -68,7 +77,7 @@ export class LogoHoverCard {
             cursor: 'pointer',
         });
 
-        this._element.append(message, link);
+        this._element.append(intro, message, link);
         this._element.addEventListener('pointerenter', this.onPointerEnter);
         this._element.addEventListener('pointerleave', this.onPointerLeave);
 
