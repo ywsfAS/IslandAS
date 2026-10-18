@@ -4,7 +4,7 @@ import type { LogoOptions } from '../types';
 
 export const DEFAULT_GITHUB_OPTIONS: LogoOptions = {
     asset: github,
-    position: new THREE.Vector3(-12, 1.5, 0),
+    position: new THREE.Vector3(-12, 1.5, 5),
     height: 2.4,
     depth: 0.6,
     layerSpacing: 0.015,

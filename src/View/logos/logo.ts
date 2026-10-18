@@ -12,6 +12,7 @@ export abstract class Logo {
     protected readonly _camera: THREE.Camera;
     protected readonly _options: LogoOptions;
     protected readonly _materials: THREE.ShaderMaterial[] = [];
+    protected _hoverCard?: LogoHoverCard;
 
     protected constructor(
         defaults: LogoOptions,
@@ -97,6 +98,8 @@ export abstract class Logo {
             cardPosition,
         );
 
+        this._hoverCard = hoverCard;
+
         View.getInstance().raycaster.subscribe(
             group,
             intersection => {
@@ -121,6 +124,7 @@ export abstract class Logo {
             material.uniforms.uSunIntensity.value = this._sun.intensity;
             material.uniforms.uCameraPosition.value.copy(this._camera.position);
         }
+        this._hoverCard?.update();
     }
 
     protected setHovered(hovered: boolean): void {

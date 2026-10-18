@@ -14,6 +14,7 @@ import { Rocks } from './rocks/rocks';
 import { Raycaster } from './raycaster/raycaster';
 import { State } from '../state/state';
 import { Text } from './text/Text';
+import { Keyboard } from './models/keyboard/keyboard';
 export class View {
 
     private static instance: View;
@@ -59,6 +60,7 @@ export class View {
         this._menu = new Menu();
         this._rocks = new Rocks();
         this._text = new Text();
+        new Keyboard();
 
         console.log("view", this._terrains);
     }

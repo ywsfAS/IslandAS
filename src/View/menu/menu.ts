@@ -5,6 +5,9 @@ import * as THREE from 'three';
 import { Github } from "../logos/github/github";
 import { Linkedin } from "../logos/linkedin/linkedin";
 import { TypeScriptLogo } from "../logos/typescript/typescript";
+import type { Camera } from "../camera/camera";
+import type { CameraState } from "../../state/camera/camera";
+import { State } from "../../state/state";
 
 export class Menu {
 
@@ -15,12 +18,18 @@ export class Menu {
 
     private _isOpen: boolean = false;
     private _infoPanel?: CSS3DObject;
+    private readonly _camera: CameraState;
 
     constructor() {
 
         const view = View.getInstance();
+        const state = State.getInstance();
+
         this._scene = view.scene;
         this._menu = this.setMenuIcon();
+
+        this._camera = state.camera;
+
         this._logos = [
             new Github(),
             new Linkedin(),
@@ -32,8 +41,8 @@ export class Menu {
         const menuIcon = document.createElement('div');
 
         const menuTitle = document.createElement('div');
-        menuTitle.innerText = 'Menu';
-        menuTitle.style.padding = '3px 3px 3px 12px';
+        menuTitle.innerText = 'Controls';
+        menuTitle.style.padding = '3px 3px 3px 16px';
         menuTitle.style.backgroundColor = 'black';
         menuTitle.style.color = 'white';
         menuTitle.style.fontSize = '5px';
@@ -244,6 +253,7 @@ export class Menu {
         panelObject.position.set(0, 13, 0);
         panelObject.scale.set(0.03, 0.03, 0.03);
 
+
         this._infoPanel = panelObject;
         this._scene.add(panelObject);
 
@@ -261,6 +271,8 @@ export class Menu {
     public update() {
         this._logos.forEach(logo => logo.update());
         this.animate();
+        const [qx, qy, qz, qw] = this._camera.quaterion;
+        this._infoPanel?.quaternion.set(qx, qy, qz, qw);
     }
 
 

@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
 import type { LogoInteractionOptions } from './types';
+import type { CameraState } from '../../state/camera/camera';
+import { State } from '../../state/state';
 
 const HIDE_DELAY_MS = 200;
 
@@ -10,11 +12,18 @@ export class LogoHoverCard {
     private _hideTimeout: ReturnType<typeof setTimeout> | undefined;
     private _pointerInside = false;
 
+    private readonly _camera: CameraState;
+
     constructor(
         scene: THREE.Scene,
         options: LogoInteractionOptions,
         position: THREE.Vector3,
     ) {
+
+        const state = State.getInstance();
+
+        this._camera = state.camera;
+
         this._element = document.createElement('div');
         Object.assign(this._element.style, {
             width: '220px',
@@ -104,5 +113,10 @@ export class LogoHoverCard {
         if (this._hideTimeout === undefined) return;
         clearTimeout(this._hideTimeout);
         this._hideTimeout = undefined;
+    }
+    public update() {
+
+        const [qx, qy, qz, qw] = this._camera.quaterion;
+        this._object?.quaternion.set(qx, qy, qz, qw);
     }
 }

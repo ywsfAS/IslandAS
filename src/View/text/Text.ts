@@ -63,7 +63,7 @@ export class Text {
 
         const size = (this._textGeometryParams?.size ?? 0) / 2;
         const text = new THREE.Mesh(geometry, material);
-        text.position.set(0, size, -4);
+        text.position.set(0, size, 20);
         text.rotateX(this._rotation.x);
         text.rotateZ(this._rotation.z);
         text.rotateY(this._rotation.y);
