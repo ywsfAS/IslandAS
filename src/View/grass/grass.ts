@@ -204,7 +204,6 @@ export class Grass {
                 return Math.round(playerChunkX) === pos[0] || Math.round(playerChunkZ) === pos[1];
             }).map(pos => `${pos[0]}${pos[1]}`));
 
-            console.log(possiblePositions);
 
             mesh.visible = id[0] === flooredPlayerChunkX && id[1] === flooredPlayerChunkZ || possiblePositions.has(key);
             if (!mesh.visible) {

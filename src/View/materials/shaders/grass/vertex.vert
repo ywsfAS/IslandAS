@@ -73,7 +73,7 @@ void main()
     float brightness = 0.6 + diffuse * min(uSunIntensity * 0.13, 0.65);
 
 
-    vColor = color2 * brightness * uSunColor;
+    vColor = color2 * brightness ;
 
     // hide distant or high slop places blades
     worldPosition.xyz = mix(spaceCenter.xyz,worldPosition.xyz,scale);

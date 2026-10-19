@@ -29,6 +29,8 @@ export class TerrainState {
     private _positions!: Float32Array;
     private _indices!: Uint16Array | Uint32Array;
     private _textures!: Float32Array;
+    private _normals!: Float32Array;
+    private _uv!: Float32Array;
 
     private _resolution!: number;
 
@@ -82,6 +84,12 @@ export class TerrainState {
     get bottom() {
         return vec2.fromValues(this.center[0], this.center[1] - this._size / 2);
     }
+    get normals() {
+        return this._normals;
+    }
+    get uv() {
+        return this._uv;
+    }
 
     public contains(point: vec2): boolean {
         const halfSize = this._size * 0.5;
@@ -101,6 +109,8 @@ export class TerrainState {
         this._indices = data.indices;
         this._textures = data.textures;
         this._resolution = data.resolution;
+        this._normals = data.normals;
+        this._uv = data.uv;
 
         this._isReady = true;
 

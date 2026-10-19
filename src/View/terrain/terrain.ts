@@ -83,7 +83,8 @@ export class Terrain {
         this._geometry = new THREE.BufferGeometry();
         this._geometry.setAttribute('position', new THREE.BufferAttribute(this._state.position, 3));
         this._geometry.setIndex(new THREE.BufferAttribute(this._state.indices, 1, false));
-        this._geometry.computeVertexNormals();
+        this._geometry.setAttribute('normal', new THREE.Float32BufferAttribute(this._state.normals, 3));
+        this._geometry.setAttribute('uv', new THREE.Float32BufferAttribute(this._state.uv, 2));
 
         this._material = this._terrains.material;
 

@@ -42,6 +42,9 @@ onmessage = (event: { data: TerrainEvent }) => {
     const baseEmplitude = event.data.baseEmplitude;
     const verticalOffset = event.data.verticalOffset;
 
+    const h = (px: number, pz: number) =>
+        getElevation(px, pz, lacunarity, persistence, iterations, frequency, baseEmplitude, power, terrainOffsets) + verticalOffset;
+
     const positions = new Float32Array(Math.pow(subdivisions + 1, 2) * 3);
 
     // generates positions for each right top corner 
@@ -51,7 +54,7 @@ onmessage = (event: { data: TerrainEvent }) => {
 
             const px = (x / subdivisions - 0.5) * size + center[0];
             const pz = (z / subdivisions - 0.5) * size + center[1];
-            const py = getElevation(px, pz, lacunarity, persistence, iterations, frequency, baseEmplitude, power, terrainOffsets) + verticalOffset;
+            const py = h(px, pz);
 
             const index = (z * (subdivisions + 1) + x) * 3;
 
@@ -83,11 +86,11 @@ onmessage = (event: { data: TerrainEvent }) => {
             const index = (z * subdivisions + x) * 6;
 
             indices[index] = a;
-            indices[index + 1] = b;
+            indices[index + 1] = d;
             indices[index + 2] = c;
 
             indices[index + 3] = a;
-            indices[index + 4] = d;
+            indices[index + 4] = b;
             indices[index + 5] = c;
         }
     }
@@ -106,23 +109,39 @@ onmessage = (event: { data: TerrainEvent }) => {
             const px = center[0] + ((x / (resolution - 1)) - 0.5) * size;
             const pz = center[1] + ((z / (resolution - 1)) - 0.5) * size;
 
-            textures[z * resolution + x] = getElevation(
-                px,
-                pz,
-                lacunarity,
-                persistence,
-                iterations,
-                frequency,
-                baseEmplitude,
-                power,
-                terrainOffsets
-            ) + verticalOffset;
+            textures[z * resolution + x] = h(px, pz);
         }
 
     }
+    const normals = new Float32Array(positions.length);
+    const uv = new Float32Array((subdivisions + 1) * (subdivisions + 1) * 2);
+    const e = size / subdivisions;
+
+    for (let x = 0; x <= subdivisions; x++) {
+        for (let z = 0; z <= subdivisions; z++) {
+            const i = z * (subdivisions + 1) + x;
+            const px = positions[i * 3];
+            const pz = positions[i * 3 + 2];
+
+            // slope in X and Z
+            const dx = h(px - e, pz) - h(px + e, pz);
+            const dz = h(px, pz - e) - h(px, pz + e);
+
+            // normal = (-dh/dx, 1, -dh/dz), normalized
+            const nx = dx, ny = 2 * e, nz = dz;
+            const len = Math.hypot(nx, ny, nz);
+
+            normals[i * 3] = nx / len;
+            normals[i * 3 + 1] = ny / len;
+            normals[i * 3 + 2] = nz / len;
+
+            uv[i * 2] = x / subdivisions;
+            uv[i * 2 + 1] = z / subdivisions;
+        }
+    }
 
     postMessage(
-        { id, positions, indices, textures, resolution },
+        { id, positions, indices, textures, resolution,normals,uv },
     );
 
 }

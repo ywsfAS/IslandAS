@@ -10,24 +10,32 @@ varying vec3 vColor;
 
 void main(){
     
-    vec4 spacePosition = modelMatrix * vec4(position,1.0);
+    vec4 modelPosition = modelMatrix * vec4(position,1.0);
 
     vec3 lightDirection = normalize(uDirectionLight);
-    vec3 worldNormal = normalize(normalMatrix * normal);
+    vec3 worldNormal = normalize(mat3(modelMatrix[0].xyz,modelMatrix[1].xyz,modelMatrix[2].xyz) * normal);
     float slope = 1.0 - max(dot(vec3(0.0, 1.0, 0.0), worldNormal), 0.0);
-    float slopeScale = 1.0 - smoothstep(0.2, 0.7, slope);
-    float attenuation = grassAttenuation(spacePosition.xz);
-    float terrainBlend = attenuation * slopeScale;
 
-    float daylight = smoothstep(-0.1, 0.25, lightDirection.y) * clamp(uSunIntensity / 5.0, 0.0, 1.0);
-    float diffuse = max(dot(worldNormal, lightDirection), 0.0) * daylight;
-    float sunlight = 0.55 + daylight * 0.25 + diffuse * 0.2;
+    vec3 defaultColor = vec3(0.52, 0.65, 0.26) / 1.2;
+    vec3 shadedColor  = defaultColor / 2.5;
+    float grassAtt = grassAttenuation(modelPosition.xz)
+                   * (1.0 - smoothstep(0.4, 0.5, slope));
+    vec3 color = mix(defaultColor, shadedColor, grassAtt);
 
-    vec3 terrainLightColor = vec3(0.55, 0.78, 0.35);
-    vec3 terrainDarkColor  = vec3(0.20, 0.38, 0.18);
 
-    vec3 terrainColor = mix(terrainDarkColor, terrainLightColor, terrainBlend);
-    vColor = terrainColor * sunlight * uSunColor;
+    vec3 sunDir = normalize(uDirectionLight);
+    float ndl = dot(worldNormal, sunDir);
+    float shade = smoothstep(-0.2, 0.8, ndl);
+    vec3 shadowTint = vec3(0.35, 0.65, 0.55) / 1.4;
+    color = mix(color * shadowTint, color, shade);
 
-    gl_Position = projectionMatrix * viewMatrix * spacePosition;
+    // Soft fresnel sheen
+    vec3 viewDir = normalize(modelPosition.xyz - cameraPosition);
+    float fresnel = pow(1.0 + dot(viewDir, worldNormal), 3.0);
+    color += fresnel * 0.08 * shade;
+
+
+    vColor = color;
+
+    gl_Position = projectionMatrix * viewMatrix * modelPosition;
 }

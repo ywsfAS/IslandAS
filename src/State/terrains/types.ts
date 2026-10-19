@@ -42,6 +42,8 @@ export interface TerrainEvent {
 export interface TerrainResult {
     id: ChunksPosition;
     positions: Float32Array;
+    normals: Float32Array;
+    uv: Float32Array;
     indices: Uint16Array | Uint32Array;
     textures: Float32Array;
     resolution: number;
