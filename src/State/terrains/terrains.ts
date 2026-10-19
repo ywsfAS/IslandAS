@@ -44,7 +44,7 @@ export class TerrainsState {
 
     private _player: PlayerState;
     private readonly _size = 200;
-    private readonly _radius = 400;
+    private readonly _radius = 500;
     private _initialized = false;
 
     constructor(options: Partial<TerrainsOptions> = {}) {
@@ -105,7 +105,7 @@ export class TerrainsState {
         this._initialized = true;
     }
     public setWorker() {
-        const workerCount = Math.min(4, Math.max(1, navigator.hardwareConcurrency));
+        const workerCount = Math.min(4, Math.max(1, navigator.hardwareConcurrency || 2));
 
         for (let i = 0; i < workerCount; i++) {
             const slot: TerrainWorkerSlot = { worker: new TerrainWorker() };

@@ -51,6 +51,9 @@ export class Terrain {
     }
 
     public getHeightTexture() {
+        if (this._heightTexture) {
+            return this._heightTexture;
+        }
 
         const heightTexture = new THREE.DataTexture(
             this._state.textures,
@@ -68,7 +71,8 @@ export class Terrain {
         heightTexture.needsUpdate = true;
 
 
-        return heightTexture;
+        this._heightTexture = heightTexture;
+        return this._heightTexture;
 
     }
     private create() {

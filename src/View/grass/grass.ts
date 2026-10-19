@@ -8,10 +8,18 @@ import * as THREE from 'three';
 import createGrassMaterial from '../materials/grassMaterial';
 import type { PlayerState } from '../../state/player/player';
 import type { CameraState } from '../../state/camera/camera';
-import type { TerrainState } from '../../state/terrain/terrain';
-import { Terrains } from '../terrains/terrains';
 import type { Terrain } from '../terrain/terrain';
 import type { Sun } from '../sun/sun';
+import type { ChunksPosition } from '../../state/terrains/types';
+import { CHUNKS_POS } from '../../state/terrains/default';
+
+interface GrassChunk {
+    geometry: THREE.BufferGeometry;
+    material: THREE.ShaderMaterial;
+    mesh: THREE.Mesh;
+    id: ChunksPosition;
+    terrainSize: number;
+}
 
 export class Grass {
 
@@ -32,12 +40,8 @@ export class Grass {
     private readonly _player: PlayerState;
     private readonly _camera: CameraState;
     private readonly _sun: Sun;
-    private _terrainState!: TerrainState;
-    private _terrain!: Terrain;
-    private _terrains: Terrains;
 
-    private _geometry!: THREE.BufferGeometry;
-    private _material!: THREE.ShaderMaterial;
+    private _chunks = new Map<string, GrassChunk>();
 
     // TODO introduce noise 
 
@@ -53,7 +57,6 @@ export class Grass {
         this._scene = view.scene;
         this._player = state.player;
         this._camera = state.camera;
-        this._terrains = view.terrains;
         this._sun = view.sun;
 
         this._grassGridCount = options.grassGridCount ?? grassGridCount;
@@ -65,21 +68,15 @@ export class Grass {
         this._grassWidthRatio = options.grassWidthRatio ?? grassWidthRatio;
         this._grassHeightRatio = options.grassHeightRatio ?? grassHeightRatio;
 
-        // retrieve terrain state
         view.terrains.events.on('terrain-view-created', (terrain: Terrain) => {
-            this._terrain = terrain;
             const terrainState = terrain.state();
-            this._terrainState = terrainState;
             terrainState.events.on('ready', () => {
-
-                this.setGeometry();
-                this.setMaterial();
-                this.setMesh();
-
-
-            })
+                this.createChunk(terrain);
+            });
         });
-
+        view.terrains.events.on('terrain-view-destroyed', (terrain: Terrain) => {
+            this.disposeChunk(terrain);
+        });
 
     }
     get grassSize() {
@@ -89,7 +86,7 @@ export class Grass {
         return this._chunkSize;
     }
 
-    public setGeometry() {
+    private createGeometry(): THREE.BufferGeometry {
 
         const count = this._grassGridCount;
         const size = this._chunkSize;
@@ -141,37 +138,104 @@ export class Grass {
 
 
         }
-        this._geometry = new THREE.BufferGeometry();
+        const geometry = new THREE.BufferGeometry();
 
-        this._geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        this._geometry.setAttribute('center', new THREE.BufferAttribute(centers, 2));
-
-    }
-
-    public setMaterial() {
-        this._material = createGrassMaterial();
-
-        this._material.uniforms.uTime.value = 0;
-        this._material.uniforms.uPlayerPosition.value = new THREE.Vector3();
-        this._material.uniforms.uGrassDistance.value = this._chunkSize;
-        this._material.uniforms.uHeightMapTexelSize.value = 1 / Math.max(1, this._terrainState.resolution - 1);
-        this._material.uniforms.uCameraPosition.value = new THREE.Vector3();
-        this._material.uniforms.uHeightMap.value = this._terrain.getHeightTexture();
-        this._material.uniforms.uSunColor.value = this._sun.color;
-
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('center', new THREE.BufferAttribute(centers, 2));
+        return geometry;
 
     }
-    public setMesh() {
-        const mesh = new THREE.Mesh(this._geometry, this._material);
+
+    private createChunk(terrain: Terrain) {
+        const terrainState = terrain.state();
+        const key = `${terrainState.id[0]},${terrainState.id[1]}`;
+        if (this._chunks.has(key)) {
+            return;
+        }
+
+        const geometry = this.createGeometry();
+        const material = createGrassMaterial();
+        material.uniforms.uTime.value = this._time.elapsedTime;
+        material.uniforms.uPlayerPosition.value = this._player.position.cur.clone();
+        material.uniforms.uGrassDistance.value = this._chunkSize;
+        material.uniforms.uHeightMapTexelSize.value = 1 / Math.max(1, terrainState.resolution - 1);
+        material.uniforms.uCameraPosition.value = new THREE.Vector3(
+            this._camera.position[0],
+            this._camera.position[1],
+            this._camera.position[2]
+        );
+        material.uniforms.uHeightMap.value = terrain.getHeightTexture();
+        material.uniforms.uDirectionLight.value = this._sun.lightDirection;
+        material.uniforms.uSunIntensity.value = this._sun.intensity;
+        material.uniforms.uSunColor.value = this._sun.color;
+        material.uniforms.uTerrainCenter.value = terrainState.center;
+
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.frustumCulled = false;
+        const playerChunkX = Math.floor(
+            (this._player.position.cur.x + terrainState.size / 2) / terrainState.size
+        );
+        const playerChunkZ = Math.floor(
+            (this._player.position.cur.z + terrainState.size / 2) / terrainState.size
+        );
+        mesh.visible = terrainState.id[0] === playerChunkX && terrainState.id[1] === playerChunkZ;
         this._scene.add(mesh);
+        this._chunks.set(key, {
+            geometry,
+            material,
+            mesh,
+            id: terrainState.id,
+            terrainSize: terrainState.size
+        });
     }
     public update() {
-        if (!this._geometry) return;
-        this._material.uniforms.uPlayerPosition.value = this._player.position.cur;
-        this._material.uniforms.uCameraPosition.value = this._camera.position;
-        this._material.uniforms.uDirectionLight.value = this._sun.lightDirection;
-        this._material.uniforms.uSunIntensity.value = this._sun.intensity;
-        this._material.uniforms.uTime.value = this._time.elapsedTime;
+        const playerPosition = this._player.position.cur;
+        for (const { id, terrainSize, mesh, material } of this._chunks.values()) {
+
+            const playerChunkX = (playerPosition.x + terrainSize / 2) / terrainSize;
+            const playerChunkZ = (playerPosition.z + terrainSize / 2) / terrainSize;
+
+
+            const flooredPlayerChunkX = Math.floor(playerChunkX);
+            const flooredPlayerChunkZ = Math.floor(playerChunkZ);
+
+            const key = `${id[0]}${id[1]}`;
+            const possiblePositions = new Set(CHUNKS_POS.filter(pos => {
+                return Math.round(playerChunkX) === pos[0] || Math.round(playerChunkZ) === pos[1];
+            }).map(pos => `${pos[0]}${pos[1]}`));
+
+            console.log(possiblePositions);
+
+            mesh.visible = id[0] === flooredPlayerChunkX && id[1] === flooredPlayerChunkZ || possiblePositions.has(key);
+            if (!mesh.visible) {
+                continue;
+            }
+
+            material.uniforms.uPlayerPosition.value = playerPosition;
+            material.uniforms.uCameraPosition.value.set(
+                this._camera.position[0],
+                this._camera.position[1],
+                this._camera.position[2]
+            );
+            material.uniforms.uDirectionLight.value = this._sun.lightDirection;
+            material.uniforms.uSunIntensity.value = this._sun.intensity;
+            material.uniforms.uSunColor.value = this._sun.color;
+            material.uniforms.uTime.value = this._time.elapsedTime;
+        }
+    }
+    private disposeChunk(terrain: Terrain) {
+        const terrainId = terrain.state().id;
+        const key = `${terrainId[0]},${terrainId[1]}`;
+        const chunk = this._chunks.get(key);
+        if (!chunk) {
+            return;
+        }
+
+        this._scene.remove(chunk.mesh);
+        chunk.geometry.dispose();
+        chunk.material.uniforms.uHeightMap.value.dispose();
+        chunk.material.dispose();
+        this._chunks.delete(key);
     }
 
 }

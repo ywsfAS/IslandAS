@@ -5,13 +5,6 @@ import { View } from '../view';
 import { Camera } from '../camera/camera';
 import type { Viewport } from '../../state/viewport/viewport';
 import { State } from '../../state/state';
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-import { BokehPass } from 'three/addons/postprocessing/BokehPass.js';
-import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
-import { VignetteShader } from 'three/addons/shaders/VignetteShader.js';
-import { TileShadowNode } from 'three/examples/jsm/tsl/shadows/TileShadowNode.js';
 
 
 export class Renderer {
@@ -22,7 +15,6 @@ export class Renderer {
     private _viewport: Viewport;
     private _camera: Camera;
     private _scene: THREE.Scene;
-    private _composer!: EffectComposer;
 
     constructor(options: Partial<RendererOptions> = {}) {
 
@@ -59,8 +51,6 @@ export class Renderer {
     public resize(): void {
         this._renderer.setPixelRatio(this._viewport.pixelRatio);
         this._renderer.setSize(this._viewport.width, this._viewport.height);
-        this._composer.setPixelRatio(this._viewport.pixelRatio);
-        this._composer.setSize(this._viewport.width, this._viewport.height);
     }
 
 

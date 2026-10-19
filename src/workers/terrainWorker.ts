@@ -1,6 +1,4 @@
-import { vec2 } from 'gl-matrix';
 import SimplexNoise from './noise.js';
-import { type TerrainHeight, getTerrainHeight } from '../state/utility.ts'
 import type { TerrainEvent } from '../state/terrains/types.ts';
 
 
@@ -95,14 +93,7 @@ onmessage = (event: { data: TerrainEvent }) => {
     }
 
 
-    // get height for 10 times in each subdivision
-    const options: TerrainHeight = {
-        size,
-        subdivisions,
-        positions,
-        center
-    }
-    const sample = 20;
+    const sample = 2;
     const resolution = subdivisions * sample + 1;
     const textures = new Float32Array(resolution * resolution);
 
@@ -115,19 +106,23 @@ onmessage = (event: { data: TerrainEvent }) => {
             const px = center[0] + ((x / (resolution - 1)) - 0.5) * size;
             const pz = center[1] + ((z / (resolution - 1)) - 0.5) * size;
 
-            textures[z * resolution + x] = getTerrainHeight(vec2.fromValues(px, pz), options);
+            textures[z * resolution + x] = getElevation(
+                px,
+                pz,
+                lacunarity,
+                persistence,
+                iterations,
+                frequency,
+                baseEmplitude,
+                power,
+                terrainOffsets
+            ) + verticalOffset;
         }
 
     }
 
-    postMessage({
-
-        id,
-        positions,
-        indices,
-        textures,
-        resolution,
-
-    });
+    postMessage(
+        { id, positions, indices, textures, resolution },
+    );
 
 }

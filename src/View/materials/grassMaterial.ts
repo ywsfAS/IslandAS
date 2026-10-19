@@ -15,7 +15,8 @@ export default function createGrassMaterial() {
             uHeightMap: { value: null },
             uDirectionLight: { value: null },
             uSunIntensity: { value: null },
-            uSunColor: { value: null }
+            uSunColor: { value: null },
+            uTerrainCenter: { value: null }
         },
         vertexShader: vertexShader,
         fragmentShader: fragementShader,
