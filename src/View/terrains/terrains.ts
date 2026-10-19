@@ -7,8 +7,9 @@ import createTerrainMaterial from "../materials/terrainMaterial";
 import { EventEmitter } from "events";
 import type { PlayerState } from "../../state/player/player";
 import { vec3 } from "gl-matrix";
-import { Grass } from "../grass/grass";
 import { DEFAULT_GRASS_CONFIG } from "../grass/default";
+import { TupleMap, type ChunksPosition } from "../../state/terrains/types";
+import type { TerrainState } from "../../state/terrain/terrain";
 
 
 export class Terrains {
@@ -18,8 +19,7 @@ export class Terrains {
     private _material!: THREE.ShaderMaterial;
     private _events = new EventEmitter();
 
-    private _id = 0;
-    private readonly _terrains: Map<number, Terrain> = new Map();
+    private readonly _terrains: TupleMap<Terrain> = new TupleMap();
 
     private readonly _player: PlayerState;
 
@@ -38,7 +38,11 @@ export class Terrains {
 
         this.listen();
 
-        setTimeout(() => this._state.initialize(), 1000);
+        setTimeout(() => {
+            this._state.initialize().catch(error => {
+                console.error("Failed to initialize terrain chunks", error);
+            });
+        }, 200);
 
     }
     get material() {
@@ -50,18 +54,22 @@ export class Terrains {
     get events() {
         return this._events;
     }
-    public getTerrainById(id: number) {
+    public getTerrainById(id: ChunksPosition) {
         return this.terrains.get(id);
     }
     private listen() {
-        this._state.events.on('create', (terrainState) => {
-            this._id++;
-            console.log("added a terrain to view");
+        this._state.events.on('create', (terrainState: TerrainState) => {
+
+            const id = terrainState.id;
             const terrain = new Terrain(terrainState);
 
+            this._terrains.set(id, terrain);
             this._events.emit('terrain-view-created', terrain);
 
-            this._terrains.set(this._id, terrain);
+            terrainState.events.once('destroy', () => {
+                this._terrains.delete(id);
+                this._events.emit('terrain-view-destroyed', terrain);
+            });
         })
     }
     private setMaterial() {

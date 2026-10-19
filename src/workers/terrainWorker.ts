@@ -1,12 +1,13 @@
 import { vec2 } from 'gl-matrix';
 import SimplexNoise from './noise.js';
 import { type TerrainHeight, getTerrainHeight } from '../state/utility.ts'
+import type { TerrainEvent } from '../state/terrains/types.ts';
 
 
 const simplexNoise = new SimplexNoise();
 
 const getElevation = (x: number, y: number, lacunarity: number, persistence: number, iterations: number, baseFrequency: number
-    , baseAmplitude: number, power: number, iterationsOffsets: number[][]) => {
+    , baseAmplitude: number, power: number, iterationsOffsets: number[][]): number => {
     let elevation = 0
     let frequency = baseFrequency
     let amplitude = 1
@@ -28,7 +29,7 @@ const getElevation = (x: number, y: number, lacunarity: number, persistence: num
     return elevation
 }
 
-onmessage = (event) => {
+onmessage = (event: { data: TerrainEvent }) => {
 
     const id = event.data.id;
     const size = event.data.size;

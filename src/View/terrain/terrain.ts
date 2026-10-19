@@ -18,6 +18,9 @@ export class Terrain {
 
     private _geometry!: THREE.BufferGeometry;
     private _material!: THREE.ShaderMaterial;
+    private _mesh?: THREE.Mesh;
+    private _heightTexture?: THREE.DataTexture;
+    private _disposed = false;
 
     private readonly _sun: Sun;
 
@@ -32,13 +35,12 @@ export class Terrain {
         this._terrains = view.terrains;
         this._sun = view.sun;
 
-
-        console.log("this", this._terrains);
         // on terrain state creation
         this.listen();
 
     }
     private listen() {
+        this._state.events.once('destroy', () => this.dispose());
         this._state.events.on('ready', () => this.create());
     }
     public state() {
@@ -70,22 +72,33 @@ export class Terrain {
 
     }
     private create() {
+        if (this._disposed) {
+            return;
+        }
 
         this._geometry = new THREE.BufferGeometry();
         this._geometry.setAttribute('position', new THREE.BufferAttribute(this._state.position, 3));
         this._geometry.setIndex(new THREE.BufferAttribute(this._state.indices, 1, false));
         this._geometry.computeVertexNormals();
 
-        console.log("normal", this._geometry.getAttribute('normal'));
         this._material = this._terrains.material;
 
-        this._material.uniforms.uHeightMap.value = this.getHeightTexture();
+        this._heightTexture = this.getHeightTexture();
+        this._material.uniforms.uHeightMap.value = this._heightTexture;
         this._material.uniforms.uDirectionLight.value = this._sun.lightDirection;
         this._material.uniforms.uSunIntensity.value = this._sun.intensity;
         this._material.uniforms.uSunColor.value = this._sun.color;
 
-        const mesh = new THREE.Mesh(this._geometry, this._material);
-        this._scene.add(mesh);
+        this._mesh = new THREE.Mesh(this._geometry, this._material);
+        this._scene.add(this._mesh);
+    }
+    private dispose() {
+        this._disposed = true;
+        if (this._mesh) {
+            this._scene.remove(this._mesh);
+        }
+        this._geometry?.dispose();
+        this._heightTexture?.dispose();
 
     }
 

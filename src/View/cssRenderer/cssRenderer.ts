@@ -39,7 +39,6 @@ export class cssRenderer {
     }
 
     public update() {
-        console.log("here we are updating the cssRenderer");
         this._cssRenderer.render(this._scene, this._camera.instance);
     }
 

@@ -34,7 +34,8 @@ export class View {
     private readonly _menu: Menu;
     private readonly _rocks: Rocks;
     private readonly _raycaster: Raycaster;
-    private readonly _text : Text;
+    private readonly _text: Text;
+    private readonly _keyboard: Keyboard;
 
     public static getInstance(): View {
         return View.instance ?? new View();
@@ -54,15 +55,14 @@ export class View {
 
         this._raycaster = new Raycaster();
         this._sky = new Sky(this._scene, this._camera.instance, this._sun);
-        this._grass = new Grass();
-        this._water = new Water();
+        ///this._grass = new Grass();
+        //this._water = new Water();
         this._stand = new Stand();
         this._menu = new Menu();
-        this._rocks = new Rocks();
+        //this._rocks = new Rocks();
         this._text = new Text();
-        new Keyboard();
+        this._keyboard = new Keyboard();
 
-        console.log("view", this._terrains);
     }
     get scene() {
         return this._scene;
@@ -99,8 +99,8 @@ export class View {
     }
 
     public update() {
-        this._water.update();
-        this._grass.update();
+        //this._water.update();
+        //this._grass.update();
         this._sun.update();
         this._terrains.update();
         this._player.update();
@@ -108,7 +108,7 @@ export class View {
         this._stand.update();
         this._sky.update();
         this._menu.update();
-        this._rocks.update();
+        //this._rocks.update();
         this._raycaster.update();
         this._cssRenderer.update();
         this._renderer.update();

@@ -141,7 +141,6 @@ export class Grass {
 
 
         }
-        console.log("grass poisiton", positions);
         this._geometry = new THREE.BufferGeometry();
 
         this._geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));

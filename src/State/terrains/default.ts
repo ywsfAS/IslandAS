@@ -1,7 +1,7 @@
-import type { TerrainsOptions } from "./types";
+import type { TerrainsOptions, ChunksPosition } from "./types";
 
 export const DEFAULT_TERRAINS_CONFIGS: TerrainsOptions = {
-    subdivisions: 200,
+    subdivisions: 30,
     lacunarity: 1,
     persistence: 1,
     frequency: 0.06,
@@ -13,3 +13,6 @@ export const DEFAULT_TERRAINS_CONFIGS: TerrainsOptions = {
     verticalOffset: 0,
 
 }
+export const CHUNKS_POS: ChunksPosition[] = [
+    [-1, 1], [0, 1], [1, 1], [-1, 0], [0, 0], [1, 0], [-1, -1], [0, -1], [1, -1]
+] as const;

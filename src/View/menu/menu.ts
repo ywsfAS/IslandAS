@@ -37,7 +37,6 @@ export class Menu {
         ];
     }
     public setMenuIcon(): CSS3DObject {
-        console.log("set menu icon");
         const menuIcon = document.createElement('div');
 
         const menuTitle = document.createElement('div');
@@ -92,7 +91,6 @@ export class Menu {
         menuObj.scale.set(.1, .1, .1);
         menuObj.rotateZ(-Math.PI / 4);
 
-        console.log(menuObj);
         this._scene.add(menuObj);
 
 
@@ -267,7 +265,6 @@ export class Menu {
         this._scene.add(panelObject);
 
         closeBtn.addEventListener('click', () => {
-            console.log("here is infopael", this._infoPanel);
             if (this._infoPanel) {
                 this._scene.remove(panelObject);
             };

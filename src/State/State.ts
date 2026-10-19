@@ -68,6 +68,7 @@ export class State {
         this._camera.update();
         this._time.update();
         this._sun.update();
+        this._terrains.update();
         this._water.update(this._time.elapsedTime);
     }
 

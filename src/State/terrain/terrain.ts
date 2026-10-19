@@ -2,10 +2,11 @@ import { EventEmitter } from "events";
 import { vec2 } from "gl-matrix";
 import { TerrainsState } from "../terrains/terrains";
 import { getTerrainHeight } from "../utility";
+import type { ChunksPosition, TerrainResult } from "../terrains/types";
 
 export interface TerrainOptions {
 
-    id: number;
+    id: ChunksPosition;
     size: number;
     center: vec2;
     precision: number;
@@ -16,7 +17,8 @@ export interface TerrainOptions {
 
 
 export class TerrainState {
-    private _id: number;
+
+    private _id: ChunksPosition;
     private _size: number;
     private _center: vec2;
     private _precision: number;
@@ -24,10 +26,8 @@ export class TerrainState {
     private _terrains: TerrainsState;
 
 
-    private _normals: any;
     private _positions!: Float32Array;
-    private _indices!: Uint32Array;
-    private _uv: any;
+    private _indices!: Uint16Array | Uint32Array;
     private _textures!: Float32Array;
 
     private _resolution!: number;
@@ -67,6 +67,22 @@ export class TerrainState {
     get center() {
         return this._center;
     }
+    get id() {
+        return this._id;
+    }
+    get left() {
+        return vec2.fromValues(this.center[0] + this._size / 2, this.center[1]);
+    }
+    get right() {
+        return vec2.fromValues(this.center[0] - this._size / 2, this.center[1]);
+    }
+    get top() {
+        return vec2.fromValues(this.center[0], this.center[1] + this._size / 2);
+    }
+    get bottom() {
+        return vec2.fromValues(this.center[0], this.center[1] - this._size / 2);
+    }
+
     public contains(point: vec2): boolean {
         const halfSize = this._size * 0.5;
         return point[0] >= this._center[0] - halfSize
@@ -79,20 +95,14 @@ export class TerrainState {
     }
 
     // fill the terrain chunk with data assigned to it from terrains
-    public fill(data: any) {
+    public fill(data: TerrainResult) {
 
         this._positions = data.positions;
         this._indices = data.indices;
-        this._normals = data.normals;
-        this._uv = data.uv;
         this._textures = data.textures;
         this._resolution = data.resolution;
 
         this._isReady = true;
-
-        console.log("terrain position", this._positions);
-        console.log("terrain textures", this._textures);
-
 
         // fire the ready event
         this._events.emit('ready');
