@@ -6,6 +6,7 @@ import TerrainWorker from '../../workers/terrainWorker?worker';
 import { vec2 } from 'gl-matrix';
 import type { PlayerState } from "../player/player";
 import { State } from "../state";
+import SimplexNoise from "../../workers/noise";
 
 interface TerrainJob {
     terrain: TerrainState;
@@ -185,6 +186,7 @@ export class TerrainsState {
         const terrain = new TerrainState({ id: chunkPosition, size: size, center: centerOfChunk, precision: precision, terrains: this });
         this._terrains.set(chunkPosition, terrain);
 
+
         const terrainData: TerrainEvent = {
 
             id: chunkPosition,
@@ -202,6 +204,8 @@ export class TerrainsState {
             terrainOffsets: this._iterationsOffsets,
 
             verticalOffset: this._verticalOffset,
+
+            seed : 100 
 
         };
 

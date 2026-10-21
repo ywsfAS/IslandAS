@@ -70,7 +70,6 @@ export class SunState {
         if (this._angle <= 0) this._dir = 1;
 
         this._angle += this.time.deltaTime * this._orbitSpeed * this._dir;
-        console.log(this._angle, this._dir);
         this._position[0] = Math.cos(this._angle) * this._orbitRadius;
         this._position[1] = Math.sin(this._angle) * this._orbitRadius;
 

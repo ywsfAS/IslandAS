@@ -12,6 +12,7 @@ import type { Terrain } from '../terrain/terrain';
 import type { Sun } from '../sun/sun';
 import type { ChunksPosition } from '../../state/terrains/types';
 import { CHUNKS_POS } from '../../state/terrains/default';
+import { xor } from 'three/tsl';
 
 interface GrassChunk {
     geometry: THREE.BufferGeometry;
@@ -192,23 +193,49 @@ export class Grass {
         const playerPosition = this._player.position.cur;
         for (const { id, terrainSize, mesh, material } of this._chunks.values()) {
 
-            const playerChunkX = (playerPosition.x + terrainSize / 2) / terrainSize;
-            const playerChunkZ = (playerPosition.z + terrainSize / 2) / terrainSize;
 
+            const playerChunkX = Math.floor(
+                (playerPosition.x + terrainSize / 2) / terrainSize
+            );
 
-            const flooredPlayerChunkX = Math.floor(playerChunkX);
-            const flooredPlayerChunkZ = Math.floor(playerChunkZ);
+            const playerChunkZ = Math.floor(
+                (playerPosition.z + terrainSize / 2) / terrainSize
+            );
 
-            const key = `${id[0]}${id[1]}`;
-            const possiblePositions = new Set(CHUNKS_POS.filter(pos => {
-                return Math.round(playerChunkX) === pos[0] || Math.round(playerChunkZ) === pos[1];
-            }).map(pos => `${pos[0]}${pos[1]}`));
+            const fractionX =
+                (playerPosition.x + terrainSize / 2) / terrainSize -
+                playerChunkX;
 
+            const fractionZ =
+                (playerPosition.z + terrainSize / 2) / terrainSize -
+                playerChunkZ;
 
-            mesh.visible = id[0] === flooredPlayerChunkX && id[1] === flooredPlayerChunkZ || possiblePositions.has(key);
-            if (!mesh.visible) {
-                continue;
-            }
+            const diff = 0.25;
+
+            const directionsX = [0];
+            const directionsZ = [0];
+
+            if (fractionX >= 1 - diff) directionsX.push(1);
+            if (fractionX <= diff) directionsX.push(-1);
+
+            if (fractionZ >= 1 - diff) directionsZ.push(1);
+            if (fractionZ <= diff) directionsZ.push(-1);
+
+            const possiblePositions = new Set(
+                CHUNKS_POS
+                    .filter(([x, z]) =>
+                        directionsX.includes(x) &&
+                        directionsZ.includes(z)
+                    )
+                    .map(([x, z]) =>
+                        `${playerChunkX + x},${playerChunkZ + z}`
+                    )
+            );
+
+            const key = `${id[0]},${id[1]}`;
+
+            mesh.visible = possiblePositions.has(key);
+
 
             material.uniforms.uPlayerPosition.value = playerPosition;
             material.uniforms.uCameraPosition.value.set(

@@ -1,15 +1,14 @@
-import SimplexNoise from './noise.js';
 import type { TerrainEvent } from '../state/terrains/types.ts';
-
-
-const simplexNoise = new SimplexNoise();
+import SimplexNoise from './noise';
 
 const getElevation = (x: number, y: number, lacunarity: number, persistence: number, iterations: number, baseFrequency: number
-    , baseAmplitude: number, power: number, iterationsOffsets: number[][]): number => {
+    , baseAmplitude: number, power: number, iterationsOffsets: number[][], seed: number): number => {
     let elevation = 0
     let frequency = baseFrequency
     let amplitude = 1
     let normalisation = 0
+
+    const simplexNoise = new SimplexNoise(seed);
 
     for (let i = 0; i < iterations; i++) {
         const noise = simplexNoise.noise2D(x * frequency + iterationsOffsets[i][0], y * frequency + iterationsOffsets[i][1])
@@ -41,9 +40,11 @@ onmessage = (event: { data: TerrainEvent }) => {
     const power = event.data.power;
     const baseEmplitude = event.data.baseEmplitude;
     const verticalOffset = event.data.verticalOffset;
+    const seed = event.data.seed;
+
 
     const h = (px: number, pz: number) =>
-        getElevation(px, pz, lacunarity, persistence, iterations, frequency, baseEmplitude, power, terrainOffsets) + verticalOffset;
+        getElevation(px, pz, lacunarity, persistence, iterations, frequency, baseEmplitude, power, terrainOffsets, seed) + verticalOffset;
 
     const positions = new Float32Array(Math.pow(subdivisions + 1, 2) * 3);
 
@@ -61,7 +62,6 @@ onmessage = (event: { data: TerrainEvent }) => {
             positions[index] = px;
             positions[index + 1] = py;
             positions[index + 2] = pz;
-
 
         }
     }
@@ -141,7 +141,7 @@ onmessage = (event: { data: TerrainEvent }) => {
     }
 
     postMessage(
-        { id, positions, indices, textures, resolution,normals,uv },
+        { id, positions, indices, textures, resolution, normals, uv },
     );
 
 }

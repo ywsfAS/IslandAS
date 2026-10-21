@@ -1,4 +1,5 @@
 import type { vec2 } from "gl-matrix";
+import type SimplexNoise from "../../workers/noise";
 
 export enum IterationMode {
     MAX_INTERATION_MODE = 0,
@@ -37,6 +38,7 @@ export interface TerrainEvent {
     terrainOffsets: number[][],
 
     verticalOffset: number,
+    seed: number,
 
 }
 export interface TerrainResult {
