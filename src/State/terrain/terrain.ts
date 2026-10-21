@@ -127,12 +127,13 @@ export class TerrainState {
         if (!this._isReady) {
             return 0;
         }
-        return getTerrainHeight(point, {
+        const height = getTerrainHeight(point, {
             size: this._size,
             subdivisions: this._terrains.subdivisions,
             center: this._center,
             positions: this._positions
         })
+        return height;
 
     }
 

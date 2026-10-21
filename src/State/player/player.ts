@@ -4,6 +4,7 @@ import { State } from '../state';
 import type { Controls } from '../controls/controls';
 import type { Time } from '../time';
 import { vec2 } from 'gl-matrix';
+import { grayscale } from 'three/tsl';
 
 
 export class PlayerState {
@@ -65,14 +66,8 @@ export class PlayerState {
         // jump 
         if (is.jump) {
             this._position.cur.y += this._jumpPower * deltaTime;
-        } else {
-            this._position.cur.y -= (this._jumpPower / 4) * deltaTime;
         }
 
-        // clipping out of bounds 
-        if (this._position.cur.y < this._minHeight || this._position.cur.y >= this._maxHeight) {
-            this._position.cur.y = Math.max(Math.min(this._position.cur.y, this._maxHeight), this._minHeight);
-        }
 
         const terrainHeight = State.getInstance().Terrains.getHeightAt(vec2.fromValues(
             this._position.cur.x,
@@ -80,13 +75,22 @@ export class PlayerState {
         ));
 
         // update height offset
+        let groundY = 0;
         if (terrainHeight !== undefined) {
             const groundOffset = PLAYER_RADIUS + PLAYER_CAPSULE_LENGTH * 0.5;
+            groundY = groundOffset + terrainHeight;
             this._position.cur.y = easeTowards(
                 this._position.cur.y,
-                terrainHeight + groundOffset,
+                groundY,
                 deltaTime
             );
+
+            if (this._position.cur.y - groundY >= this._maxHeight) {
+                this._position.cur.y = groundY;
+            }
+        }
+        if (this._position.cur.y - groundY >= this._maxHeight) {
+            this._position.cur.y -= this._jumpPower * deltaTime;
         }
 
         this._position.delta.set(

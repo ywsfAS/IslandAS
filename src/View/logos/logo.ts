@@ -5,6 +5,10 @@ import { createLogoMaterial } from '../materials/logoMaterial';
 import type { Sun } from '../sun/sun';
 import type { LogoOptions } from './types';
 import { LogoHoverCard } from './hoverCard';
+import type { TerrainState } from '../../state/terrain/terrain';
+import { vec2 } from 'gl-matrix';
+import type { TerrainsState } from '../../state/terrains/terrains';
+import { State } from '../../state/state';
 
 export abstract class Logo {
     protected readonly _scene: THREE.Scene;
@@ -13,12 +17,16 @@ export abstract class Logo {
     protected readonly _options: LogoOptions;
     protected readonly _materials: THREE.ShaderMaterial[] = [];
     protected _hoverCard?: LogoHoverCard;
+    protected readonly _terrains: TerrainsState;
 
     protected constructor(
         defaults: LogoOptions,
         options: Partial<Omit<LogoOptions, 'asset'>> = {},
     ) {
+        const state = State.getInstance();
         const view = View.getInstance();
+
+        this._terrains = state.Terrains;
         this._scene = view.scene;
         this._sun = view.sun;
         this._camera = view.camera.instance;
@@ -83,37 +91,63 @@ export abstract class Logo {
 
         const groupBounds = new THREE.Box3().setFromObject(group);
         const center = groupBounds.getCenter(new THREE.Vector3());
+        const size = groupBounds.getSize(new THREE.Vector3()).distanceTo(center);
         group.children.forEach(child => child.position.sub(center));
 
         group.rotateX(-Math.PI);
-        group.position.copy(this._options.position);
-        this._scene.add(group);
+        const position = vec2.fromValues(this._options.position.x, this._options.position.z);
 
         const cardPosition = group.position.clone();
-        cardPosition.y += this._options.height / 2 + 3;
-        cardPosition.z += this._options.depth / 2;
-        const hoverCard = new LogoHoverCard(
-            this._scene,
-            this._options.interaction,
-            cardPosition,
-        );
+        const placeOnTerrain = (state: TerrainState) => {
+            if (!state.contains(position)) return;
 
-        this._hoverCard = hoverCard;
+            const height = state.getHeight(position);
 
-        View.getInstance().raycaster.subscribe(
-            group,
-            intersection => {
-                const hovered = intersection !== null;
-                this.setHovered(hovered);
-                if (hovered) {
-                    hoverCard.show();
-                } else {
-                    hoverCard.hide();
-                }
-                this.onHover(hovered);
-            },
-            this._options.interaction.id,
-        );
+            console.log(height);
+            if (height === undefined) return;
+
+            group.position.set(
+                this._options.position.x,
+                height + size / 2,
+                this._options.position.z
+            );
+            cardPosition.y += this._options.height + height;
+            cardPosition.x += group.position.x;
+            console.log("final height for card", cardPosition);
+            this._scene.add(group);
+
+            cardPosition.z += this._options.depth / 2;
+            const hoverCard = new LogoHoverCard(
+                this._scene,
+                this._options.interaction,
+                cardPosition,
+            );
+
+            this._hoverCard = hoverCard;
+            View.getInstance().raycaster.subscribe(
+                group,
+                intersection => {
+                    const hovered = intersection !== null;
+                    this.setHovered(hovered);
+                    if (hovered) {
+                        hoverCard.show();
+                    } else {
+                        hoverCard.hide();
+                    }
+                    this.onHover(hovered);
+                },
+                this._options.interaction.id,
+            );
+        };
+
+        this._terrains.events.on('create', (state: TerrainState) => {
+            if (state.contains(position)) {
+                state.events.on('ready', () => {
+                    placeOnTerrain(state);
+                });
+            }
+        });
+
 
     }
 

@@ -6,7 +6,6 @@ import TerrainWorker from '../../workers/terrainWorker?worker';
 import { vec2 } from 'gl-matrix';
 import type { PlayerState } from "../player/player";
 import { State } from "../state";
-import SimplexNoise from "../../workers/noise";
 
 interface TerrainJob {
     terrain: TerrainState;
@@ -91,6 +90,15 @@ export class TerrainsState {
             }
         }
         return undefined;
+    }
+    public getTerrainAt(point: vec2): TerrainState | undefined {
+        for (const terrain of this._terrains.values()) {
+            if (terrain.contains(point) && terrain.isReady) {
+                return terrain;
+            }
+        }
+        return undefined;
+
     }
 
     get events() {
@@ -205,7 +213,7 @@ export class TerrainsState {
 
             verticalOffset: this._verticalOffset,
 
-            seed : 100 
+            seed: 100
 
         };
 

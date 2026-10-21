@@ -3,7 +3,6 @@ import type { SunStateOptions } from './types';
 import { DEFAULT_SUN_CONFIG } from './default';
 import type { Time } from '../time';
 import { State } from '../state';
-import { thickness } from 'three/tsl';
 
 
 export class SunState {
