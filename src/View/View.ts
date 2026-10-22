@@ -108,6 +108,7 @@ export class View {
         this._stand.update();
         this._sky.update();
         this._menu.update();
+        this._text.update();
         this._rocks.update();
         this._raycaster.update();
         this._cssRenderer.update();

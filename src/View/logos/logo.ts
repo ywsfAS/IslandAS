@@ -111,12 +111,11 @@ export abstract class Logo {
                 height + size / 2,
                 this._options.position.z
             );
-            cardPosition.y += this._options.height + height;
+            cardPosition.y = this._options.height + height + 3;
             cardPosition.x += group.position.x;
-            console.log("final height for card", cardPosition);
             this._scene.add(group);
 
-            cardPosition.z += this._options.depth / 2;
+            cardPosition.z += this._options.depth;
             const hoverCard = new LogoHoverCard(
                 this._scene,
                 this._options.interaction,

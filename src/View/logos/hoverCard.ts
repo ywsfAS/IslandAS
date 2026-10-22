@@ -75,6 +75,7 @@ export class LogoHoverCard {
             lineHeight: '1.2',
             textDecoration: 'none',
             cursor: 'pointer',
+            zindex: 1000,
         });
 
         this._element.append(intro, message, link);

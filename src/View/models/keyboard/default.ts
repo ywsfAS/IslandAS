@@ -5,5 +5,5 @@ export const DEFAULT_KEYBOARD_OPTIONS: ModelOptions = {
     asset: 'models/keyboard.glb',
     position: new THREE.Vector3(0, 1, 0),
     rotation: new THREE.Euler(0, 0, 0),
-    scale: new THREE.Vector3(1, 1, 1),
+    scale: new THREE.Vector3(2, 2, 2),
 };
