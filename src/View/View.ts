@@ -15,6 +15,7 @@ import { Raycaster } from './raycaster/raycaster';
 import { State } from '../state/state';
 import { Text } from './text/Text';
 import { Keyboard } from './models/keyboard/keyboard';
+import { ZoneManager } from './zones/zoneManager';
 export class View {
 
     private static instance: View;
@@ -36,6 +37,7 @@ export class View {
     private readonly _raycaster: Raycaster;
     private readonly _text: Text;
     private readonly _keyboard: Keyboard;
+    private readonly _zoneManager: ZoneManager;
 
     public static getInstance(): View {
         return View.instance ?? new View();
@@ -61,6 +63,7 @@ export class View {
         this._menu = new Menu();
         this._rocks = new Rocks();
         this._text = new Text();
+        this._zoneManager = new ZoneManager();
         this._keyboard = new Keyboard();
 
     }
@@ -96,6 +99,9 @@ export class View {
     }
     get raycaster() {
         return this._raycaster;
+    }
+    get zoneManager() {
+        return this._zoneManager;
     }
 
     public update() {

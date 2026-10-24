@@ -1,9 +1,9 @@
-import { Zone } from "../zone";
+import { ZoneState } from "../zone";
 
-export class IntroZone extends Zone {
+export class IntroZoneState extends ZoneState {
 
-    constructor() {
-        super();
+    constructor(id: number) {
+        super(id);
     }
     public onEnter(): void {
         console.log("you are inside the zone");

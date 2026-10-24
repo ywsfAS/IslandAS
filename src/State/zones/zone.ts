@@ -4,8 +4,9 @@ import type { vec2 } from "gl-matrix";
 import type { PlayerState } from "../player/player";
 import { State } from "../state";
 
-export abstract class Zone {
+export abstract class ZoneState {
 
+    protected _id: number;
     protected _title: string;
     protected _subtitle: string;
     protected _radius: number;
@@ -17,7 +18,9 @@ export abstract class Zone {
 
     protected readonly _player: PlayerState;
 
-    constructor(options: Partial<ZoneConfig> = {}) {
+    constructor(id: number, options: Partial<ZoneConfig> = {}) {
+
+        this._id = id;
 
         const state = State.getInstance();
         this._player = state.player;
@@ -36,6 +39,15 @@ export abstract class Zone {
     }
     public isInside(): boolean {
         return this._isInside;
+    }
+    get id(): number {
+        return this._id;
+    }
+    get radius() {
+        return this._radius;
+    }
+    get center() {
+        return this._center;
     }
 
     protected abstract onEnter(): void;
