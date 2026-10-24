@@ -4,6 +4,11 @@
     box-sizing: border-box;
 }
 
+:root {
+    --accent: #020100;
+    --title-color: black;
+}
+
 html,
 body {
     height: 100vh;
@@ -29,4 +34,172 @@ canvas #app {
             rgba(0, 0, 0, 0.3) 80%,
             rgba(0, 0, 0, 0.6) 100%);
 
+}
+
+#zone-title {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#zone-title.show {
+    animation: zt-overlay 3.6s ease forwards;
+}
+
+.zt-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 8vh;
+    background: black;
+    transform: scaleY(0);
+}
+
+.zt-bar.top {
+    top: 0;
+    transform-origin: top;
+}
+
+.zt-bar.bottom {
+    bottom: 0;
+    transform-origin: bottom;
+}
+
+.show .zt-bar.top {
+    animation: zt-bar-top 3.6s ease forwards;
+}
+
+.show .zt-bar.bottom {
+    animation: zt-bar-bottom 3.6s ease forwards;
+}
+
+.zt-content {
+    text-align: center;
+    color: var(--title-color);
+}
+
+.zt-title {
+    font: 700 clamp(2rem, 5vw, 5rem) 'Cinzel', serif;
+    text-transform: uppercase;
+    margin: 0;
+    padding-left: .35em;
+    opacity: 0;
+    text-align: center;
+}
+
+.show .zt-title {
+    animation: zt-title 1.6s cubic-bezier(.2, .7, .2, 1) .2s forwards;
+}
+
+.zt-line {
+    height: 1px;
+    width: 0;
+    margin: 1rem auto;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+.show .zt-line {
+    animation: zt-line 1.2s ease .8s forwards;
+}
+
+.zt-sub {
+    font: 400 clamp(.8rem, 3vw, 1.3rem) 'Cinzel', serif;
+    font-weight: bold;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0;
+    opacity: 0;
+}
+
+.show .zt-sub {
+    animation: zt-sub 1.2s ease 1s forwards;
+}
+
+@keyframes zt-overlay {
+
+    0% {
+        opacity: 0
+    }
+
+    8% {
+        opacity: 1
+    }
+
+    82% {
+        opacity: 1
+    }
+
+    100% {
+        opacity: 0
+    }
+}
+
+@keyframes zt-bar-top {
+    0% {
+        transform: scaleY(0)
+    }
+
+    12% {
+        transform: scaleY(1)
+    }
+
+    100% {
+        transform: scaleY(1)
+    }
+}
+
+@keyframes zt-bar-bottom {
+    0% {
+        transform: scaleY(0)
+    }
+
+    12% {
+        transform: scaleY(1)
+    }
+
+    100% {
+        transform: scaleY(1)
+    }
+}
+
+@keyframes zt-title {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes zt-line {
+    to {
+        width: min(60vw, 500px);
+    }
+}
+
+@keyframes zt-sub {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .zt-title,
+    .zt-sub {
+        animation-duration: .01s !important;
+    }
 }

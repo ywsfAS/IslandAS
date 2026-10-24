@@ -3,6 +3,7 @@ import { DEFAULT_ZONE_CONFIGS } from './default';
 import type { vec2 } from "gl-matrix";
 import type { PlayerState } from "../player/player";
 import { State } from "../state";
+import { EventEmitter } from "events";
 
 export abstract class ZoneState {
 
@@ -17,6 +18,7 @@ export abstract class ZoneState {
     protected _isInside: boolean = false;
 
     protected readonly _player: PlayerState;
+    protected readonly _events: EventEmitter = new EventEmitter();
 
     constructor(id: number, options: Partial<ZoneConfig> = {}) {
 
@@ -49,6 +51,15 @@ export abstract class ZoneState {
     get center() {
         return this._center;
     }
+    get title() {
+        return this._title;
+    }
+    get subtitle() {
+        return this._subtitle;
+    }
+    get events(): EventEmitter {
+        return this._events;
+    }
 
     protected abstract onEnter(): void;
     protected abstract onExit(): void;
@@ -70,10 +81,12 @@ export abstract class ZoneState {
         if (!this._isInside && distance <= this._radius) {
             this._isInside = true;
             this.onEnter();
+            this._events.emit('onEnter');
         }
         if (this._isInside && distance > this._radius + this._transitionRadius) {
             this._isInside = false;
             this.onExit();
+            this._events.emit('onExit');
         }
 
     };

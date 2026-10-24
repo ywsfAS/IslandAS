@@ -7,6 +7,12 @@ export class IntroZone extends Zone {
     constructor(state: IntroZoneState, options?: Partial<ZoneParams>) {
         super(state, options);
     }
+    public override onEnter(){
+        super.onEnter();
+    }
+    public override onExit(){
+        super.onExit();
+    }
     public override update() {
         super.update();
     }

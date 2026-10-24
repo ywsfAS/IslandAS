@@ -1,6 +1,7 @@
 import type { ZoneState } from "../../state/zones/zone";
 import { View } from "../view";
 import { DEFAULT_ZONE_CONFIGS } from './default';
+import { setZoneTitle, type ZoneTitleArgs } from "./helpers";
 import type { RingGeometryParams, ZoneParams } from './types';
 import * as THREE from 'three';
 export abstract class Zone {
@@ -24,7 +25,24 @@ export abstract class Zone {
         this._ringMaterialParams = { ...options.matrial, ...matrial };
 
         this.setMesh();
+
+        this._state.events.on('onEnter', () => this.onEnter());
+        this._state.events.on('onExit', () => this.onExit());
     }
+    public onEnter(): void {
+        const titleArgs: ZoneTitleArgs = {
+            title: this._state.title,
+            subtitle: this._state.subtitle,
+            accent: "black",
+            titleColor: "black"
+        }
+        setZoneTitle(titleArgs);
+
+    };
+    public onExit(): void {
+
+    };
+
     public setMesh() {
         const radius = this._state.radius;
         const x = this._state.center[0];

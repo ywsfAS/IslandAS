@@ -2,10 +2,10 @@ import { vec2 } from 'gl-matrix';
 import type { ZoneConfig } from './types';
 
 export const DEFAULT_ZONE_CONFIGS: ZoneConfig = {
-    title: "Intro",
-    subtitle: "this a simple introduction about me",
+    title: "THE JOURNEY BEGINS",
+    subtitle: "A glimpse into who I am and what I create.",
 
-    center: vec2.fromValues(30, 0),
-    radius: 5,
+    center: vec2.fromValues(0, 100),
+    radius: 20,
     transitionRadius: 25,
 }
