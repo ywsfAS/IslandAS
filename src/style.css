@@ -203,3 +203,11 @@ canvas #app {
         animation-duration: .01s !important;
     }
 }
+
+button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 999;
+
+}

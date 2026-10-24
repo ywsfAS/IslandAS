@@ -1,3 +1,5 @@
+import { TechnicolorShader } from "three/examples/jsm/Addons.js";
+import { AudioManager } from "./audio/audioManager";
 import { CameraState } from "./camera/camera";
 import { Controls } from "./controls/controls";
 import { PlayerState } from "./player/player";
@@ -20,6 +22,7 @@ export class State {
     private readonly _water: WaterState;
 
     private readonly _zoneManager: ZoneManagerState;
+    private readonly _audioManager: AudioManager;
 
     public static getInstance(): State {
         return State.instance ?? new State();
@@ -34,10 +37,33 @@ export class State {
         this._player = new PlayerState();
         this._terrains = new TerrainsState();
         this._zoneManager = new ZoneManagerState();
+        this._audioManager = new AudioManager();
+
 
         this._camera = new CameraState();
         this._sun = new SunState();
         this._water = new WaterState();
+
+        const button = document.createElement("button");
+        button.textContent = "Enter Island";
+
+        console.log("button");
+
+
+        button.addEventListener("click", async () => {
+            try {
+                console.log("clicked");
+                await this._audioManager.resume();
+
+                await this.audioManager.play("/audio/island-ambience.wav", true);
+
+                button.remove();
+            } catch (error) {
+                console.error("Failed to start island ambience:", error);
+            }
+        });
+
+        document.body.appendChild(button);
 
     }
     get camera() {
@@ -65,8 +91,11 @@ export class State {
     get water() {
         return this._water;
     }
-    get zoneManager(){
+    get zoneManager() {
         return this._zoneManager;
+    }
+    get audioManager() {
+        return this._audioManager;
     }
 
     public update() {
