@@ -128,7 +128,6 @@ export class Text {
         this._mesh.material.uniforms.uTime.value = this._time.elapsedTime;
         this._mesh.material.uniforms.uLightDirection.value = this._sun.direction;
         this._mesh.material.uniforms.uViewPosition.value = this._camera.position;
-        console.log(this._camera.position);
     }
 
 }

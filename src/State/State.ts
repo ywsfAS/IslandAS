@@ -6,6 +6,7 @@ import { TerrainsState } from "./terrains/terrains";
 import { Time } from "./time";
 import { Viewport } from './viewport/viewport';
 import { WaterState } from "./water/water";
+import { ZoneManager } from "./zones/zoneManager";
 export class State {
     public static instance: State;
 
@@ -17,6 +18,8 @@ export class State {
     private readonly _terrains: TerrainsState;
     private readonly _sun: SunState;
     private readonly _water: WaterState;
+
+    private readonly _zoneManager: ZoneManager;
 
     public static getInstance(): State {
         return State.instance ?? new State();
@@ -30,6 +33,7 @@ export class State {
         this._controls = new Controls();
         this._player = new PlayerState();
         this._terrains = new TerrainsState();
+        this._zoneManager = new ZoneManager();
 
         this._camera = new CameraState();
         this._sun = new SunState();
@@ -69,6 +73,7 @@ export class State {
         this._time.update();
         this._sun.update();
         this._terrains.update();
+        this._zoneManager.update();
         this._water.update(this._time.elapsedTime);
     }
 
