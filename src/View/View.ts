@@ -16,6 +16,8 @@ import { State } from '../state/state';
 import { Text } from './text/Text';
 import { Keyboard } from './models/keyboard/keyboard';
 import { ZoneManager } from './zones/zoneManager';
+import { Headphone } from './models/headphone/headphone';
+import { Path } from './path/path';
 export class View {
 
     private static instance: View;
@@ -37,7 +39,9 @@ export class View {
     private readonly _raycaster: Raycaster;
     private readonly _text: Text;
     private readonly _keyboard: Keyboard;
+    private readonly _headphone: Headphone;
     private readonly _zoneManager: ZoneManager;
+    private readonly _path: Path;
 
     public static getInstance(): View {
         return View.instance ?? new View();
@@ -58,13 +62,14 @@ export class View {
         this._raycaster = new Raycaster();
         this._sky = new Sky(this._scene, this._camera.instance, this._sun);
         this._grass = new Grass();
-        //this._water = new Water();
         this._stand = new Stand();
         this._menu = new Menu();
         this._rocks = new Rocks();
         this._text = new Text();
         this._zoneManager = new ZoneManager();
         this._keyboard = new Keyboard();
+        this._headphone = new Headphone();
+        this._path = new Path();
 
     }
     get scene() {

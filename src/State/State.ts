@@ -10,6 +10,7 @@ import { WaterState } from "./water/water";
 import { ZoneManagerState } from "./zones/zoneManager";
 import type { AudioControls } from "./audio/types";
 import { createStartBtn } from "./utility";
+import { PathState } from "./path/path";
 export class State {
     public static instance: State;
 
@@ -24,6 +25,7 @@ export class State {
 
     private readonly _zoneManager: ZoneManagerState;
     private readonly _audioManager: AudioManager;
+    private readonly _path: PathState;
     private _mainAudioControls: AudioControls;
 
     public static getInstance(): State {
@@ -44,6 +46,8 @@ export class State {
         this._camera = new CameraState();
         this._sun = new SunState();
         this._water = new WaterState();
+        this._path = new PathState();
+
 
         const button = createStartBtn();
         document.body.appendChild(button);
@@ -70,6 +74,9 @@ export class State {
     }
     get sun() {
         return this._sun;
+    }
+    get path() {
+        return this._path;
     }
 
     get time() {
