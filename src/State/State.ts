@@ -1,4 +1,3 @@
-import { TechnicolorShader } from "three/examples/jsm/Addons.js";
 import { AudioManager } from "./audio/audioManager";
 import { CameraState } from "./camera/camera";
 import { Controls } from "./controls/controls";
@@ -10,6 +9,7 @@ import { Viewport } from './viewport/viewport';
 import { WaterState } from "./water/water";
 import { ZoneManagerState } from "./zones/zoneManager";
 import type { AudioControls } from "./audio/types";
+import { createStartBtn } from "./utility";
 export class State {
     public static instance: State;
 
@@ -45,17 +45,17 @@ export class State {
         this._sun = new SunState();
         this._water = new WaterState();
 
-        const button = document.createElement("button");
-        button.textContent = "Enter Island";
+        const button = createStartBtn();
+        document.body.appendChild(button);
+        this.registerMainSound(button);
 
-        console.log("button");
+        this._zoneManager = new ZoneManagerState();
 
-
+    }
+    private registerMainSound(button: HTMLButtonElement) {
         button.addEventListener("click", async () => {
             try {
-                console.log("clicked");
                 await this._audioManager.resume();
-
                 this._mainAudioControls = await this.audioManager.play("/audio/exploration-joy.mp3", true);
 
                 button.remove();
@@ -63,9 +63,6 @@ export class State {
                 console.error("Failed to start island ambience:", error);
             }
         });
-
-        document.body.appendChild(button);
-        this._zoneManager = new ZoneManagerState();
 
     }
     get camera() {

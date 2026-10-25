@@ -48,3 +48,23 @@ export function getTerrainHeight(point: vec2, { size, subdivisions, center, posi
     return finalZ;
 
 }
+
+export function createStartBtn(): HTMLButtonElement {
+    const btn = document.createElement("button");
+
+    btn.type = "button";
+    btn.innerHTML = `
+        <span class="start-btn__text">CLICK TO<br>START</span>
+        <i class="fa-solid fa-volume-xmark" aria-hidden="true"></i>
+    `;
+    btn.className = "start-btn";
+    
+    const icon = btn.querySelector("i")!;
+
+    btn.addEventListener("click", () => {
+        icon.classList.toggle("fa-volume-xmark");
+        icon.classList.toggle("fa-volume-high");
+    });
+
+    return btn;
+}

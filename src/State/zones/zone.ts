@@ -88,6 +88,7 @@ export abstract class ZoneState {
     }
     protected onExit(): void {
         const mainControls = State.getInstance().mainAudioControls;
+        if (!mainControls) return;
         mainControls.setVolume(1);
         this._currentAudioControls.stop();
 
