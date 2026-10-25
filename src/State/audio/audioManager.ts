@@ -1,3 +1,5 @@
+import type { AudioControls } from "./types";
+
 
 export class AudioManager {
     private readonly _context: AudioContext;
@@ -72,14 +74,19 @@ export class AudioManager {
 
 
     }
-    public async play(path: string, loop: boolean): Promise<void> {
+
+    public async play(path: string, loop: boolean = false): Promise<AudioControls> {
         this.ensureActive();
         const buffer = await this.load(path);
         const source = this._context.createBufferSource();
         source.buffer = buffer;
         source.loop = loop;
 
-        source.connect(this._gain);
+        const localGain = this._context.createGain();
+
+
+        source.connect(localGain);
+        localGain.connect(this._gain);
 
         this._sources.add(source);
 
@@ -90,6 +97,11 @@ export class AudioManager {
 
 
         source.start();
+
+        return {
+            setVolume: (volume: number) => this.setVolume(volume, localGain),
+            stop: () => source.stop(),
+        }
 
     }
     public stopAll(): void {
@@ -126,6 +138,9 @@ export class AudioManager {
         void this._context.close();
     }
     public setMasterVolume(volume: number): void {
+        this.setVolume(volume, this._gain);
+    }
+    private setVolume(volume: number, gain: GainNode): void {
         this.ensureActive();
 
         if (!Number.isFinite(volume)) {
@@ -133,7 +148,7 @@ export class AudioManager {
         }
 
         const normalized = Math.max(0, Math.min(1, volume));
-        this._gain.gain.setTargetAtTime(
+        gain.gain.setTargetAtTime(
             normalized,
             this._context.currentTime,
             0.015,

@@ -8,4 +8,5 @@ export const DEFAULT_ZONE_CONFIGS: ZoneConfig = {
     center: vec2.fromValues(0, 100),
     radius: 20,
     transitionRadius: 25,
+    audioUrl: "/audio/screen-title.mp3"
 }

@@ -6,6 +6,7 @@ export interface ZoneConfig {
 
     radius: number;
     transitionRadius: number;
+    audioUrl : string;
 
     center: vec2;
 }

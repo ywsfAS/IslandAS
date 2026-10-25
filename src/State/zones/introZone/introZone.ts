@@ -5,10 +5,12 @@ export class IntroZoneState extends ZoneState {
     constructor(id: number) {
         super(id);
     }
-    public onEnter(): void {
+    public override onEnter(): void {
+        super.onEnter();
         console.log("you are inside the zone");
     }
-    public onExit(): void {
+    public override onExit(): void {
+        super.onExit();
         console.log("you are outside the zone");
     }
 

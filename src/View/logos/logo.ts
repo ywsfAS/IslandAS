@@ -9,6 +9,7 @@ import type { TerrainState } from '../../state/terrain/terrain';
 import { vec2 } from 'gl-matrix';
 import type { TerrainsState } from '../../state/terrains/terrains';
 import { State } from '../../state/state';
+import type { AudioManager } from '../../state/audio/audioManager';
 
 export abstract class Logo {
     protected readonly _scene: THREE.Scene;
@@ -18,6 +19,7 @@ export abstract class Logo {
     protected readonly _materials: THREE.ShaderMaterial[] = [];
     protected _hoverCard?: LogoHoverCard;
     protected readonly _terrains: TerrainsState;
+    protected readonly _audio: AudioManager;
 
     protected constructor(
         defaults: LogoOptions,
@@ -25,6 +27,7 @@ export abstract class Logo {
     ) {
         const state = State.getInstance();
         const view = View.getInstance();
+        this._audio = state.audioManager;
 
         this._terrains = state.Terrains;
         this._scene = view.scene;
@@ -164,6 +167,7 @@ export abstract class Logo {
         for (const material of this._materials) {
             material.uniforms.uHover.value = hovered ? 1 : 0;
         }
+        this._audio.play("/audio/click.mp3");
     }
 
     protected onHover(_hovered: boolean): void { }

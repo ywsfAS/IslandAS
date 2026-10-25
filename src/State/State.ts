@@ -9,6 +9,7 @@ import { Time } from "./time";
 import { Viewport } from './viewport/viewport';
 import { WaterState } from "./water/water";
 import { ZoneManagerState } from "./zones/zoneManager";
+import type { AudioControls } from "./audio/types";
 export class State {
     public static instance: State;
 
@@ -23,6 +24,7 @@ export class State {
 
     private readonly _zoneManager: ZoneManagerState;
     private readonly _audioManager: AudioManager;
+    private _mainAudioControls: AudioControls;
 
     public static getInstance(): State {
         return State.instance ?? new State();
@@ -36,7 +38,6 @@ export class State {
         this._controls = new Controls();
         this._player = new PlayerState();
         this._terrains = new TerrainsState();
-        this._zoneManager = new ZoneManagerState();
         this._audioManager = new AudioManager();
 
 
@@ -55,7 +56,7 @@ export class State {
                 console.log("clicked");
                 await this._audioManager.resume();
 
-                await this.audioManager.play("/audio/island-ambience.wav", true);
+                this._mainAudioControls = await this.audioManager.play("/audio/exploration-joy.mp3", true);
 
                 button.remove();
             } catch (error) {
@@ -64,6 +65,7 @@ export class State {
         });
 
         document.body.appendChild(button);
+        this._zoneManager = new ZoneManagerState();
 
     }
     get camera() {
@@ -96,6 +98,9 @@ export class State {
     }
     get audioManager() {
         return this._audioManager;
+    }
+    get mainAudioControls() {
+        return this._mainAudioControls;
     }
 
     public update() {
