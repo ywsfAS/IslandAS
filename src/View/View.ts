@@ -18,6 +18,7 @@ import { Keyboard } from './models/keyboard/keyboard';
 import { ZoneManager } from './zones/zoneManager';
 import { Headphone } from './models/headphone/headphone';
 import { Path } from './path/path';
+import { Trees } from './trees/trees';
 export class View {
 
     private static instance: View;
@@ -42,6 +43,7 @@ export class View {
     private readonly _headphone: Headphone;
     private readonly _zoneManager: ZoneManager;
     private readonly _path: Path;
+    private readonly _trees: Trees;
 
     public static getInstance(): View {
         return View.instance ?? new View();
@@ -70,6 +72,7 @@ export class View {
         this._keyboard = new Keyboard();
         this._headphone = new Headphone();
         this._path = new Path();
+        this._trees = new Trees();
 
     }
     get scene() {

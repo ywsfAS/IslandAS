@@ -3,11 +3,12 @@ import type { PathStateOptions } from './types';
 
 export const DEFAULT_PATH_CONFIG: PathStateOptions = {
     points: [
-        vec3.fromValues(-40, 0, -30),
-        vec3.fromValues(-20, 0, -10),
-        vec3.fromValues(0, 0, -15),
-        vec3.fromValues(20, 0, 5),
-        vec3.fromValues(100, 0, 25),
+        vec3.fromValues(0, 0, 0),
+        vec3.fromValues(3, 0, 20),
+        vec3.fromValues(-3, 0, 40),
+        vec3.fromValues(4, 0, 60),
+        vec3.fromValues(1, 0, 80),
+        vec3.fromValues(0, 0, 90),
     ],
     width: 10,
     closed: false,
@@ -17,5 +18,5 @@ export const DEFAULT_PATH_CONFIG: PathStateOptions = {
     widthSegments: 4,
     uvScale: 4,
     yOffset: 0.3,
-    smoothness : 0.2,
+    smoothness: 0.2
 };

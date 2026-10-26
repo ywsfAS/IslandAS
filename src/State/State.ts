@@ -11,6 +11,7 @@ import { ZoneManagerState } from "./zones/zoneManager";
 import type { AudioControls } from "./audio/types";
 import { createStartBtn } from "./utility";
 import { PathState } from "./path/path";
+import { TreesState } from "./trees/trees";
 export class State {
     public static instance: State;
 
@@ -26,6 +27,7 @@ export class State {
     private readonly _zoneManager: ZoneManagerState;
     private readonly _audioManager: AudioManager;
     private readonly _path: PathState;
+    private readonly _trees: TreesState;
     private _mainAudioControls!: AudioControls;
 
     public static getInstance(): State {
@@ -47,6 +49,7 @@ export class State {
         this._sun = new SunState();
         this._water = new WaterState();
         this._path = new PathState();
+        this._trees = new TreesState();
 
 
         const button = createStartBtn();
@@ -105,6 +108,9 @@ export class State {
     }
     get mainAudioControls() {
         return this._mainAudioControls;
+    }
+    get trees() {
+        return this._trees;
     }
 
     public update() {
