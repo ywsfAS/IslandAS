@@ -121,6 +121,7 @@ export class View {
         this._menu.update();
         this._text.update();
         this._rocks.update();
+        this._path.update();
         this._raycaster.update();
         this._cssRenderer.update();
         this._renderer.update();

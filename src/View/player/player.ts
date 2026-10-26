@@ -3,7 +3,6 @@ import { View } from '../view';
 import { State } from '../../state/state';
 import { PLAYER_CAPSULE_LENGTH, PLAYER_RADIUS } from '../../state/player/default';
 import { createPlayerMaterial } from '../materials/playerMaterial';
-import type { SunState } from '../../state/sun/sun';
 import type { Time } from '../../state/time';
 import type { PlayerState } from '../../state/player/player';
 import type { Sun } from '../sun/sun';
@@ -59,7 +58,6 @@ export class Player {
         this._mesh.rotation.y = rot;
 
 
-        // update uniforms for mesh material 
         this._material.uniforms.uTime.value = this._time.elapsedTime;
         this._material.uniforms.uSunColor.value = this._sun.color;
         this._material.uniforms.uLightDirection.value = this._sun.lightDirection;

@@ -26,7 +26,7 @@ export class State {
     private readonly _zoneManager: ZoneManagerState;
     private readonly _audioManager: AudioManager;
     private readonly _path: PathState;
-    private _mainAudioControls: AudioControls;
+    private _mainAudioControls!: AudioControls;
 
     public static getInstance(): State {
         return State.instance ?? new State();
