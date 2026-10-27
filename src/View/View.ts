@@ -19,6 +19,7 @@ import { ZoneManager } from './zones/zoneManager';
 import { Headphone } from './models/headphone/headphone';
 import { Path } from './path/path';
 import { Trees } from './trees/trees';
+import { Fence } from './fences/fence';
 export class View {
 
     private static instance: View;
@@ -44,6 +45,7 @@ export class View {
     private readonly _zoneManager: ZoneManager;
     private readonly _path: Path;
     private readonly _trees: Trees;
+    private readonly _fence: Fence;
 
     public static getInstance(): View {
         return View.instance ?? new View();
@@ -73,6 +75,7 @@ export class View {
         this._headphone = new Headphone();
         this._path = new Path();
         this._trees = new Trees();
+        this._fence = new Fence();
 
     }
     get scene() {
@@ -125,6 +128,7 @@ export class View {
         this._text.update();
         this._rocks.update();
         this._path.update();
+        this._trees.update();
         this._raycaster.update();
         this._cssRenderer.update();
         this._renderer.update();

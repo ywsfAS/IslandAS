@@ -6,6 +6,7 @@ import { View } from '../view';
 import type { TreeGeometryOptions, TreesOptions } from './types';
 import { DEFAULT_TREES_CONFIG } from './default';
 import { createTreeMaterial } from '../materials/treeMaterial';
+import type { SunState } from '../../state/sun/sun';
 
 
 
@@ -25,6 +26,7 @@ export class Trees {
 
     private readonly _state: TreesState;
     private readonly _scene: THREE.Scene;
+    private readonly _sun: SunState;
     private readonly _onReady = () => this.onData();
 
     constructor(options: Partial<TreesOptions> = {}) {
@@ -35,6 +37,7 @@ export class Trees {
 
         this._state = state.trees;
         this._scene = view.scene;
+        this._sun = state.sun;
 
         this._trunkColor = new THREE.Color(options.trunkColor ?? d.trunkColor);
         this._leafColor = new THREE.Color(options.leafColor ?? d.leafColor);
@@ -96,10 +99,14 @@ export class Trees {
 
     public setMaterial() {
         this._material = createTreeMaterial();
+
         this._material.uniforms.uCylindreColor.value = this._trunkColor;
         this._material.uniforms.uLowConeColor.value = this._leafColor;
         this._material.uniforms.uTopConeColor.value = this._leafColor;
 
+        this._material.uniforms.uLightDirection.value = this._sun.direction;
+        this._material.uniforms.uSunColor.value = this._sun.color;
+        this._material.uniforms.uSunIntensity.value = this._sun.intensity;
 
     }
 
@@ -127,6 +134,11 @@ export class Trees {
         this._applied = count;
         this._mesh.count = count;
         this._mesh.instanceMatrix.needsUpdate = true;
+    }
+    public update(): void {
+        this._material.uniforms.uLightDirection.value = this._sun.direction;
+        this._material.uniforms.uSunColor.value = this._sun.color;
+        this._material.uniforms.uSunIntensity.value = this._sun.intensity;
     }
 
     public dispose() {

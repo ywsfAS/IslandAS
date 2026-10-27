@@ -10,6 +10,9 @@ export function createTreeMaterial(): THREE.ShaderMaterial {
             uLowConeColor: { value: null },
             uTopConeColor: { value: null },
 
+            uLightDirection: { value: null },
+            uSunColor: { value: null },
+            uSunIntensity: { value: null }
 
         },
         vertexShader: vertexShader,
