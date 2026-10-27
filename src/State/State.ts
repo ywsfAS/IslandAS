@@ -12,6 +12,7 @@ import type { AudioControls } from "./audio/types";
 import { createStartBtn } from "./utility";
 import { PathState } from "./path/path";
 import { TreesState } from "./trees/trees";
+import { FenceState } from "./fences/fence";
 export class State {
     public static instance: State;
 
@@ -28,6 +29,7 @@ export class State {
     private readonly _audioManager: AudioManager;
     private readonly _path: PathState;
     private readonly _trees: TreesState;
+    private readonly _fences: FenceState;
     private _mainAudioControls!: AudioControls;
 
     public static getInstance(): State {
@@ -50,6 +52,7 @@ export class State {
         this._water = new WaterState();
         this._path = new PathState();
         this._trees = new TreesState();
+        this._fences = new FenceState();
 
 
         const button = createStartBtn();
@@ -111,6 +114,9 @@ export class State {
     }
     get trees() {
         return this._trees;
+    }
+    get fence() {
+        return this._fences;
     }
 
     public update() {

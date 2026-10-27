@@ -111,6 +111,9 @@ export class PathState {
     get length() {
         return this._length;
     }
+    get widthSegments() {
+        return this._widthSegments;
+    }
 
     public destroy() {
         if (this._destroyed) return;
