@@ -6,6 +6,10 @@ export function createTreeMaterial(): THREE.ShaderMaterial {
 
     const material = new THREE.ShaderMaterial({
         uniforms: {
+            uCylindreColor: { value: null },
+            uLowConeColor: { value: null },
+            uTopConeColor: { value: null },
+
 
         },
         vertexShader: vertexShader,

@@ -3,9 +3,10 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import type { TreesState } from '../../state/trees/trees';
 import { State } from '../../state/state';
 import { View } from '../view';
-import type { TreesOptions } from './types';
+import type { TreeGeometryOptions, TreesOptions } from './types';
 import { DEFAULT_TREES_CONFIG } from './default';
 import { createTreeMaterial } from '../materials/treeMaterial';
+
 
 
 export class Trees {
@@ -13,6 +14,7 @@ export class Trees {
     private _trunkColor: THREE.Color;
     private _leafColor: THREE.Color;
     private _castShadow: boolean;
+    private _geometryOptions: TreeGeometryOptions;
 
     private _geometry!: THREE.BufferGeometry;
     private _material!: THREE.ShaderMaterial;
@@ -37,6 +39,7 @@ export class Trees {
         this._trunkColor = new THREE.Color(options.trunkColor ?? d.trunkColor);
         this._leafColor = new THREE.Color(options.leafColor ?? d.leafColor);
         this._castShadow = options.castShadow ?? d.castShadow;
+        this._geometryOptions = { ...options.geometryOptions, ...d.geometryOptions };
 
         this.setGeometry();
         this.setMaterial();
@@ -47,11 +50,40 @@ export class Trees {
     }
 
     get mesh() { return this._mesh; }
+    private setSectionId(
+        geometry: THREE.BufferGeometry,
+        id: number
+    ) {
+        const count = geometry.getAttribute('position').count;
 
+        const ids = new Float32Array(count).fill(id);
+
+        geometry.setAttribute(
+            'aSection',
+            new THREE.BufferAttribute(ids, 1)
+        );
+    }
     public setGeometry() {
-        const trunk = new THREE.CylinderGeometry(0.12, 0.2, 1, 6).translate(0, 0.5, 0);
-        const low = new THREE.ConeGeometry(1.0, 1.7, 7).translate(0, 1.7, 0);
-        const high = new THREE.ConeGeometry(0.7, 1.4, 7).translate(0, 2.5, 0);
+        const { cylindre, lowCone, topCone } = this._geometryOptions;
+
+        const { radiusBottom, radiusTop, height, translation: cylindreTranslation } = cylindre;
+        const { radius: lowRadius, height: lowHeight, radialSegments: lowRadialSegments, translation: lowTranslation } = lowCone;
+        const { radius: topRadius, height: topHeight, radialSegments: topRadialSegments, translation: topTranslation } = topCone;
+
+        const trunk = new THREE.CylinderGeometry(radiusTop, radiusBottom, height).
+            translate(cylindreTranslation[0], cylindreTranslation[1], cylindreTranslation[2]);
+
+
+        const low = new THREE.ConeGeometry(lowRadius, lowHeight, lowRadialSegments).
+            translate(lowTranslation[0], lowTranslation[1], lowTranslation[2]);
+
+
+        const high = new THREE.ConeGeometry(topRadius, topHeight, topRadialSegments).
+            translate(topTranslation[0], topTranslation[1], topTranslation[2]);
+
+        this.setSectionId(trunk, 0);
+        this.setSectionId(low, 1);
+        this.setSectionId(high, 2);
 
         const merged = mergeGeometries([trunk, low, high], false);
         trunk.dispose();
@@ -64,6 +96,11 @@ export class Trees {
 
     public setMaterial() {
         this._material = createTreeMaterial();
+        this._material.uniforms.uCylindreColor.value = this._trunkColor;
+        this._material.uniforms.uLowConeColor.value = this._leafColor;
+        this._material.uniforms.uTopConeColor.value = this._leafColor;
+
+
     }
 
     public setMesh() {
