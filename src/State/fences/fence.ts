@@ -69,7 +69,6 @@ export class FenceState {
             index += sample;
         }
         this._positions = centers;
-        console.log(centers);
 
     }
 
