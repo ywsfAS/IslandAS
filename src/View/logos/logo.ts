@@ -106,7 +106,6 @@ export abstract class Logo {
 
             const height = state.getHeight(position);
 
-            console.log(height);
             if (height === undefined) return;
 
             group.position.set(
