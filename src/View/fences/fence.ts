@@ -40,6 +40,9 @@ export class Fence {
             this._options.railDepth,
         );
 
+        this._postGeometry.translate(0, 0.5, 0);
+        this._railGeometry.translate(0, 0.5, 0);
+
         this._material = new THREE.MeshStandardMaterial({
             color: this._options.color,
         });
@@ -93,13 +96,15 @@ export class Fence {
 
                 // Post transform
                 this._dummy.position.copy(start);
-                this._dummy.position.y += 0.6;
+                this._dummy.position.y += 1;
                 this._dummy.rotation.set(0, 0, 0);
                 this._dummy.scale.set(1, 1, 1);
+                this._dummy.translateY(0.5);
                 this._dummy.updateMatrix();
 
                 posts.setMatrixAt(postIndex++, this._dummy.matrix);
 
+                // there is no post to connect to
                 if (i === 0) continue;
 
                 const previousIndex = (i - 1) * 6 + side * 3;
@@ -117,8 +122,9 @@ export class Fence {
 
                 direction.normalize();
 
+                // first rail transform matrix 
                 this._dummy.position.copy(start).add(end).multiplyScalar(0.5);
-                this._dummy.position.y += 0.4;
+                this._dummy.position.y += 0.6;
                 this._dummy.quaternion.setFromUnitVectors(
                     this._axis,
                     direction,
@@ -128,7 +134,8 @@ export class Fence {
 
                 rails.setMatrixAt(railIndex++, this._dummy.matrix);
 
-                this._dummy.position.y += 0.45;
+                // second rail transform matrix 
+                this._dummy.position.y += 1.6;
                 this._dummy.updateMatrix();
 
                 rails.setMatrixAt(railIndex++, this._dummy.matrix);
