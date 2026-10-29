@@ -24,7 +24,7 @@ void main() {
 
     float daylight = smoothstep(-0.1, 0.35, lightDirection.y);
 
-    float lighting = clamp(getSunReflection(normal,lightDirection,uSunIntensity),0.0,1.0);
+    float lighting = smoothstep(0.0,1.0,clamp(getSunReflection(normal,lightDirection,uSunIntensity),0.0,1.0) - 0.5);
     lighting = clamp(lighting + (vTone - 0.5) * 0.3, 0.0, 1.0);
 
     vec3 color = mix(uDeepColor, uStandardColor, smoothstep(0.0, 0.55, lighting));

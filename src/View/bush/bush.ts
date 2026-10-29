@@ -7,6 +7,7 @@ import { State } from '../../state/state';
 import { View } from '../view';
 import { createBushMaterial } from '../materials/bushMaterial';
 import type { SunState } from '../../state/sun/sun';
+import type { Sun } from '../sun/sun';
 
 interface Clump {
     center: THREE.Vector3;
@@ -20,7 +21,7 @@ interface Leaf {
 
 export class Bush {
     private readonly _state: BushesState;
-    private readonly _sun: SunState;
+    private readonly _sun: Sun;
     private readonly _scene: THREE.Scene;
     private readonly _options: BushViewOptions;
 
@@ -39,7 +40,7 @@ export class Bush {
         const view = View.getInstance();
 
         this._state = state.bushes;
-        this._sun = state.sun;
+        this._sun = view.sun;
         this._scene = view.scene;
 
         this._geometry = this.createGeometry();
@@ -64,17 +65,10 @@ export class Bush {
     public update(): void {
         const uniforms = this._material.uniforms;
 
-        uniforms.uLightDirection.value.set(
-            this._sun.direction[0],
-            this._sun.direction[1],
-            this._sun.direction[2],
-        );
+        uniforms.uLightDirection.value = this._sun.lightDirection;
         uniforms.uSunIntensity.value = this._sun.intensity;
-        uniforms.uSunColor.value.set(
-            this._sun.color[0],
-            this._sun.color[1],
-            this._sun.color[2],
-        );
+        uniforms.uSunColor.value = this._sun.color;
+
     }
 
     public destroy(): void {
