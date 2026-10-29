@@ -9,6 +9,8 @@ uniform vec3 uRimColor;
 varying vec3 vWorldNormal;
 varying vec3 vWorldPosition;
 
+#include "../utilities/getSunReflection.glsl";
+
 void main() {
     vec3 normal = normalize(vWorldNormal);
     if (!gl_FrontFacing) {
@@ -17,16 +19,14 @@ void main() {
 
     vec3 lightDirection = normalize(uLightDirection);
     float daylight = smoothstep(-0.1, 0.25, lightDirection.y);
-    float diffuse = max(dot(normal, lightDirection), 0.0);
-    float sunStrength = clamp(uSunIntensity / 5.0, 0.0, 1.0);
 
     vec3 nightColor = uBaseColor * 0.48;
     vec3 daylightColor = uBaseColor * (0.72 + daylight * 0.18);
     vec3 lightColor = mix(vec3(0.68, 0.66, 0.62), uSunColor, 0.35);
-    float reflection = diffuse * daylight * sunStrength * 0.5;
+    float reflection = getSunReflection(normal,lightDirection,uSunIntensity);
 
     vec3 finalColor = mix(nightColor, daylightColor, daylight);
-    finalColor = mix(finalColor, lightColor, reflection);
+    finalColor = mix(finalColor, lightColor, reflection / 3.0);
     vec3 hoverColor = min(finalColor * 1.4 + vec3(0.08), vec3(1.0));
     finalColor = mix(finalColor, hoverColor, uHover);
 

@@ -15,6 +15,7 @@ varying float vDebugValue;
 
 #include "../utilities/pivot.glsl";
 #include "../utilities/grassAttenuation.glsl";
+#include "../utilities/getSunReflection.glsl";
 
 void main()
 {
@@ -69,8 +70,7 @@ void main()
     vec3 color1 = mix(grassDarkColor,grassLightColor,scale);
     vec3 color2 = mix(color1,grassDarkColor,isPeak);
 
-    float diffuse = max(dot(normalize(uDirectionLight), normalize(terrainNormal)), 0.0);
-    float brightness = 0.6 + diffuse * min(uSunIntensity * 0.13, 0.65);
+    float brightness = getSunReflection(terrainNormal,uDirectionLight,uSunIntensity);
 
 
     vColor = color2 * brightness ;

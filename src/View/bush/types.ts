@@ -1,12 +1,23 @@
-import type { vec3 } from "gl-matrix";
-
 export interface BushViewOptions {
-    color: vec3;
-    roughness: number;
-    subdivisions: number;
-    minVertexVariation: number;
     radius: number;
-    maxVertexVariation: number;
+    bushHeight: number;
+    floorHeight: number;
+    groundSink: number;
+
+    clumpCount: number;
+    clumpSpread: number;
+    clumpMinRadius: number;
+    clumpMaxRadius: number;
+
+    leafCount: number;
+    leafLength: number;
+    leafWidthRatio: number;
+    leafSizeVariation: number;
+
+    deepColor: string;
+    standardColor: string;
+    lightColor: string;
+
     castShadow: boolean;
     receiveShadow: boolean;
 }

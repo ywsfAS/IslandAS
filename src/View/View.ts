@@ -20,7 +20,7 @@ import { Headphone } from './models/headphone/headphone';
 import { Path } from './path/path';
 import { Trees } from './trees/trees';
 import { Fence } from './fences/fence';
-import { Bushe } from './bush/bush';
+import { Bush } from './bush/bush';
 export class View {
 
     private static instance: View;
@@ -47,7 +47,7 @@ export class View {
     private readonly _path: Path;
     private readonly _trees: Trees;
     private readonly _fence: Fence;
-    private readonly _bushes: Bushe;
+    private readonly _bushes: Bush;
 
     public static getInstance(): View {
         return View.instance ?? new View();
@@ -78,7 +78,7 @@ export class View {
         this._path = new Path();
         this._trees = new Trees();
         this._fence = new Fence();
-        this._bushes = new Bushe();
+        this._bushes = new Bush();
 
     }
     get scene() {
@@ -122,6 +122,7 @@ export class View {
         //this._water.update();
         this._grass.update();
         this._sun.update();
+        this._bushes.update();
         this._terrains.update();
         this._player.update();
         this._camera.update();
