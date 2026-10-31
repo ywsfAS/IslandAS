@@ -10,6 +10,7 @@ import type { TerrainState } from '../../state/terrain/terrain';
 export abstract class Model {
     protected readonly _scene: THREE.Scene;
     protected readonly _options: ModelOptions;
+    protected _group: THREE.Group;
 
     protected readonly _terrains: TerrainsState;
 
@@ -67,10 +68,26 @@ export abstract class Model {
         model.traverse(object => {
             if (object instanceof THREE.Mesh) {
                 this.setMeshMaterial(object);
+                console.log(object.material);
             }
         });
 
-        this._scene.add(model);
+
+        this._group = model;
+
+        this.addToScene();
+        this.onLoad();
+    }
+    protected addToScene(): void {
+        this._scene.add(this._group);
+        this.onLoad();
+    }
+
+    protected onLoad() {
+
+    }
+    public update() {
+
     }
 
     protected setMeshMaterial(mesh: THREE.Mesh): void {

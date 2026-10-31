@@ -1,6 +1,5 @@
 import { vec3 } from "gl-matrix";
 import type { SunStateOptions } from "./types";
-import { vec2 } from "three/tsl";
 
 
 export const DEFAULT_SUN_CONFIG: SunStateOptions = {
@@ -9,11 +8,11 @@ export const DEFAULT_SUN_CONFIG: SunStateOptions = {
     initDirection: vec3.fromValues(1, 0, 1),
     initColor: vec3.fromValues(1, 1, 1),
 
-    intensity: 10,
+    intensity: 4,
     radius: 60,
     initAngle: 0,
     initOrbitSpeed: .4,
-    orbitRadius: 200,
+    orbitRadius: 500,
     center: vec3.fromValues(0, 0, 0)
 
 

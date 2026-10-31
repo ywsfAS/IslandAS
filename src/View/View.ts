@@ -18,9 +18,9 @@ import { Keyboard } from './models/keyboard/keyboard';
 import { ZoneManager } from './zones/zoneManager';
 import { Headphone } from './models/headphone/headphone';
 import { Path } from './path/path';
-import { Trees } from './trees/trees';
 import { Fence } from './fences/fence';
 import { Bush } from './bush/bush';
+import { Tree } from './models/tree/tree';
 export class View {
 
     private static instance: View;
@@ -43,11 +43,12 @@ export class View {
     private readonly _text: Text;
     private readonly _keyboard: Keyboard;
     private readonly _headphone: Headphone;
+    private readonly _tree: Tree;
     private readonly _zoneManager: ZoneManager;
     private readonly _path: Path;
-    private readonly _trees: Trees;
     private readonly _fence: Fence;
     private readonly _bushes: Bush;
+
 
     public static getInstance(): View {
         return View.instance ?? new View();
@@ -57,7 +58,7 @@ export class View {
         View.instance = this;
 
         this._scene = new THREE.Scene();
-        this._scene.fog = new THREE.FogExp2(0x0f111a, 5.025);
+        this._scene.fog = new THREE.Fog(0x8899aa, 50, 300);
         this._camera = new Camera(new THREE.PerspectiveCamera());
         this._renderer = new Renderer();
         this._cssRenderer = new cssRenderer();
@@ -76,9 +77,11 @@ export class View {
         this._keyboard = new Keyboard();
         this._headphone = new Headphone();
         this._path = new Path();
-        this._trees = new Trees();
         this._fence = new Fence();
         this._bushes = new Bush();
+        this._tree = new Tree();
+        console.log(this._tree);
+
 
     }
     get scene() {
@@ -123,6 +126,7 @@ export class View {
         this._grass.update();
         this._sun.update();
         this._bushes.update();
+        this._tree.update();
         this._terrains.update();
         this._player.update();
         this._camera.update();
@@ -132,7 +136,6 @@ export class View {
         this._text.update();
         this._rocks.update();
         this._path.update();
-        this._trees.update();
         this._raycaster.update();
         this._cssRenderer.update();
         this._renderer.update();

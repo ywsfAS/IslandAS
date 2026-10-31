@@ -55,6 +55,7 @@ export class TreesState {
     };
 
     private scatter(terrain: TerrainState) {
+        console.log("scatter");
         const half = terrain.size / 2;
         let added = 0;
 
