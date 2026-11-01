@@ -137,6 +137,7 @@ export class View {
         this._rocks.update();
         this._path.update();
         this._raycaster.update();
+        this._zoneManager.update();
         this._cssRenderer.update();
         this._renderer.update();
     }

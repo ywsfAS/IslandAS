@@ -3,9 +3,8 @@ import type { ZoneParams } from "./types";
 
 export const DEFAULT_ZONE_CONFIGS: ZoneParams = {
     geometry: {
-        outerRadius: 1,
+        outerRadius: 2,
         thetaSegments: 30,
-        phiSegments: 1
     },
     matrial: {
         side: DoubleSide,

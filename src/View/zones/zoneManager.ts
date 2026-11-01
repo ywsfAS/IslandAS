@@ -44,5 +44,9 @@ export class ZoneManager {
         this._zones.set(state.id, workShopZone);
     }
 
-
+    public update() {
+        for (const zone of this._zones.values()) {
+            zone.update();
+        }
+    }
 }
