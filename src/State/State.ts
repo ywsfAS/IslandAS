@@ -14,6 +14,7 @@ import { PathState } from "./path/path";
 import { TreesState } from "./trees/trees";
 import { FenceState } from "./fences/fence";
 import { BushesState } from "./bush/bush";
+import { RocksState } from "./rocks/rocks";
 export class State {
     public static instance: State;
 
@@ -32,6 +33,7 @@ export class State {
     private readonly _trees: TreesState;
     private readonly _fences: FenceState;
     private readonly _bushes: BushesState;
+    private readonly _rocks: RocksState;
     private _mainAudioControls!: AudioControls;
 
     public static getInstance(): State {
@@ -56,6 +58,7 @@ export class State {
         this._trees = new TreesState();
         this._fences = new FenceState();
         this._bushes = new BushesState();
+        this._rocks = new RocksState();
 
 
         const button = createStartBtn();
@@ -123,6 +126,9 @@ export class State {
     }
     get bushes() {
         return this._bushes;
+    }
+    get rocks() {
+        return this._rocks;
     }
 
     public update() {

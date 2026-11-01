@@ -10,7 +10,7 @@ import { Sky } from './sky/sky';
 import { Stand } from './stand/stand';
 import { cssRenderer } from './cssRenderer/cssRenderer';
 import { Menu } from './menu/menu';
-import { Rocks } from './rocks/rocks';
+import { Rocks } from './models/rocks/rocks';
 import { Raycaster } from './raycaster/raycaster';
 import { State } from '../state/state';
 import { Text } from './text/Text';
