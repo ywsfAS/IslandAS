@@ -7,6 +7,8 @@ import foliageAlpha from '/textures/foliage.png';
 import type { TreesState } from "../../../state/trees/trees";
 import { State } from "../../../state/state";
 import type { PlayerState } from "../../../state/player/player";
+import { materialAO } from "three/tsl";
+import type { Time } from "../../../state/time";
 
 export class Tree extends Model {
     private _texture: Texture;
@@ -17,7 +19,7 @@ export class Tree extends Model {
 
     private _foliageMatrix: Matrix4;
     private _trunkMatrix: Matrix4;
-    private _player: PlayerState;
+    private _time: Time;
 
 
     private readonly _onReady = () => this.onData();
@@ -28,7 +30,7 @@ export class Tree extends Model {
         const state = State.getInstance();
 
         this._state = state.trees;
-        this._player = state.player;
+        this._time = state.time;
 
         const loader = new TextureLoader();
         this._texture = loader.load(foliageAlpha);
@@ -115,6 +117,10 @@ export class Tree extends Model {
 
     }
     public update() {
+        const material = this._foliageMesh?.material;
+        if (!material) return;
+
+        material.uniforms.uTime.value = this._time.deltaTime;
 
 
     }

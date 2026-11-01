@@ -19,6 +19,7 @@ export function createFoliageMaterial(alphaMap: Texture) {
             u_effectBlend: { value: 4.0 },
             u_inflate: { value: 0.0 },
             u_scale: { value: 1.0 },
+            uTime: { value: null }
         },
 
         alphaMap,

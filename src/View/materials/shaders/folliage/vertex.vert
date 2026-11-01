@@ -1,9 +1,7 @@
 uniform float u_effectBlend;
 uniform float u_inflate;
 uniform float u_scale;
-uniform float u_windSpeed;
-uniform float u_windTime;
-uniform vec3 u_playerPosition;
+uniform float uTime;
 
 float inverseLerp(float v, float minValue, float maxValue) {
   return (v - minValue) / (maxValue - minValue);
@@ -32,10 +30,10 @@ vec3 inflateOffset(vec3 offset) {
 
 void main() {
 
-  vec4 worldViewPosition = modelViewMatrix * instanceMatrix * vec4(position, 1.0);
-  vec4 treePosition = modelMatrix * instanceMatrix  * vec4(position,1.0);
+  vec4 modelPosition = instanceMatrix * vec4(position, 1.0);
 
-  float d = distance(u_playerPosition.xz,treePosition.xz);
+  vec4 worldViewPosition = modelViewMatrix * modelPosition;
+  vec4 treePosition = modelMatrix * instanceMatrix  * vec4(position,1.0);
 
   vec2 vertexOffset = calcInitialOffsetFromUVs();
   vec3 inflatedVertexOffset = inflateOffset(vec3(vertexOffset, 0.0));

@@ -4,16 +4,19 @@ import type { FenceOptions } from "./types";
 import { DEFAULT_FENCE_OPTIONS } from "./default";
 import { State } from "../../state/state";
 import { View } from "../view";
+import diffuseFence from "../../../public/textures/wood/wood-diffuse.jpg";
+import normalFence from "../../../public/textures/wood/wood-normal.jpg";
+import aoFence from "../../../public/textures/wood/wood-ao.jpg";
 
 export class Fence {
 
     private readonly _group = new THREE.Group();
 
     private readonly _options: FenceOptions;
-    private readonly _postGeometry: THREE.BoxGeometry;
-    private readonly _railGeometry: THREE.BoxGeometry;
+    private _postGeometry: THREE.BoxGeometry;
+    private _railGeometry: THREE.BoxGeometry;
 
-    private readonly _material: THREE.MeshStandardMaterial;
+    private _material: THREE.MeshStandardMaterial;
 
     private readonly _axis = new THREE.Vector3(1, 0, 0);
     private readonly _state: FenceState;
@@ -28,6 +31,41 @@ export class Fence {
         this._scene = view.scene;
 
         this._options = { ...options, ...DEFAULT_FENCE_OPTIONS };
+
+        this.setGeometry();
+        this.setMaterial();
+
+
+        this._state.events.on("ready", this.build);
+    }
+
+    get object3D() {
+        return this._group;
+    }
+    private setMaterial() {
+
+        const loader = new THREE.TextureLoader();
+
+        const diffuse = loader.load(diffuseFence);
+        const normal = loader.load(normalFence);
+        const ao = loader.load(aoFence);
+
+
+        diffuse.colorSpace = THREE.SRGBColorSpace;
+
+        this._material = new THREE.MeshStandardMaterial({
+            color: this._options.color,
+            normalMap: normal,
+            map: diffuse,
+            aoMap: ao,
+            metalness: 0,
+            roughness: 1
+
+        });
+
+    }
+    private setGeometry() {
+
         this._postGeometry = new THREE.BoxGeometry(
             this._options.postWidth,
             this._options.postHeight,
@@ -43,15 +81,6 @@ export class Fence {
         this._postGeometry.translate(0, 0.5, 0);
         this._railGeometry.translate(0, 0.5, 0);
 
-        this._material = new THREE.MeshStandardMaterial({
-            color: this._options.color,
-        });
-
-        this._state.events.on("ready", this.build);
-    }
-
-    get object3D() {
-        return this._group;
     }
 
     private build = () => {

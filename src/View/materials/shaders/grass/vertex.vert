@@ -16,6 +16,7 @@ varying float vDebugValue;
 #include "../utilities/pivot.glsl";
 #include "../utilities/grassAttenuation.glsl";
 #include "../utilities/getSunReflection.glsl";
+#include "../utilities/getWindEffect.glsl";
 
 void main()
 {
@@ -64,7 +65,7 @@ void main()
 
 
     // wind effect 
-    float wind = sin(uTime * 2.0 + worldPosition.x * 0.5 + worldPosition.z * 0.5) * 0.2;
+    float wind = getWindEffect(worldPosition.xz); 
     worldPosition.x += wind * position.y;
 
     vec3 color1 = mix(grassDarkColor,grassLightColor,scale);
