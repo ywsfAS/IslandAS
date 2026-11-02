@@ -54,13 +54,20 @@ export abstract class Model {
             );
         };
 
-        this._terrains.events.on('create', (state: TerrainState) => {
-            if (state.contains(position)) {
-                state.events.on('ready', () => {
-                    placeOnTerrain(state);
-                });
+        const handleTerrain = (state: TerrainState) => {
+            if (!state.contains(position)) return;
+
+            if (state.isReady) {
+                placeOnTerrain(state);
+            } else {
+                state.events.once('ready', () => placeOnTerrain(state));
             }
-        });
+        };
+
+        this._terrains.events.on('create', handleTerrain);
+        for (const terrain of this._terrains.terrains.values()) {
+            handleTerrain(terrain);
+        }
 
         model.rotation.copy(this._options.rotation);
         model.scale.copy(this._options.scale);
