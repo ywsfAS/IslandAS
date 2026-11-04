@@ -24,12 +24,16 @@ import { Bucket } from "../../models/intro/bucket/bucket";
 import { Bottle } from "../../models/intro/bottle/bottle";
 import { Chest } from "../../models/intro/chest/chest";
 import { Planks } from "../../models/intro/planks/planks";
+import { IntroTree } from "../../models/intro/trees/trees";
 
 export class IntroZone extends Zone {
     private readonly _models: Model[];
 
     constructor(state: IntroZoneState, options?: Partial<ZoneParams>) {
         super(state, options);
+        const treeOptions = { positions: state.trees.positions };
+        new IntroTree("tree", treeOptions);
+        new IntroTree("tree-trunk", treeOptions);
 
         const positionAt = (offsetX: number, offsetZ: number, offsetY = 0) => new THREE.Vector3(
             state.center[0] + offsetX,
@@ -51,6 +55,11 @@ export class IntroZone extends Zone {
             // tree logs around the campfire small / normal ones
             new TreeLog({ position: positionAt(10, 0) }, "small"),
             new TreeLog({ position: positionAt(-10, 0) }, "small"),
+
+            new TreeLog({ position: positionAt(5, 5), scale: new THREE.Vector3(6, 6, 6), rotation: new THREE.Euler(0, -Math.PI / 4) }, "small"),
+            new TreeLog({ position: positionAt(-5, -5), scale: new THREE.Vector3(6, 6, 6), rotation: new THREE.Euler(0, Math.PI / 4) }, "small"),
+            new TreeLog({ position: positionAt(5, -5), scale: new THREE.Vector3(6, 6, 6), rotation: new THREE.Euler(0, -Math.PI / 4) }, "small"),
+            new TreeLog({ position: positionAt(-5, 5), scale: new THREE.Vector3(6, 6, 6), rotation: new THREE.Euler(0, Math.PI / 4) }, "small"),
 
             new TreeLog({ position: positionAt(0, 10), rotation: new THREE.Euler(0, Math.PI / 2, 0) }, "small"),
             new TreeLog({ position: positionAt(0, -10), rotation: new THREE.Euler(0, Math.PI / 2, 0) }, "small"),

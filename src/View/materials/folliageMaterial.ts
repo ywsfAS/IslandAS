@@ -9,7 +9,7 @@ import CustomShaderMaterial from 'three-custom-shader-material/vanilla';
 import vertexShader from './shaders/folliage/vertex.vert';
 
 
-export function createFoliageMaterial(alphaMap: Texture) {
+export function createFoliageMaterial(alphaMap: Texture, color: string = '#66b334') {
     return new CustomShaderMaterial({
         baseMaterial: MeshStandardMaterial,
 
@@ -24,7 +24,7 @@ export function createFoliageMaterial(alphaMap: Texture) {
 
         alphaMap,
         alphaTest: 0.5,
-        color: new Color('#66b334').convertLinearToSRGB(),
+        color: new Color(color).convertLinearToSRGB(),
 
         flatShading: true,
 

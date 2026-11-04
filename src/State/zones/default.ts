@@ -6,7 +6,7 @@ export const DEFAULT_ZONE_CONFIGS: ZoneConfig = {
     subtitle: "A glimpse into who I am and what I create.",
 
     center: vec2.fromValues(0, 200),
-    radius: 60,
+    radius: 70,
     transitionRadius: 25,
     audioUrl: "/audio/screen-title.mp3"
 }
