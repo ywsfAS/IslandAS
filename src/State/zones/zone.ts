@@ -43,7 +43,7 @@ export abstract class ZoneState {
         this._center = options.center ?? center;
         this._audioUrl = options.audioUrl ?? audioUrl;
 
-        this.registerAudio();
+        //this.registerAudio();
 
     }
     public blend(): number {

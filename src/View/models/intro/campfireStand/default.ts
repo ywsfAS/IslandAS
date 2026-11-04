@@ -5,7 +5,7 @@ export const DEFAULT_CAMPFIRE_STAND_OPTIONS: ModelOptions = {
     asset: "models/intro/campfire-stand.glb",
     position: new THREE.Vector3(),
     rotation: new THREE.Euler(),
-    scale: new THREE.Vector3(8, 8, 8),
+    scale: new THREE.Vector3(20, 20, 20),
 };
 
 export const DEFAULT_CAMPFIRE_STAND_MATERIAL: THREE.MeshStandardMaterialParameters = {

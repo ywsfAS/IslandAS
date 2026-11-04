@@ -18,6 +18,8 @@ import { WorkbenchAnvil } from "../../models/intro/workbenchAnvil/workbenchAnvil
 import { WorkbenchGrind } from "../../models/intro/workbenchGrind/workbenchGrind";
 import type { ZoneParams } from "../types";
 import { Zone } from "../zone";
+import { TreeLog } from "../../models/intro/tree-log/treeLog";
+import { createMultiMaterialObject } from "three/examples/jsm/utils/SceneUtils.js";
 
 export class IntroZone extends Zone {
     private readonly _models: Model[];
@@ -25,28 +27,46 @@ export class IntroZone extends Zone {
     constructor(state: IntroZoneState, options?: Partial<ZoneParams>) {
         super(state, options);
 
-        const positionAt = (offsetX: number, offsetZ: number) => new THREE.Vector3(
+        const positionAt = (offsetX: number, offsetZ: number, offsetY = 0) => new THREE.Vector3(
             state.center[0] + offsetX,
-            0,
+            offsetY,
             state.center[1] + offsetZ,
         );
 
         this._models = [
-            new Floor({ position: positionAt(0, 0) }),
-            new TentCanvas({ position: positionAt(-10, -2) }),
-            new Bedroll({ position: positionAt(-20, 10) }),
-            new BedrollPacked({ position: positionAt(-30, 4.5) }),
-            new CampfirePit({ position: positionAt(-20, 2) }),
-            new CampfireStand({ position: positionAt(40, 2) }),
-            new Barrel({ position: positionAt(10, -10) }),
-            new BarrelOpen({ position: positionAt(14, -10) }),
-            new ToolAxe({ position: positionAt(-6, -12) }),
-            new ToolAxeUpgraded({ position: positionAt(-3, -12) }),
-            new ToolPickaxe({ position: positionAt(0, -12) }),
-            new ToolPickaxeUpgraded({ position: positionAt(3, -12) }),
-            new Workbench({ position: positionAt(-10, -18) }),
-            new WorkbenchAnvil({ position: positionAt(-6, -18) }),
-            new WorkbenchGrind({ position: positionAt(-2, -18) }),
+            new TentCanvas({ position: positionAt(0, 30) }),
+
+            new Bedroll({ position: positionAt(-20, 0, 10), rotation: new THREE.Euler(0, Math.PI, 0) }),
+            new BedrollPacked({ position: positionAt(-20, 8) }),
+
+            // campfire at the center of the zone
+            new CampfirePit({ position: positionAt(0, 0) }),
+            new CampfireStand({ position: positionAt(0, 0) }),
+
+            // tree logs around the campfire small / normal ones
+            new TreeLog({ position: positionAt(10, 0) }, "small"),
+            new TreeLog({ position: positionAt(-10, 0) }, "small"),
+
+            new TreeLog({ position: positionAt(0, 10), rotation: new THREE.Euler(0, Math.PI / 2, 0) }, "small"),
+            new TreeLog({ position: positionAt(0, -10), rotation: new THREE.Euler(0, Math.PI / 2, 0) }, "small"),
+
+            // barrel 
+            new Barrel({ position: positionAt(10, 22) }),
+            new BarrelOpen({ position: positionAt(10, 15) }),
+
+            // tools
+            new ToolAxe({ position: positionAt(11.5, 0), rotation: new THREE.Euler(-Math.PI / 4, Math.PI / 2, 0) }),
+            new ToolAxeUpgraded({ position: positionAt(-11.5, 0), rotation: new THREE.Euler(Math.PI / 4, Math.PI / 2, -Math.PI / 4) }),
+
+            new ToolPickaxe({ position: positionAt(0, 11.5) }),
+            new ToolPickaxeUpgraded({ position: positionAt(0, -11.5) }),
+
+            // workbenches
+            new Workbench({ position: positionAt(20, 0) }),
+            new WorkbenchAnvil({ position: positionAt(20, 8) }),
+            new WorkbenchGrind({ position: positionAt(20, 16) }),
+
+
         ];
     }
 

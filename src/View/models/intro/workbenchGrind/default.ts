@@ -5,7 +5,7 @@ export const DEFAULT_WORKBENCH_GRIND_OPTIONS: ModelOptions = {
     asset: "models/intro/workbench-grind.glb",
     position: new THREE.Vector3(),
     rotation: new THREE.Euler(),
-    scale: new THREE.Vector3(8, 8, 8),
+    scale: new THREE.Vector3(15, 15, 15),
 };
 
 export const DEFAULT_WORKBENCH_GRIND_MATERIAL: THREE.MeshStandardMaterialParameters = {

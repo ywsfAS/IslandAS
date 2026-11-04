@@ -5,7 +5,7 @@ export const DEFAULT_BEDROLL_OPTIONS: ModelOptions = {
     asset: "models/intro/bedroll.glb",
     position: new THREE.Vector3(),
     rotation: new THREE.Euler(),
-    scale: new THREE.Vector3(15, 15, 15),
+    scale: new THREE.Vector3(25, 25, 25),
 };
 
 export const DEFAULT_BEDROLL_MATERIAL: THREE.MeshStandardMaterialParameters = {

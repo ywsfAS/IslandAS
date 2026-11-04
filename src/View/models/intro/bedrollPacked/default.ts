@@ -5,7 +5,7 @@ export const DEFAULT_BEDROLL_PACKED_OPTIONS: ModelOptions = {
     asset: "models/intro/bedroll-packed.glb",
     position: new THREE.Vector3(),
     rotation: new THREE.Euler(),
-    scale: new THREE.Vector3(15, 15, 15),
+    scale: new THREE.Vector3(20, 20, 20),
 };
 
 export const DEFAULT_BEDROLL_PACKED_MATERIAL: THREE.MeshStandardMaterialParameters = {

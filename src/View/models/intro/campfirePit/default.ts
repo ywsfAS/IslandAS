@@ -5,7 +5,7 @@ export const DEFAULT_CAMPFIRE_PIT_OPTIONS: ModelOptions = {
     asset: "models/intro/campfire-pit.glb",
     position: new THREE.Vector3(),
     rotation: new THREE.Euler(),
-    scale: new THREE.Vector3(15, 15, 15),
+    scale: new THREE.Vector3(20, 20, 20),
 };
 
 export const DEFAULT_CAMPFIRE_PIT_MATERIAL: THREE.MeshStandardMaterialParameters = {

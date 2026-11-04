@@ -5,7 +5,7 @@ export const DEFAULT_BARREL_OPTIONS: ModelOptions = {
     asset: "models/intro/barrel.glb",
     position: new THREE.Vector3(),
     rotation: new THREE.Euler(),
-    scale: new THREE.Vector3(10, 10, 10),
+    scale: new THREE.Vector3(15, 15, 15),
 };
 
 export const DEFAULT_BARREL_MATERIAL: THREE.MeshStandardMaterialParameters = {
