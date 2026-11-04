@@ -3,7 +3,7 @@ import * as THREE from "three"; import type { ModelOptions } from "../../types";
 export const DEFAULT_BOX_OPTIONS = {
     position: new THREE.Vector3(),
     rotation: new THREE.Euler(),
-    scale: new THREE.Vector3(20, 20, 20),
+    scale: new THREE.Vector3(10, 10, 10),
 };
 
 

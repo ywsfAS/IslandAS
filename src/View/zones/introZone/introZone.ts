@@ -20,6 +20,11 @@ import type { ZoneParams } from "../types";
 import { Zone } from "../zone";
 import { TreeLog } from "../../models/intro/tree-log/treeLog";
 import { createMultiMaterialObject } from "three/examples/jsm/utils/SceneUtils.js";
+import { Box } from "../../models/intro/box/box";
+import { Bucket } from "../../models/intro/bucket/bucket";
+import { Bottle } from "../../models/intro/bottle/bottle";
+import { Chest } from "../../models/intro/chest/chest";
+import { Planks } from "../../models/intro/planks/planks";
 
 export class IntroZone extends Zone {
     private readonly _models: Model[];
@@ -34,6 +39,7 @@ export class IntroZone extends Zone {
         );
 
         this._models = [
+            new Floor({ position: positionAt(0, 30) }),
             new TentCanvas({ position: positionAt(0, 30) }),
 
             new Bedroll({ position: positionAt(-20, 0, 10), rotation: new THREE.Euler(0, Math.PI, 0) }),
@@ -53,6 +59,10 @@ export class IntroZone extends Zone {
             // barrel 
             new Barrel({ position: positionAt(10, 22) }),
             new BarrelOpen({ position: positionAt(10, 15) }),
+            new Bucket({ position: positionAt(10, 8) }),
+            new Chest({ position: positionAt(0, -30) }),
+            new Bottle({ position: positionAt(0, -20) }, "small"),
+            new Bottle({ position: positionAt(2, -20) }, "large"),
 
             // tools
             new ToolAxe({ position: positionAt(11.5, 0), rotation: new THREE.Euler(-Math.PI / 4, Math.PI / 2, 0) }),
@@ -66,6 +76,10 @@ export class IntroZone extends Zone {
             new WorkbenchAnvil({ position: positionAt(20, 8) }),
             new WorkbenchGrind({ position: positionAt(20, 16) }),
 
+            new Box({ position: positionAt(20, -8), rotation: new THREE.Euler(0, Math.PI / 2, 0) }),
+            new Box({ position: positionAt(24, -8) }, "normal", "open"),
+            new Box({ position: positionAt(14, -12) }, "small", "open"),
+            new Planks({ position: positionAt(30, -16) }),
 
         ];
     }
