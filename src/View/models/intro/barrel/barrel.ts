@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { Model } from "../../model";
-import { DEFAULT_BARREL_MATERIAL, DEFAULT_BARREL_OPTIONS } from "./default";
+import { DEFAULT_BARREL_OPTIONS } from "./default";
 import type { BarrelOptions } from "./types";
 
 export class Barrel extends Model {
@@ -8,7 +8,18 @@ export class Barrel extends Model {
         super(DEFAULT_BARREL_OPTIONS, options);
     }
 
-    protected override setMeshMaterial(mesh: THREE.Mesh): void {
-        mesh.material = new THREE.MeshStandardMaterial(DEFAULT_BARREL_MATERIAL);
+    protected setMeshMaterial(mesh: THREE.Mesh) {
+        mesh.material = new THREE.MeshStandardMaterial({
+            map: this._introTexture,
+            roughness: 0.8,
+            metalness: 0,
+            flatShading: true,
+
+            toneMapped: false,
+            fog: false,
+
+            side: THREE.DoubleSide,
+            shadowSide: THREE.FrontSide,
+        })
     }
 }

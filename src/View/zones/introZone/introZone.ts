@@ -19,7 +19,6 @@ import { WorkbenchGrind } from "../../models/intro/workbenchGrind/workbenchGrind
 import type { ZoneParams } from "../types";
 import { Zone } from "../zone";
 import { TreeLog } from "../../models/intro/tree-log/treeLog";
-import { createMultiMaterialObject } from "three/examples/jsm/utils/SceneUtils.js";
 import { Box } from "../../models/intro/box/box";
 import { Bucket } from "../../models/intro/bucket/bucket";
 import { Bottle } from "../../models/intro/bottle/bottle";

@@ -13,6 +13,10 @@ export abstract class Model {
     protected _group: THREE.Group;
 
     protected readonly _terrains: TerrainsState;
+    protected readonly _introTexture = new THREE.TextureLoader().load("/textures/colormap.png", (texture) => {
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.flipY = false;
+    });
 
     protected constructor(
         defaults: ModelOptions,
@@ -75,7 +79,6 @@ export abstract class Model {
         model.traverse(object => {
             if (object instanceof THREE.Mesh) {
                 this.setMeshMaterial(object);
-                console.log(object.material);
             }
         });
 

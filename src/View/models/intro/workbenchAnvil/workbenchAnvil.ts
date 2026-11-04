@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { Model } from "../../model";
-import { DEFAULT_WORKBENCH_ANVIL_MATERIAL, DEFAULT_WORKBENCH_ANVIL_OPTIONS } from "./default";
+import { DEFAULT_WORKBENCH_ANVIL_OPTIONS } from "./default";
 import type { WorkbenchAnvilOptions } from "./types";
 
 export class WorkbenchAnvil extends Model {
@@ -8,7 +8,18 @@ export class WorkbenchAnvil extends Model {
         super(DEFAULT_WORKBENCH_ANVIL_OPTIONS, options);
     }
 
-    protected override setMeshMaterial(mesh: THREE.Mesh): void {
-        mesh.material = new THREE.MeshStandardMaterial(DEFAULT_WORKBENCH_ANVIL_MATERIAL);
+    protected setMeshMaterial(mesh: THREE.Mesh) {
+        mesh.material = new THREE.MeshStandardMaterial({
+            map: this._introTexture,
+            roughness: 0.8,
+            metalness: 0,
+            flatShading: true,
+
+            toneMapped: false,
+            fog: false,
+
+            side: THREE.DoubleSide,
+            shadowSide: THREE.FrontSide,
+        })
     }
 }

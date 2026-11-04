@@ -80,7 +80,6 @@ export class View {
         this._fence = new Fence();
         this._bushes = new Bush();
         this._tree = new Tree();
-        console.log(this._tree);
 
 
     }

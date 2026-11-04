@@ -1,5 +1,4 @@
 import type { ModelOptions } from "../types";
-import type { TreeOptions } from "./types";
 import * as THREE from 'three';
 
 export const DEFAULT_TREE_OPTIONS: ModelOptions = {

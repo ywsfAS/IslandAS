@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { Model } from "../../model";
-import { DEFAULT_WORKBENCH_GRIND_MATERIAL, DEFAULT_WORKBENCH_GRIND_OPTIONS } from "./default";
+import { DEFAULT_WORKBENCH_GRIND_OPTIONS } from "./default";
 import type { WorkbenchGrindOptions } from "./types";
 
 export class WorkbenchGrind extends Model {
@@ -8,7 +8,18 @@ export class WorkbenchGrind extends Model {
         super(DEFAULT_WORKBENCH_GRIND_OPTIONS, options);
     }
 
-    protected override setMeshMaterial(mesh: THREE.Mesh): void {
-        mesh.material = new THREE.MeshStandardMaterial(DEFAULT_WORKBENCH_GRIND_MATERIAL);
+    protected setMeshMaterial(mesh: THREE.Mesh) {
+        mesh.material = new THREE.MeshStandardMaterial({
+            map: this._introTexture,
+            roughness: 0.8,
+            metalness: 0,
+            flatShading: true,
+
+            toneMapped: false,
+            fog: false,
+
+            side: THREE.DoubleSide,
+            shadowSide: THREE.FrontSide,
+        })
     }
 }

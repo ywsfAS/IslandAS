@@ -1,4 +1,4 @@
-import { Color, DoubleSide, InstancedBufferAttribute, InstancedMesh, Material, Matrix4, MeshBasicMaterial, MeshStandardMaterial, Object3D, Texture, TextureLoader, type Mesh } from "three";
+import { Color, DoubleSide, InstancedMesh, Matrix4, MeshStandardMaterial, Object3D, Texture, TextureLoader, type Mesh } from "three";
 import { Model } from "../model";
 import { DEFAULT_TREE_OPTIONS } from './default';
 import type { TreeOptions } from './types';
@@ -6,19 +6,17 @@ import { createFoliageMaterial } from "../../materials/folliageMaterial";
 import foliageAlpha from '/textures/foliage.png';
 import type { TreesState } from "../../../state/trees/trees";
 import { State } from "../../../state/state";
-import type { PlayerState } from "../../../state/player/player";
-import { materialAO } from "three/tsl";
 import type { Time } from "../../../state/time";
 
 export class Tree extends Model {
     private _texture: Texture;
     private readonly _state: TreesState;
-    private _foliageMesh: InstancedMesh;
-    private _trunkMesh: InstancedMesh;
+    private _foliageMesh!: InstancedMesh;
+    private _trunkMesh!: InstancedMesh;
     private _applied = 0;
 
-    private _foliageMatrix: Matrix4;
-    private _trunkMatrix: Matrix4;
+    private _foliageMatrix!: Matrix4;
+    private _trunkMatrix!: Matrix4;
     private _time: Time;
 
 
@@ -43,7 +41,6 @@ export class Tree extends Model {
     }
     public override setMeshMaterial(mesh: Mesh): void {
         const name = mesh.name;
-        console.log(this._texture);
 
         if (name === "foliage") {
             mesh.material = createFoliageMaterial(this._texture);
