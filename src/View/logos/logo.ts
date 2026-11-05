@@ -122,6 +122,7 @@ export abstract class Logo {
                 this._scene,
                 this._options.interaction,
                 cardPosition,
+                View.getInstance().cards,
             );
 
             this._hoverCard = hoverCard;
@@ -159,7 +160,6 @@ export abstract class Logo {
             material.uniforms.uSunIntensity.value = this._sun.intensity;
             material.uniforms.uCameraPosition.value.copy(this._camera.position);
         }
-        this._hoverCard?.update();
     }
 
     protected setHovered(hovered: boolean): void {

@@ -21,6 +21,7 @@ import { Path } from './path/path';
 import { Fence } from './fences/fence';
 import { Bush } from './bush/bush';
 import { Tree } from './models/tree/tree';
+import { Cards } from './cards/cards';
 export class View {
 
     private static instance: View;
@@ -48,6 +49,7 @@ export class View {
     private readonly _path: Path;
     private readonly _fence: Fence;
     private readonly _bushes: Bush;
+    private readonly _cards: Cards;
 
 
     public static getInstance(): View {
@@ -62,6 +64,7 @@ export class View {
         this._camera = new Camera(new THREE.PerspectiveCamera());
         this._renderer = new Renderer();
         this._cssRenderer = new cssRenderer();
+        this._cards = new Cards();
         this._sun = new Sun();
         this._player = new Player();
         this._terrains = new Terrains();
@@ -119,6 +122,9 @@ export class View {
     get zoneManager() {
         return this._zoneManager;
     }
+    get cards() {
+        return this._cards;
+    }
 
     public update() {
         //this._water.update();
@@ -131,12 +137,13 @@ export class View {
         this._camera.update();
         this._stand.update();
         this._sky.update();
-        this._menu.update();
+        this._menu.updateLogos();
         this._text.update();
         this._rocks.update();
         this._path.update();
         this._raycaster.update();
         this._zoneManager.update();
+        this._cards.update();
         this._cssRenderer.update();
         this._renderer.update();
     }
