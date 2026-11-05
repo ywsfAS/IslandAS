@@ -5,7 +5,7 @@ export const DEFAULT_INTRO_TREES_CONFIG: IntroTreesConfig = {
     innerRadiusRatio: 0.55,
     outerRadiusRatio: 0.92,
     variants: [
-        { type: "tree", minScale: 2, maxScale: 10 },
+        { type: "tree", minScale: 2, maxScale: 3 },
         { type: "tree-trunk", minScale: 8, maxScale: 14 },
     ],
 };

@@ -15,7 +15,7 @@ export class IntroTreesState {
                 innerRadius ** 2 + Math.random() * (outerRadius ** 2 - innerRadius ** 2),
             );
             const variant = settings.variants[
-                Math.floor(Math.random() * settings.variants.length)
+                this.getWeightedRandom(90, 10)
             ];
 
             return {
@@ -26,6 +26,10 @@ export class IntroTreesState {
                 type: variant.type,
             };
         });
+    }
+
+    private getWeightedRandom(w1: number, w2: number) {
+        return Math.random() * (w1 + w2) < w1 ? 0 : 1;
     }
 
     get positions(): readonly IntroTreePosition[] {

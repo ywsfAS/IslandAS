@@ -1,34 +1,30 @@
-import type { Scene } from "three";
-import { View } from "../view";
-import { CSS3DObject } from "three/examples/jsm/Addons.js";
-import * as THREE from 'three';
-import { Github } from "../logos/github/github";
-import { Linkedin } from "../logos/linkedin/linkedin";
-import { TypeScriptLogo } from "../logos/typescript/typescript";
-import type { Camera } from "../camera/camera";
-import type { CameraState } from "../../state/camera/camera";
-import { State } from "../../state/state";
+import { State } from '../../state/state';
+import { View } from '../view';
+import { InteractiveCard } from '../cards/interactiveCard';
+import type { MenuOptions } from './types';
+import { DEFAULT_MENU_OPTIONS, MENU_CONTROLS } from './default';
+import { Github } from '../logos/github/github';
+import { Linkedin } from '../logos/linkedin/linkedin';
+import { TypeScriptLogo } from '../logos/typescript/typescript';
+import type { Logo } from '../logos/logo';
+import { gsap } from 'gsap';
 
-export class Menu {
+export class Menu extends InteractiveCard<MenuOptions> {
+    private readonly _logos: Logo[];
+    private _titleDelay?: gsap.core.Tween;
 
-    private _menu: CSS3DObject;
-    private _menuHtml!: HTMLElement;
-    private _scene: Scene;
-    private readonly _logos: [Github, Linkedin, TypeScriptLogo];
-
-    private _isOpen: boolean = false;
-    private _infoPanel?: CSS3DObject;
-    private readonly _camera: CameraState;
-
-    constructor() {
-
+    constructor(options: Partial<MenuOptions> = {}) {
         const view = View.getInstance();
-        const state = State.getInstance();
-
-        this._scene = view.scene;
-        this._menu = this.setMenuIcon();
-
-        this._camera = state.camera;
+        super(
+            view.scene,
+            State.getInstance().camera,
+            view.cards,
+            {
+                ...DEFAULT_MENU_OPTIONS,
+                ...options,
+                position: options.position?.clone() ?? DEFAULT_MENU_OPTIONS.position.clone(),
+            },
+        );
 
         this._logos = [
             new Github(),
@@ -36,166 +32,169 @@ export class Menu {
             new TypeScriptLogo(),
         ];
     }
-    public setMenuIcon(): CSS3DObject {
-        const menuIcon = document.createElement('div');
 
-        const menuTitle = document.createElement('div');
-        menuTitle.innerText = 'Controls';
-        menuTitle.style.padding = '3px 3px 3px 16px';
-        menuTitle.style.backgroundColor = 'black';
-        menuTitle.style.color = 'white';
-        menuTitle.style.fontSize = '5px';
-        menuTitle.style.borderRadius = '2px';
-        menuTitle.style.textAlign = 'center';
-        menuTitle.style.transition = 'transform 0.2s ease 0s';
+    protected override createIcon(options: MenuOptions): HTMLButtonElement {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.setAttribute('aria-label', options.iconLabel);
 
+        const square = document.createElement('span');
+        square.dataset.menuSquare = '';
+        const icon = document.createElement('i');
+        icon.className = options.iconClassName;
+        icon.setAttribute('aria-hidden', 'true');
+        square.append(icon);
 
-        const menuTitleObj = new CSS3DObject(menuTitle);
-        menuTitleObj.position.set(0, 5, 0);
-        menuTitleObj.scale.set(0, 0, 0);
-
-        this._scene.add(menuTitleObj);
-
-
-
-        menuIcon.style.width = '15px';
-        menuIcon.style.height = '15px';
-        menuIcon.style.backgroundColor = 'white';
-        menuIcon.style.border = '3px solid black';
-        menuIcon.style.cursor = 'pointer';
-        menuIcon.style.transition = 'transform 0.2s ease 0s';
-        this._menuHtml = menuIcon;
-
-        const menuLogo = document.createElement('i');
-        menuLogo.classList.add('fa-solid');
-        menuLogo.classList.add('fa-forward');
-        menuLogo.style.width = '15px';
-        menuLogo.style.height = '15px';
-        menuLogo.style.transition = 'transform 0.2s ease 0s';
-        menuLogo.style.zIndex = '200';
-
-
-        const menuLogoObj = new CSS3DObject(menuLogo);
-        menuLogoObj.position.set(0, 5, 0);
-        menuLogoObj.scale.set(0, 0, 0);
-
-        menuIcon.appendChild(menuLogo);
-
-        this._scene.add(menuLogoObj);
-
-
-
-
-        const menuObj = new CSS3DObject(menuIcon);
-        menuObj.position.set(0, 5, 0);
-        menuObj.scale.set(.1, .1, .1);
-        menuObj.rotateZ(-Math.PI / 4);
-
-        this._scene.add(menuObj);
-
-
-        const menuElements = [menuIcon, menuLogo, menuTitle];
-        let closeTimeout: ReturnType<typeof setTimeout> | undefined;
-        let titleTimeout: ReturnType<typeof setTimeout> | undefined;
-        const openMenu = () => {
-            this._isOpen = true;
-            if (closeTimeout !== undefined) {
-                clearTimeout(closeTimeout);
-                closeTimeout = undefined;
-            }
-            menuObj.scale.set(0.15, 0.15, 0.15);
-            menuLogoObj.scale.set(.04, .04, .04);
-            if (titleTimeout === undefined && menuTitleObj.scale.x === 0) {
-                // wait the delay 
-                titleTimeout = setTimeout(() => {
-                    titleTimeout = undefined;
-                    menuTitleObj.position.x = 2;
-                    menuTitleObj.scale.set(0.15, 0.15, 0.15);
-                }, 250);
-            }
-        };
-        const closeMenu = () => {
-            this._isOpen = false;
-            closeTimeout = undefined;
-            if (titleTimeout !== undefined) {
-                clearTimeout(titleTimeout);
-                titleTimeout = undefined;
-            }
-            menuObj.scale.set(0.1, 0.1, 0.1);
-            menuTitleObj.position.x = 0;
-            menuTitleObj.scale.set(0, 0, 0);
-            menuLogoObj.scale.set(0, 0, 0);
-        };
-        const deferCloseMenu = (event: PointerEvent) => {
-            const nextTarget = event.relatedTarget;
-            if (nextTarget instanceof Node && menuElements.some(element =>
-                element === nextTarget || element.contains(nextTarget)
-            )) {
-                return;
-            }
-
-            if (closeTimeout !== undefined) {
-                clearTimeout(closeTimeout);
-            }
-            closeTimeout = setTimeout(closeMenu, 300);
-        };
-
-        for (const element of menuElements) {
-            element.addEventListener('pointerenter', openMenu);
-            element.addEventListener('pointerleave', deferCloseMenu);
-            element.addEventListener('click', () => this.showInfos());
-        }
-
-        return menuObj;
-
+        const title = document.createElement('span');
+        title.textContent = 'Controls';
+        title.dataset.menuTitle = '';
+        button.append(square, title);
+        gsap.set(icon, { scale: 0 });
+        gsap.set(title, { autoAlpha: 0, scale: 0 });
+        return button;
     }
-    public showInfos() {
 
-        if (this._infoPanel) {
-            this._scene.remove(this._infoPanel);
-            this._infoPanel = undefined;
+    protected override styleIcon(icon: HTMLButtonElement): void {
+        Object.assign(icon.style, {
+            position: 'relative',
+            display: 'block',
+            width: '70px',
+            height: '70px',
+            padding: '0',
+            border: 'none',
+            background: 'transparent',
+            cursor: 'pointer',
+            pointerEvents: 'auto',
+            transformOrigin: 'center',
+        });
+
+        const square = icon.querySelector<HTMLElement>('[data-menu-square]');
+        const symbol = icon.querySelector('i');
+        const title = icon.querySelector<HTMLElement>('[data-menu-title]');
+        if (!square || !symbol || !title) return;
+
+        Object.assign(square.style, {
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            width: '50px',
+            height: '50px',
+            border: '10px solid black',
+            background: 'white',
+            color: 'black',
+            transform: 'translate(-50%,-50%) rotate(-45deg)',
+            transformOrigin: 'center',
+            zIndex: "999",
+            'backface-visibility': 'hidden'
+        });
+        Object.assign(symbol.style, {
+            display: 'grid',
+            placeItems: 'center',
+            width: '100%',
+            height: '100%',
+            transformOrigin: 'center',
+            fontSize: '18px',
+            rotate: '45deg'
+        });
+
+        Object.assign(title.style, {
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            padding: '10px 20px 10px 50px',
+            borderRadius: '4px',
+            backgroundColor: 'black',
+            color: 'white',
+            fontSize: '17px',
+            textAlign: 'center',
+            whiteSpace: 'nowrap',
+            transformOrigin: 'center center',
+        });
+    }
+
+    protected override onHover(hovered: boolean): void {
+        this._titleDelay?.kill();
+        this._titleDelay = undefined;
+
+        const icon = this.icon?.querySelector('i');
+        const title = this.icon?.querySelector<HTMLElement>('[data-menu-title]');
+        if (!icon || !title) return;
+
+        if (!hovered) {
+            gsap.to(icon, {
+                scale: 0,
+                duration: 0.16,
+                ease: 'power2.in',
+            });
+            gsap.to(title, {
+                xPercent: 0,
+                yPercent: -50,
+
+                autoAlpha: 0,
+                scale: 0,
+                duration: 0.16,
+                ease: 'power2.in',
+            });
             return;
         }
 
-        const panel = document.createElement('section');
+        gsap.to(icon, {
+            scale: 1,
+            duration: 0.2,
+            ease: 'back.out(1.7)',
+        });
+        this._titleDelay = gsap.delayedCall(0.25, () => {
+            this._titleDelay = undefined;
+            gsap.to(title, {
+                autoAlpha: 1,
+                scale: 1,
+                duration: 0.18,
+                ease: 'back.out(1.7)',
+            });
+        });
+    }
 
+    protected override createContent(): HTMLElement {
+        const panel = document.createElement('section');
         Object.assign(panel.style, {
-            width: '300px',
             padding: '14px',
             borderRadius: '8px',
             backgroundColor: 'white',
             color: '#263238',
             fontFamily: '"Nunito", sans-serif',
             fontSize: '13px',
-        })
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+        });
 
         const header = document.createElement('div');
-
         Object.assign(header.style, {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             gap: '12px',
-        })
-        const closeBtn = document.createElement('button');
-        closeBtn.innerText = 'X';
-        Object.assign(closeBtn.style, {
+        });
+
+        const closeButton = document.createElement('button');
+        closeButton.type = 'button';
+        closeButton.textContent = '×';
+        closeButton.setAttribute('aria-label', 'Close controls');
+        closeButton.dataset.cardClose = '';
+        Object.assign(closeButton.style, {
             cursor: 'pointer',
             backgroundColor: 'transparent',
             outline: 'none',
-            border: 'none'
-        })
-
+            border: 'none',
+            fontSize: '18px',
+        });
 
         const title = document.createElement('h2');
-        title.innerText = 'IslandAS Controls';
+        title.textContent = 'IslandAS Controls';
         Object.assign(title.style, {
             margin: '0',
             fontSize: '16px',
             fontWeight: '600',
         });
-
-        header.append(title, closeBtn);
+        header.append(title, closeButton);
 
         const intro = document.createElement('p');
         intro.textContent = 'Use these controls to move around and explore the island.';
@@ -215,20 +214,9 @@ export class Menu {
             listStyle: 'none',
         });
 
-        const controlsList: Record<string, string>[] = [
-            { name: "Forward", key: "W / Arrow Up", code: "KeyW" },
-            { name: "Back", key: "S / Arrow Down", code: "KeyS" },
-            { name: "Left", key: "A / Arrow Left", code: "KeyA" },
-            { name: "Right", key: "D / Arrow Right", code: "KeyD" },
-            { name: "Jump", key: "Space", code: "Space" },
-            { name: "Boost", key: "Shift", code: "ShiftLeft" }
-        ];
-
-        for (let i = 0; i < controlsList.length; i++) {
-            const control = controlsList[i];
-            const li = document.createElement('li');
-
-            Object.assign(li.style, {
+        for (const control of MENU_CONTROLS) {
+            const item = document.createElement('li');
+            Object.assign(item.style, {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
@@ -237,10 +225,11 @@ export class Menu {
                 borderRadius: '5px',
                 backgroundColor: '#f1f4f6',
             });
-            const name = document.createElement('div');
+
+            const name = document.createElement('span');
             name.textContent = control.name;
 
-            const key = document.createElement('div');
+            const key = document.createElement('span');
             key.textContent = control.key;
             Object.assign(key.style, {
                 color: '#60717d',
@@ -248,38 +237,15 @@ export class Menu {
                 textAlign: 'right',
             });
 
-            li.append(name, key);
-            list.append(li);
-
+            item.append(name, key);
+            list.append(item);
         }
 
         panel.append(header, intro, list);
-
-        const panelObject = new CSS3DObject(panel);
-
-        panelObject.position.set(0, 13, 0);
-        panelObject.scale.set(0.03, 0.03, 0.03);
-
-
-        this._infoPanel = panelObject;
-        this._scene.add(panelObject);
-
-        closeBtn.addEventListener('click', () => {
-            if (this._infoPanel) {
-                this._scene.remove(panelObject);
-            };
-            this._infoPanel = undefined;
-        });
+        return panel;
     }
-    public animate() {
 
-    }
-    public update() {
+    public updateLogos(): void {
         this._logos.forEach(logo => logo.update());
-        this.animate();
-        const [qx, qy, qz, qw] = this._camera.quaterion;
-        this._infoPanel?.quaternion.set(qx, qy, qz, qw);
     }
-
-
-};
+}
