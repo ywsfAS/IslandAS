@@ -119,10 +119,8 @@ export abstract class Logo {
 
             cardPosition.z += this._options.depth;
             const hoverCard = new LogoHoverCard(
-                this._scene,
                 this._options.interaction,
                 cardPosition,
-                View.getInstance().cards,
             );
 
             this._hoverCard = hoverCard;

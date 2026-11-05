@@ -9,7 +9,7 @@ import { Water } from './water/water';
 import { Sky } from './sky/sky';
 import { Stand } from './stand/stand';
 import { cssRenderer } from './cssRenderer/cssRenderer';
-import { Menu } from './menu/menu';
+import { ControlsMenu } from './menu/controls/controlsMenu';
 import { Rocks } from './models/rocks/rocks';
 import { Raycaster } from './raycaster/raycaster';
 import { State } from '../state/state';
@@ -22,6 +22,10 @@ import { Fence } from './fences/fence';
 import { Bush } from './bush/bush';
 import { Tree } from './models/tree/tree';
 import { Cards } from './cards/cards';
+import { Github } from './logos/github/github';
+import { Linkedin } from './logos/linkedin/linkedin';
+import { TypeScriptLogo } from './logos/typescript/typescript';
+import type { Logo } from './logos/logo';
 export class View {
 
     private static instance: View;
@@ -38,7 +42,7 @@ export class View {
     private readonly _water: Water;
     private readonly _sky: Sky;
     private readonly _stand: Stand;
-    private readonly _menu: Menu;
+    private readonly _menu: ControlsMenu;
     private readonly _rocks: Rocks;
     private readonly _raycaster: Raycaster;
     private readonly _text: Text;
@@ -50,6 +54,7 @@ export class View {
     private readonly _fence: Fence;
     private readonly _bushes: Bush;
     private readonly _cards: Cards;
+    private readonly _logos: Logo[];
 
 
     public static getInstance(): View {
@@ -73,7 +78,7 @@ export class View {
         this._sky = new Sky(this._scene, this._camera.instance, this._sun);
         this._grass = new Grass();
         this._stand = new Stand();
-        this._menu = new Menu();
+        this._menu = new ControlsMenu();
         this._rocks = new Rocks();
         this._text = new Text();
         this._zoneManager = new ZoneManager();
@@ -83,6 +88,11 @@ export class View {
         this._fence = new Fence();
         this._bushes = new Bush();
         this._tree = new Tree();
+        this._logos = [
+            new Github(),
+            new Linkedin(),
+            new TypeScriptLogo(),
+        ];
 
 
     }
@@ -137,7 +147,7 @@ export class View {
         this._camera.update();
         this._stand.update();
         this._sky.update();
-        this._menu.updateLogos();
+        this._logos.forEach(logo => logo.update());
         this._text.update();
         this._rocks.update();
         this._path.update();

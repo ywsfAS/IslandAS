@@ -1,21 +1,17 @@
-import type { Scene, Vector3 } from 'three';
+import type { Vector3 } from 'three';
 import { InteractiveCard } from '../cards/interactiveCard';
 import { DEFAULT_INTERACTIVE_CARD_OPTIONS } from '../cards/default';
 import type { InteractiveCardOptions } from '../cards/types';
-import type { Cards } from '../cards/cards';
-import { State } from '../../state/state';
 import type { LogoInteractionOptions } from './types';
 
 type LogoHoverCardOptions = InteractiveCardOptions & LogoInteractionOptions;
 
 export class LogoHoverCard extends InteractiveCard<LogoHoverCardOptions> {
     constructor(
-        scene: Scene,
         options: LogoInteractionOptions,
         position: Vector3,
-        cards: Cards,
     ) {
-        super(scene, State.getInstance().camera, cards, {
+        super({
             ...DEFAULT_INTERACTIVE_CARD_OPTIONS,
             position: position.clone(),
             showIcon: false,

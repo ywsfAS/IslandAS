@@ -1,17 +1,15 @@
 import { gsap } from 'gsap';
 import { CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
+import { State } from '../../state/state';
 import type { CameraState } from '../../state/camera/camera';
-import type { Scene } from 'three';
+import { View } from '../view';
 import { DEFAULT_INTERACTIVE_CARD_OPTIONS } from './default';
 import type { InteractiveCardOptions } from './types';
-import type { Cards } from './cards';
 
 export abstract class InteractiveCard<
     Options extends InteractiveCardOptions = InteractiveCardOptions,
 > {
-    private readonly _scene: Scene;
     private readonly _camera: CameraState;
-    private readonly _cards: Cards;
     private readonly _options: Options;
     private readonly _object: CSS3DObject;
     private readonly _container: HTMLDivElement;
@@ -20,14 +18,10 @@ export abstract class InteractiveCard<
     private _hideTween?: gsap.core.Tween;
 
     protected constructor(
-        scene: Scene,
-        camera: CameraState,
-        cards: Cards,
         options: Options,
     ) {
-        this._scene = scene;
-        this._camera = camera;
-        this._cards = cards;
+        const view = View.getInstance();
+        this._camera = State.getInstance().camera;
         this._options = {
             ...DEFAULT_INTERACTIVE_CARD_OPTIONS,
             ...options,
@@ -73,7 +67,7 @@ export abstract class InteractiveCard<
         this._object = new CSS3DObject(this._container);
         this._object.position.copy(this._options.position);
         this._object.scale.setScalar(this._options.scale);
-        this._scene.add(this._object);
+        view.scene.add(this._object);
 
         gsap.set(this._content, {
             autoAlpha: 0,
@@ -91,7 +85,7 @@ export abstract class InteractiveCard<
         this._container.addEventListener('pointerenter', this.onPointerEnter);
         this._container.addEventListener('pointerleave', this.onPointerLeave);
         this._content.addEventListener('click', this.onContentClick);
-        this._cards.register(this);
+        view.cards.register(this);
     }
 
     protected createIcon(options: Options): HTMLButtonElement {
@@ -198,8 +192,9 @@ export abstract class InteractiveCard<
         this.cancelHide();
         gsap.killTweensOf(this._content);
         if (this._icon) gsap.killTweensOf(this._icon);
-        this._scene.remove(this._object);
-        this._cards.remove(this);
+        const view = View.getInstance();
+        view.scene.remove(this._object);
+        view.cards.remove(this);
     }
 
     public update(): void {

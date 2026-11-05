@@ -1,6 +1,8 @@
 import type { InteractiveCardOptions } from '../cards/types';
 
-export type MenuOptions = InteractiveCardOptions;
+export interface MenuOptions extends InteractiveCardOptions {
+    iconTitle: string;
+}
 
 export interface MenuControl {
     name: string;
