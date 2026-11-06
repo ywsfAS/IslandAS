@@ -54,7 +54,6 @@ export class View {
     private readonly _fence: Fence;
     private readonly _bushes: Bush;
     private readonly _cards: Cards;
-    private readonly _logos: Logo[];
 
 
     public static getInstance(): View {
@@ -88,11 +87,6 @@ export class View {
         this._fence = new Fence();
         this._bushes = new Bush();
         this._tree = new Tree();
-        this._logos = [
-            new Github(),
-            new Linkedin(),
-            new TypeScriptLogo(),
-        ];
 
 
     }
@@ -147,7 +141,6 @@ export class View {
         this._camera.update();
         this._stand.update();
         this._sky.update();
-        this._logos.forEach(logo => logo.update());
         this._text.update();
         this._rocks.update();
         this._path.update();

@@ -3,10 +3,10 @@ import type { ZoneConfig } from '../types';
 
 export const DEFAULT_CONTACT_CONFIGS: ZoneConfig = {
     title: "LET'S CONNECT",
-    subtitle: "Have a project in mind or simply want to talk? I'd love to hear from you.",
+    subtitle: "Every great project starts with a conversation.",
 
     center: vec2.fromValues(100, 0),
-    radius: 20,
+    radius: 40,
     transitionRadius: 25,
     audioUrl: "/audio/screen-title.mp3"
 }

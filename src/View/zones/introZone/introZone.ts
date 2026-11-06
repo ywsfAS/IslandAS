@@ -29,6 +29,7 @@ import { IntroMenu } from "../../menu/intro/introMenu";
 import { createIntroMenuOptions } from "../../menu/intro/default";
 import { Fire } from "../../models/intro/fire/fire";
 import type { InteractiveCard } from "../../cards/interactiveCard";
+import { setPosition } from "../utilities";
 
 export class IntroZone extends Zone {
     private readonly _models: Model[];
@@ -40,11 +41,8 @@ export class IntroZone extends Zone {
         new IntroTree("tree", treeOptions);
         new IntroTree("tree-trunk", treeOptions);
 
-        const positionAt = (offsetX: number, offsetZ: number, offsetY = 0) => new THREE.Vector3(
-            state.center[0] + offsetX,
-            offsetY,
-            state.center[1] + offsetZ,
-        );
+
+        const positionAt = (offsetX: number, offsetZ: number, offsetY: number) => setPosition(state.center, offsetX, offsetZ, offsetY);
 
         this._menus = [new IntroMenu(createIntroMenuOptions(
             positionAt(0, 30, 12),

@@ -101,13 +101,15 @@ export abstract class Logo {
         const position = vec2.fromValues(this._options.position.x, this._options.position.z);
 
         const cardPosition = group.position.clone();
+        let placed = false;
         const placeOnTerrain = (state: TerrainState) => {
-            if (!state.contains(position)) return;
+            if (placed || !state.contains(position)) return;
 
             const height = state.getHeight(position);
 
             if (height === undefined) return;
 
+            placed = true;
             group.position.set(
                 this._options.position.x,
                 height + size / 2,
@@ -140,14 +142,20 @@ export abstract class Logo {
             );
         };
 
-        this._terrains.events.on('create', (state: TerrainState) => {
+        const handleTerrain = (state: TerrainState) => {
             if (state.contains(position)) {
-                state.events.on('ready', () => {
+                if (state.isReady) {
                     placeOnTerrain(state);
-                });
+                } else {
+                    state.events.once('ready', () => placeOnTerrain(state));
+                }
             }
-        });
+        };
 
+        this._terrains.events.on('create', handleTerrain);
+        for (const terrain of this._terrains.terrains.values()) {
+            handleTerrain(terrain);
+        }
 
     }
 
