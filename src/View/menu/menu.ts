@@ -2,9 +2,12 @@ import { InteractiveCard } from '../cards/interactiveCard';
 import type { MenuOptions } from './types';
 import { DEFAULT_MENU_OPTIONS } from './default';
 import { gsap } from 'gsap';
+import type { AudioManager } from '../../state/audio/audioManager';
+import { State } from '../../state/state';
 
 export abstract class Menu extends InteractiveCard<MenuOptions> {
     private _titleDelay?: gsap.core.Tween;
+    private readonly _audio: AudioManager;
 
     public constructor(options: Partial<MenuOptions> = {}) {
         super({
@@ -12,6 +15,8 @@ export abstract class Menu extends InteractiveCard<MenuOptions> {
             ...options,
             position: options.position?.clone() ?? DEFAULT_MENU_OPTIONS.position.clone(),
         });
+        const state = State.getInstance();
+        this._audio = state.audioManager;
     }
 
     protected override createIcon(options: MenuOptions): HTMLButtonElement {
@@ -89,7 +94,6 @@ export abstract class Menu extends InteractiveCard<MenuOptions> {
             fontSize: '17px',
             textAlign: 'center',
             whiteSpace: 'nowrap',
-            transformOrigin: 'center center',
         });
     }
 
@@ -127,12 +131,18 @@ export abstract class Menu extends InteractiveCard<MenuOptions> {
         this._titleDelay = gsap.delayedCall(0.25, () => {
             this._titleDelay = undefined;
             gsap.to(title, {
+                xPercent: 0,
+                yPercent: -50,
+
                 autoAlpha: 1,
                 scale: 1,
                 duration: 0.18,
                 ease: 'back.out(1.7)',
             });
         });
+
+
+        this._audio.play("/audio/click.mp3");
     }
     protected abstract override createContent(options: MenuOptions): HTMLElement;
 }

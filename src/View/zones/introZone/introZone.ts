@@ -25,6 +25,8 @@ import { Bottle } from "../../models/intro/bottle/bottle";
 import { Chest } from "../../models/intro/chest/chest";
 import { Planks } from "../../models/intro/planks/planks";
 import { IntroTree } from "../../models/intro/trees/trees";
+import { IntroMenu } from "../../menu/intro/introMenu";
+import { createIntroMenuOptions } from "../../menu/intro/default";
 
 export class IntroZone extends Zone {
     private readonly _models: Model[];
@@ -40,6 +42,39 @@ export class IntroZone extends Zone {
             offsetY,
             state.center[1] + offsetZ,
         );
+
+        new IntroMenu(createIntroMenuOptions(
+            positionAt(0, 30, 12),
+            'About my journey',
+            'Journey',
+            'fa-solid fa-book-open',
+            'A little about me',
+            "I'm a software engineering student passionate about building things, exploring technology, and turning ideas into real experiences.",
+        ));
+        new IntroMenu(createIntroMenuOptions(
+            positionAt(20, 0, 10),
+            'What I build',
+            'Projects',
+            'fa-solid fa-code',
+            'Building things',
+            'I enjoy designing and developing software, with a focus on backend engineering, architecture, and interactive experiences.',
+        ));
+        new IntroMenu(createIntroMenuOptions(
+            positionAt(20, 16, 10),
+            'My toolbox',
+            'Skills',
+            'fa-solid fa-toolbox',
+            'Tools of the trade',
+            'C#, .NET, TypeScript, React, SQL, and more. These are some of the technologies I use to bring ideas to life.',
+        ));
+        new IntroMenu(createIntroMenuOptions(
+            positionAt(0, 0, 8),
+            'Beyond the code',
+            'More',
+            'fa-solid fa-fire',
+            'Beyond the code',
+            'Curiosity drives me. I enjoy experimenting, learning how things work, and creating experiences that people can interact with.',
+        ));
 
         this._models = [
             new Floor({ position: positionAt(0, 30) }),
