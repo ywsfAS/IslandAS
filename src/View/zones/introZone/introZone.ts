@@ -27,6 +27,7 @@ import { Planks } from "../../models/intro/planks/planks";
 import { IntroTree } from "../../models/intro/trees/trees";
 import { IntroMenu } from "../../menu/intro/introMenu";
 import { createIntroMenuOptions } from "../../menu/intro/default";
+import { Fire } from "../../models/intro/fire/fire";
 
 export class IntroZone extends Zone {
     private readonly _models: Model[];
@@ -85,6 +86,7 @@ export class IntroZone extends Zone {
 
             // campfire at the center of the zone
             new CampfirePit({ position: positionAt(0, 0) }),
+            new Fire({ position: positionAt(0, 0, 10) }),
             new CampfireStand({ position: positionAt(0, 0) }),
 
             // tree logs around the campfire small / normal ones

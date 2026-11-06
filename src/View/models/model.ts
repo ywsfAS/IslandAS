@@ -11,6 +11,7 @@ export abstract class Model {
     protected readonly _scene: THREE.Scene;
     protected readonly _options: ModelOptions;
     protected _group: THREE.Group;
+    protected _animations: THREE.AnimationClip[];
 
     protected readonly _terrains: TerrainsState;
     protected readonly _introTexture = new THREE.TextureLoader().load("/textures/colormap.png", (texture) => {
@@ -42,6 +43,7 @@ export abstract class Model {
     private async load(): Promise<void> {
         const gltf = await new GLTFLoader().loadAsync(this._options.asset);
         const model = gltf.scene;
+        const anim = gltf.animations;
 
         const position = vec2.fromValues(this._options.position.x, this._options.position.z);
         const placeOnTerrain = (state: TerrainState) => {
@@ -84,6 +86,7 @@ export abstract class Model {
 
 
         this._group = model;
+        this._animations = anim;
 
         this.addToScene();
         this.onLoad();
