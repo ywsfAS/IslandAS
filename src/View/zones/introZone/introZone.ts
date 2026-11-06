@@ -28,9 +28,11 @@ import { IntroTree } from "../../models/intro/trees/trees";
 import { IntroMenu } from "../../menu/intro/introMenu";
 import { createIntroMenuOptions } from "../../menu/intro/default";
 import { Fire } from "../../models/intro/fire/fire";
+import type { InteractiveCard } from "../../cards/interactiveCard";
 
 export class IntroZone extends Zone {
     private readonly _models: Model[];
+    private readonly _menus: InteractiveCard[];
 
     constructor(state: IntroZoneState, options?: Partial<ZoneParams>) {
         super(state, options);
@@ -44,14 +46,14 @@ export class IntroZone extends Zone {
             state.center[1] + offsetZ,
         );
 
-        new IntroMenu(createIntroMenuOptions(
+        this._menus = [new IntroMenu(createIntroMenuOptions(
             positionAt(0, 30, 12),
             'About my journey',
             'Journey',
             'fa-solid fa-book-open',
             'A little about me',
             "I'm a software engineering student passionate about building things, exploring technology, and turning ideas into real experiences.",
-        ));
+        )),
         new IntroMenu(createIntroMenuOptions(
             positionAt(20, 0, 10),
             'What I build',
@@ -59,7 +61,7 @@ export class IntroZone extends Zone {
             'fa-solid fa-code',
             'Building things',
             'I enjoy designing and developing software, with a focus on backend engineering, architecture, and interactive experiences.',
-        ));
+        )),
         new IntroMenu(createIntroMenuOptions(
             positionAt(20, 16, 10),
             'My toolbox',
@@ -67,7 +69,7 @@ export class IntroZone extends Zone {
             'fa-solid fa-toolbox',
             'Tools of the trade',
             'C#, .NET, TypeScript, React, SQL, and more. These are some of the technologies I use to bring ideas to life.',
-        ));
+        )),
         new IntroMenu(createIntroMenuOptions(
             positionAt(0, 0, 8),
             'Beyond the code',
@@ -75,7 +77,9 @@ export class IntroZone extends Zone {
             'fa-solid fa-fire',
             'Beyond the code',
             'Curiosity drives me. I enjoy experimenting, learning how things work, and creating experiences that people can interact with.',
-        ));
+        )),
+
+        ];
 
         this._models = [
             new Floor({ position: positionAt(0, 30) }),

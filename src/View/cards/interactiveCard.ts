@@ -2,9 +2,12 @@ import { gsap } from 'gsap';
 import { CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
 import { State } from '../../state/state';
 import type { CameraState } from '../../state/camera/camera';
+import type { TerrainState } from '../../state/terrain/terrain';
+import type { TerrainsState } from '../../state/terrains/terrains';
 import { View } from '../view';
 import { DEFAULT_INTERACTIVE_CARD_OPTIONS } from './default';
 import type { InteractiveCardOptions } from './types';
+import { vec2 } from 'gl-matrix';
 
 export abstract class InteractiveCard<
     Options extends InteractiveCardOptions = InteractiveCardOptions,
@@ -16,12 +19,17 @@ export abstract class InteractiveCard<
     private readonly _icon?: HTMLButtonElement;
     private readonly _content: HTMLElement;
     private _hideTween?: gsap.core.Tween;
+    private readonly _terrains: TerrainsState;
+    private _destroyed = false;
 
     protected constructor(
         options: Options,
+        placeOnTerrain = false,
     ) {
         const view = View.getInstance();
-        this._camera = State.getInstance().camera;
+        const state = State.getInstance();
+        this._camera = state.camera;
+        this._terrains = state.Terrains;
         this._options = {
             ...DEFAULT_INTERACTIVE_CARD_OPTIONS,
             ...options,
@@ -68,6 +76,13 @@ export abstract class InteractiveCard<
         this._object.position.copy(this._options.position);
         this._object.scale.setScalar(this._options.scale);
         view.scene.add(this._object);
+
+        if (placeOnTerrain) {
+            this._terrains.events.on('create', this.handleTerrain);
+            for (const terrain of this._terrains.terrains.values()) {
+                this.handleTerrain(terrain);
+            }
+        }
 
         gsap.set(this._content, {
             autoAlpha: 0,
@@ -189,6 +204,8 @@ export abstract class InteractiveCard<
     }
 
     public destroy(): void {
+        this._destroyed = true;
+        this._terrains.events.off('create', this.handleTerrain);
         this.cancelHide();
         gsap.killTweensOf(this._content);
         if (this._icon) gsap.killTweensOf(this._icon);
@@ -221,4 +238,25 @@ export abstract class InteractiveCard<
         this._hideTween?.kill();
         this._hideTween = undefined;
     }
+
+    private readonly handleTerrain = (terrain: TerrainState): void => {
+        const position = vec2.fromValues(this._options.position.x, this._options.position.z);
+        if (!terrain.contains(position)) return;
+
+        const place = () => {
+            if (this._destroyed || !terrain.isReady) return;
+
+            this._object.position.set(
+                this._options.position.x,
+                terrain.getHeight(position) + this._options.position.y,
+                this._options.position.z,
+            );
+        };
+
+        if (terrain.isReady) {
+            place();
+        } else {
+            terrain.events.once('ready', place);
+        }
+    };
 }

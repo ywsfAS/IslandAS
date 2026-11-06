@@ -14,7 +14,7 @@ export abstract class Menu extends InteractiveCard<MenuOptions> {
             ...DEFAULT_MENU_OPTIONS,
             ...options,
             position: options.position?.clone() ?? DEFAULT_MENU_OPTIONS.position.clone(),
-        });
+        }, true);
         const state = State.getInstance();
         this._audio = state.audioManager;
     }
