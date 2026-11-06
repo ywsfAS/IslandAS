@@ -52,17 +52,19 @@ export abstract class InteractiveCard<
 
         this._content = this.createContent(this._options);
         Object.assign(this._content.style, {
-            position: this._options.showIcon ? 'absolute' : 'relative',
+            position: this._options.showIcon || this._options.cardPlacement === 'above'
+                ? 'absolute'
+                : 'relative',
             left: this._options.showIcon && this._options.cardPlacement === 'right'
                 ? 'calc(100% + 60px)'
-                : this._options.showIcon && this._options.cardPlacement === 'above'
+                : this._options.cardPlacement === 'above'
                     ? '50%'
                     : '0',
             top: this._options.showIcon && this._options.cardPlacement === 'right'
                 ? '50%'
                 : 'auto',
-            bottom: this._options.showIcon && this._options.cardPlacement === 'above'
-                ? 'calc(100% + 60px)'
+            bottom: this._options.cardPlacement === 'above'
+                ? `calc(100% + ${this._options.showIcon ? 60 : 12}px)`
                 : 'auto',
             width: `${this._options.cardWidth}px`,
             pointerEvents: 'auto',
@@ -91,7 +93,7 @@ export abstract class InteractiveCard<
             yPercent: this._options.showIcon && this._options.cardPlacement === 'right'
                 ? -50
                 : 0,
-            xPercent: this._options.showIcon && this._options.cardPlacement === 'above'
+            xPercent: this._options.cardPlacement === 'above'
                 ? -50
                 : 0,
         });
@@ -153,7 +155,7 @@ export abstract class InteractiveCard<
             yPercent: this._options.showIcon && this._options.cardPlacement === 'right'
                 ? -50
                 : 0,
-            xPercent: this._options.showIcon && this._options.cardPlacement === 'above'
+            xPercent: this._options.cardPlacement === 'above'
                 ? -50
                 : 0,
             duration: this._options.animationDuration,
@@ -182,7 +184,7 @@ export abstract class InteractiveCard<
                 yPercent: this._options.showIcon && this._options.cardPlacement === 'right'
                     ? -50
                     : 0,
-                xPercent: this._options.showIcon && this._options.cardPlacement === 'above'
+                xPercent: this._options.cardPlacement === 'above'
                     ? -50
                     : 0,
                 duration: this._options.animationDuration,

@@ -98,9 +98,10 @@ export abstract class Logo {
         group.children.forEach(child => child.position.sub(center));
 
         group.rotateX(-Math.PI);
+        group.rotateY(Math.PI / 2);
+        const logoBounds = new THREE.Box3().setFromObject(group);
         const position = vec2.fromValues(this._options.position.x, this._options.position.z);
 
-        const cardPosition = group.position.clone();
         let placed = false;
         const placeOnTerrain = (state: TerrainState) => {
             if (placed || !state.contains(position)) return;
@@ -115,11 +116,13 @@ export abstract class Logo {
                 height + size / 2,
                 this._options.position.z
             );
-            cardPosition.y = this._options.height + height + 3;
-            cardPosition.x += group.position.x;
             this._scene.add(group);
 
-            cardPosition.z += this._options.depth;
+            const cardPosition = new THREE.Vector3(
+                this._options.position.x,
+                group.position.y + logoBounds.max.y + 0.3,
+                this._options.position.z,
+            );
             const hoverCard = new LogoHoverCard(
                 this._options.interaction,
                 cardPosition,
