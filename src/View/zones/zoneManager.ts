@@ -1,8 +1,12 @@
+import * as THREE from "three";
 import { State } from "../../state/state";
 import type { ContactZoneState } from "../../state/zones/contactZone/contactZone";
 import type { IntroZoneState } from "../../state/zones/introZone/introZone";
 import type { WorkShopZoneState } from "../../state/zones/workshopZone/workshopZone";
 import { ZoneManagerState } from "../../state/zones/zoneManager";
+import type { Model } from "../models/model";
+import { Signpost } from "../models/signpost/signpost";
+import { SignpostSingle } from "../models/signpostSingle/signpostSingle";
 import { ContactZone } from "./contactZone/contactZone";
 import { IntroZone } from "./introZone/introZone";
 import { WorkShopZone } from "./workShopZone/workShopeZone";
@@ -12,6 +16,7 @@ export class ZoneManager {
 
     private readonly _zones: Map<number, Zone> = new Map();
     private readonly _state: ZoneManagerState;
+    private readonly _models: Model[];
 
     constructor() {
         const state = State.getInstance();
@@ -29,6 +34,17 @@ export class ZoneManager {
         })
 
         this._state.initialize();
+
+        this._models = [
+            new Signpost({
+                position: new THREE.Vector3(20, 0, 0),
+                rotation: new THREE.Euler(0, 4 * Math.PI / 6, 0),
+            }),
+            new SignpostSingle({
+                position: new THREE.Vector3(-20, 0, 0),
+                rotation: new THREE.Euler(0, Math.PI / 2, 0),
+            }),
+        ];
     };
     public setIntroZone(state: IntroZoneState) {
         const introZone = new IntroZone(state);
@@ -47,6 +63,9 @@ export class ZoneManager {
     public update() {
         for (const zone of this._zones.values()) {
             zone.update();
+        }
+        for (const model of this._models) {
+            model.update();
         }
     }
 }

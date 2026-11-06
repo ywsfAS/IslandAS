@@ -4,8 +4,8 @@ import type { ModelOptions } from "../types";
 export const DEFAULT_SIGNPOST_SINGLE_OPTIONS: ModelOptions = {
     asset: "models/signpost-single.glb",
     position: new THREE.Vector3(),
-    rotation: new THREE.Euler(),
-    scale: new THREE.Vector3(5, 5, 5),
+    rotation: new THREE.Euler(0, 0, 0),
+    scale: new THREE.Vector3(15, 15, 15),
 };
 
 export const DEFAULT_SIGNPOST_SINGLE_MATERIAL: THREE.MeshStandardMaterialParameters = {
