@@ -17,6 +17,7 @@ import { Lantern } from "../../models/contact/lantern/lantern";
 import { PresentCube } from "../../models/contact/presentCube/presentCube";
 import { PresentRectangle } from "../../models/contact/presentRectangle/presentRectangle";
 import { Wreath } from "../../models/contact/wreath/wreath";
+import { Mailbox } from "../../models/contact/mailbox/mailbox";
 import * as THREE from 'three';
 
 export class ContactZone extends Zone {
@@ -37,6 +38,14 @@ export class ContactZone extends Zone {
                 'A moment to pause',
                 'Take a seat, enjoy the island, and stay awhile.',
             )),
+            new IntroMenu(createIntroMenuOptions(
+                positionAt(5, 7.5, 10),
+                'Check the mailbox',
+                'Send',
+                'fa-solid fa-envelope',
+                'Have something in mind?',
+                "Drop me a message and let's talk.",
+            )),
         ];
 
         this._models = [
@@ -45,6 +54,7 @@ export class ContactZone extends Zone {
             new PresentCube({ position: positionAt(0, 4) }),
             new PresentRectangle({ position: positionAt(0, -4) }),
             new Wreath({ position: positionAt(-1, 0), rotation: new THREE.Euler(0, Math.PI / 2, 0) }),
+            new Mailbox({ position: positionAt(5, 8), rotation: new THREE.Euler(0, 3 * Math.PI / 2, 0) }),
         ];
 
         this._logos = [
