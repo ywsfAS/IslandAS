@@ -11,6 +11,7 @@ import { ZoneManagerState } from "./zones/zoneManager";
 import type { AudioControls } from "./audio/types";
 import { createStartBtn } from "./utility";
 import { PathState } from "./path/path";
+import { DEFAULT_CONTACT_PATH_CONFIG, DEFAULT_WORKSHOP_PATH_CONFIG } from "./path/default";
 import { TreesState } from "./trees/trees";
 import { FenceState } from "./fences/fence";
 import { BushesState } from "./bush/bush";
@@ -30,8 +31,10 @@ export class State {
     private readonly _zoneManager: ZoneManagerState;
     private readonly _audioManager: AudioManager;
     private readonly _path: PathState;
+    private readonly _contactPath: PathState;
+    private readonly _workshopPath: PathState;
     private readonly _trees: TreesState;
-    private readonly _fences: FenceState;
+    private _fences?: FenceState[];
     private readonly _bushes: BushesState;
     private readonly _rocks: RocksState;
     private _mainAudioControls!: AudioControls;
@@ -55,8 +58,9 @@ export class State {
         this._sun = new SunState();
         this._water = new WaterState();
         this._path = new PathState();
+        this._contactPath = new PathState(DEFAULT_CONTACT_PATH_CONFIG);
+        this._workshopPath = new PathState(DEFAULT_WORKSHOP_PATH_CONFIG);
         this._trees = new TreesState();
-        this._fences = new FenceState();
         this._bushes = new BushesState();
         this._rocks = new RocksState();
 
@@ -90,6 +94,12 @@ export class State {
     get path() {
         return this._path;
     }
+    get contactPath() {
+        return this._contactPath;
+    }
+    get workshopPath() {
+        return this._workshopPath;
+    }
 
     get time() {
         return this._time;
@@ -121,7 +131,14 @@ export class State {
     get trees() {
         return this._trees;
     }
-    get fence() {
+    get fences() {
+        if (!this._fences) {
+            this._fences = [
+                new FenceState(this._path),
+                new FenceState(this._contactPath),
+                new FenceState(this._workshopPath),
+            ];
+        }
         return this._fences;
     }
     get bushes() {

@@ -3,6 +3,7 @@ import { IntroZoneState } from "./introZone/introZone";
 import type { ZoneState } from "./zone";
 import { ContactZoneState } from "./contactZone/contactZone";
 import { WorkShopZoneState } from "./workshopZone/workshopZone";
+import { CenterZoneState } from "./centerZone/centerZone";
 
 export class ZoneManagerState {
 
@@ -13,6 +14,7 @@ export class ZoneManagerState {
     constructor() {
     }
     public initialize() {
+        this.setCenterZone();
         this.setIntroZone();
         this.setContactZone();
         this.setWorkShopZone();
@@ -20,6 +22,13 @@ export class ZoneManagerState {
 
     get events(): EventEmitter {
         return this._events;
+    }
+    public setCenterZone() {
+        const centerZone = new CenterZoneState(this._id);
+        this._zones.set(this._id, centerZone);
+        this._id++;
+
+        this._events.emit("center-state-created", centerZone);
     }
     public setIntroZone() {
         const introZone = new IntroZoneState(this._id);

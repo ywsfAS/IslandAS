@@ -5,5 +5,5 @@ export const DEFAULT_BENCH_SHORT_OPTIONS: ModelOptions = {
     asset: "models/contact/bench-short.glb",
     position: new THREE.Vector3(),
     rotation: new THREE.Euler(),
-    scale: new THREE.Vector3(8, 8, 8),
+    scale: new THREE.Vector3(6, 6, 6),
 };

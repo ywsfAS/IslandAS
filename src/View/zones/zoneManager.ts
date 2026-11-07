@@ -10,6 +10,8 @@ import { SignpostSingle } from "../models/signpostSingle/signpostSingle";
 import { ContactZone } from "./contactZone/contactZone";
 import { IntroZone } from "./introZone/introZone";
 import { WorkShopZone } from "./workShopZone/workShopeZone";
+import type { CenterZoneState } from "../../state/zones/centerZone/centerZone";
+import { CenterZone } from "./centerZone/centerZone";
 import type { Zone } from "./zone";
 
 export class ZoneManager {
@@ -23,6 +25,9 @@ export class ZoneManager {
 
         this._state = state.zoneManager;
 
+        this._state.events.on("center-state-created", (zoneState: CenterZoneState) => {
+            this.setCenterZone(zoneState);
+        })
         this._state.events.on("intro-state-created", (zoneState: IntroZoneState) => {
             this.setIntroZone(zoneState);
         })
@@ -46,6 +51,10 @@ export class ZoneManager {
             }),
         ];
     };
+    public setCenterZone(state: CenterZoneState) {
+        const centerZone = new CenterZone(state);
+        this._zones.set(state.id, centerZone);
+    }
     public setIntroZone(state: IntroZoneState) {
         const introZone = new IntroZone(state);
         this._zones.set(state.id, introZone);

@@ -30,6 +30,7 @@ import { createIntroMenuOptions } from "../../menu/intro/default";
 import { Fire } from "../../models/intro/fire/fire";
 import type { InteractiveCard } from "../../cards/interactiveCard";
 import { setPosition } from "../utilities";
+import { BenchShort } from "../../models/contact/benchShort/benchShort";
 
 export class IntroZone extends Zone {
     private readonly _models: Model[];
@@ -42,7 +43,7 @@ export class IntroZone extends Zone {
         new IntroTree("tree-trunk", treeOptions);
 
 
-        const positionAt = (offsetX: number, offsetZ: number, offsetY: number) => setPosition(state.center, offsetX, offsetZ, offsetY);
+        const positionAt = (offsetX: number, offsetZ: number, offsetY?: number) => setPosition(state.center, offsetX, offsetZ, offsetY);
 
         this._menus = [new IntroMenu(createIntroMenuOptions(
             positionAt(0, 30, 12),
@@ -82,6 +83,7 @@ export class IntroZone extends Zone {
         this._models = [
             new Floor({ position: positionAt(0, 30) }),
             new TentCanvas({ position: positionAt(0, 30) }),
+            new BenchShort({ position: positionAt(0, 20), rotation: new THREE.Euler(0, Math.PI , 0) }),
 
             new Bedroll({ position: positionAt(-20, 0, 10), rotation: new THREE.Euler(0, Math.PI, 0) }),
             new BedrollPacked({ position: positionAt(-20, 8) }),

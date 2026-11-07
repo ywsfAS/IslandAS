@@ -21,13 +21,13 @@ export class Path {
     private readonly _sun: SunState;
     private readonly _scene: THREE.Scene;
 
-    constructor(options: Partial<PathOptions> = {}) {
+    constructor(pathState: PathState, options: Partial<PathOptions> = {}) {
         const d = DEFAULT_PATH_CONFIG;
 
         const state = State.getInstance();
         const view = View.getInstance();
 
-        this._state = state.path;
+        this._state = pathState;
         this._sun = state.sun;
         this._scene = view.scene;
 

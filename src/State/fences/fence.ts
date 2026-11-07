@@ -1,9 +1,7 @@
 import { EventEmitter } from "events";
 import type { PathState } from "../path/path";
-import { State } from "../state";
 import type { FenceOptions } from "./types";
 import { DEFAULT_FENCE_OPTIONS } from './default';
-import { smaa } from "three/examples/jsm/tsl/display/SMAANode.js";
 
 export class FenceState {
 
@@ -16,10 +14,8 @@ export class FenceState {
 
     private readonly _path: PathState;
 
-    constructor(options: Partial<FenceOptions> = {}) {
-
-        const state = State.getInstance();
-        this._path = state.path;
+    constructor(path: PathState, options: Partial<FenceOptions> = {}) {
+        this._path = path;
 
         const { offset, maxCount, sample } = DEFAULT_FENCE_OPTIONS;
 
@@ -46,9 +42,10 @@ export class FenceState {
         const pathPositions = this._path.positions;
 
         const sample = this._sample;
-        const rows = pathPositions.length / 3;
         const cols = this._path.widthSegments + 1;
-        const centers = new Float32Array(Math.ceil(rows / sample) * 3 * 2);
+        const rows = pathPositions.length / (cols * 3);
+        const sampledRows = Math.ceil(rows / sample);
+        const centers = new Float32Array(sampledRows * 6);
         let index = 0;
         for (let i = 0; i < rows; i += sample) {
 
@@ -66,7 +63,7 @@ export class FenceState {
             centers[index + 4] = pathPositions[right + 1];
             centers[index + 5] = pathPositions[right + 2];
 
-            index += sample;
+            index += 6;
         }
         this._positions = centers;
 

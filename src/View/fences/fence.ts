@@ -2,7 +2,6 @@ import * as THREE from "three";
 import type { FenceState } from "../../state/fences/fence";
 import type { FenceOptions } from "./types";
 import { DEFAULT_FENCE_OPTIONS } from "./default";
-import { State } from "../../state/state";
 import { View } from "../view";
 import diffuseFence from "../../../public/textures/wood/wood-diffuse.jpg";
 import normalFence from "../../../public/textures/wood/wood-normal.jpg";
@@ -23,11 +22,9 @@ export class Fence {
     private readonly _dummy = new THREE.Object3D();
     private readonly _scene: THREE.Scene;
 
-    constructor(options: Partial<FenceOptions> = {}) {
-
-        const state = State.getInstance();
+    constructor(state: FenceState, options: Partial<FenceOptions> = {}) {
         const view = View.getInstance();
-        this._state = state.fence;
+        this._state = state;
         this._scene = view.scene;
 
         this._options = { ...options, ...DEFAULT_FENCE_OPTIONS };

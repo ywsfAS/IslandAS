@@ -17,7 +17,6 @@ import { Text } from './text/Text';
 import { Keyboard } from './models/keyboard/keyboard';
 import { ZoneManager } from './zones/zoneManager';
 import { Headphone } from './models/headphone/headphone';
-import { Path } from './path/path';
 import { Fence } from './fences/fence';
 import { Bush } from './bush/bush';
 import { Tree } from './models/tree/tree';
@@ -50,8 +49,7 @@ export class View {
     private readonly _headphone: Headphone;
     private readonly _tree: Tree;
     private readonly _zoneManager: ZoneManager;
-    private readonly _path: Path;
-    private readonly _fence: Fence;
+    private readonly _fences: Fence[];
     private readonly _bushes: Bush;
     private readonly _cards: Cards;
 
@@ -83,8 +81,8 @@ export class View {
         this._zoneManager = new ZoneManager();
         this._keyboard = new Keyboard();
         this._headphone = new Headphone();
-        this._path = new Path();
-        this._fence = new Fence();
+        const state = State.getInstance();
+        this._fences = state.fences.map((fenceState) => new Fence(fenceState));
         this._bushes = new Bush();
         this._tree = new Tree();
 
@@ -143,7 +141,6 @@ export class View {
         this._sky.update();
         this._text.update();
         this._rocks.update();
-        this._path.update();
         this._raycaster.update();
         this._zoneManager.update();
         this._cards.update();
