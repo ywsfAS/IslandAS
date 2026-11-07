@@ -44,7 +44,7 @@ export class TerrainsState {
 
     private _player: PlayerState;
     private readonly _size = 200;
-    private readonly _radius = 500;
+    private readonly _radius = 400;
     private _initialized = false;
 
     constructor(options: Partial<TerrainsOptions> = {}) {

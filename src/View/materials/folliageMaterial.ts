@@ -29,7 +29,7 @@ export function createFoliageMaterial(alphaMap: Texture, color: string = '#66b33
         flatShading: true,
 
         toneMapped: false,
-        fog: false,
+        fog: true,
 
         side: DoubleSide,
         shadowSide: FrontSide,

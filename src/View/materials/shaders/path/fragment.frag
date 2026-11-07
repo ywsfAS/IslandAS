@@ -4,6 +4,8 @@ uniform float uEdgeSoftness;
 
 varying vec2 vUv;
 
+#include <fog_pars_fragment>
+
 void main() {
 
     float across = abs(vUv.x - 0.5) * 2.0;
@@ -13,4 +15,5 @@ void main() {
     vec3 color = mix(uColor, uEdgeColor, smoothstep(0.4, 1.0, across));
 
     gl_FragColor = vec4(color, alpha);
+    #include <fog_fragment>
 }

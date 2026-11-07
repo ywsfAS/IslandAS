@@ -81,6 +81,12 @@ export abstract class Model {
         model.traverse(object => {
             if (object instanceof THREE.Mesh) {
                 this.setMeshMaterial(object);
+                const materials = Array.isArray(object.material)
+                    ? object.material
+                    : [object.material];
+                for (const material of materials) {
+                    material.fog = true;
+                }
             }
         });
 

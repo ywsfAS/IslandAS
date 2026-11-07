@@ -4,6 +4,8 @@ uniform float uSunIntensity;
 
 varying vec3 vNormal;
 
+#include <fog_pars_fragment>
+
 void main(){
 
     vec3 lightDirection = normalize(uLightDirection);
@@ -24,4 +26,5 @@ void main(){
 
 
     gl_FragColor = vec4(finalColor,1.0);
+    #include <fog_fragment>
 }

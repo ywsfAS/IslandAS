@@ -10,6 +10,8 @@ varying vec3 vWorldPosition;
 varying vec3 vWorldNormal;
 varying vec2 vUv;
 
+#include <fog_pars_vertex>
+
 void main()
 {
     vUv = uv;
@@ -43,5 +45,7 @@ void main()
     vWorldPosition = modelPosition.xyz;
     vWorldNormal = normal;
 
-    gl_Position = projectionMatrix * viewMatrix * modelPosition;
+    vec4 mvPosition = viewMatrix * modelPosition;
+    gl_Position = projectionMatrix * mvPosition;
+    #include <fog_vertex>
 }

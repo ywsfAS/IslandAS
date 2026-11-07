@@ -12,6 +12,7 @@ varying float vTone;
 varying float vDepth;
 varying float vNormalizedHeight;
 
+#include <fog_pars_fragment>
 #include "../utilities/getSunReflection.glsl";
 
 void main() {
@@ -43,6 +44,7 @@ void main() {
     color *= mix(vec3(0.55), dayTint, sunStrength * daylight);
 
     gl_FragColor = vec4(color, 1.0);
+    #include <fog_fragment>
 
     #include <tonemapping_fragment>
     #include <colorspace_fragment>

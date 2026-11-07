@@ -6,6 +6,8 @@ uniform vec3 uLightDirection;
 uniform vec3 uViewPosition;
 uniform float uTime;
 
+#include <fog_pars_fragment>
+
 const float LASER_SPEED     = 0.45;  
 const float LASER_SPACING   = 0.4;   
 const float LASER_CORE_SIZE = 0.3;
@@ -47,4 +49,5 @@ void main() {
     emission = 1.0 - exp(-emission * 1.5);
 
     gl_FragColor = vec4(emission, 1.0);
+    #include <fog_fragment>
 }

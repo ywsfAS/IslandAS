@@ -1,12 +1,14 @@
 import * as THREE from 'three';
 import vertexShader from './shaders/water/vertex.vert';
 import fragementShader from './shaders/water/fragment.frag';
+import { createFogUniforms } from './fogUniforms';
 
 export function createWaterMaterial() {
 
     const material = new THREE.ShaderMaterial({
 
         uniforms: {
+            ...createFogUniforms(),
             uTime: { value: null },
             uSpatialFrequency: { value: null },
             uAngularFrequency: { value: null },
@@ -24,7 +26,8 @@ export function createWaterMaterial() {
         },
         vertexShader: vertexShader,
         fragmentShader: fragementShader,
-        side: THREE.DoubleSide
+        side: THREE.DoubleSide,
+        fog: true
 
     });
 

@@ -62,8 +62,8 @@ export class View {
         View.instance = this;
 
         this._scene = new THREE.Scene();
-        this._scene.fog = new THREE.Fog(0x8899aa, 50, 300);
-        this._camera = new Camera(new THREE.PerspectiveCamera());
+        this._scene.fog = new THREE.Fog(0xeaf0f2, 200, 400);
+        this._camera = new Camera();
         this._renderer = new Renderer();
         this._cssRenderer = new cssRenderer();
         this._cards = new Cards();

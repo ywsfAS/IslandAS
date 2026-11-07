@@ -9,6 +9,8 @@ varying float vTone;
 varying float vDepth;
 varying float vNormalizedHeight;
 
+#include <fog_pars_vertex>
+
 void main() {
     mat4 instanceTransform = modelMatrix * instanceMatrix;
     vec4 worldPosition = instanceTransform * vec4(position, 1.0);
@@ -21,5 +23,7 @@ void main() {
 
     vNormalizedHeight = position.y / uBushRadius;
 
-    gl_Position = projectionMatrix * viewMatrix * worldPosition;
+    vec4 mvPosition = viewMatrix * worldPosition;
+    gl_Position = projectionMatrix * mvPosition;
+    #include <fog_vertex>
 }

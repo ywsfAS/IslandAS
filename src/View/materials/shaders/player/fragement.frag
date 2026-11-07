@@ -4,6 +4,8 @@ uniform vec3 uSunColor;
 uniform float uTime;
 varying vec3 vNormal;
 
+#include <fog_pars_fragment>
+
 void main(){
     
     vec3 lightColor      = vec3(0.24, 0.68, 0.76); // Soft teal
@@ -19,4 +21,5 @@ void main(){
     vec3 finalColor = reflectedColor ;
     
     gl_FragColor = vec4(finalColor, 1.0);
+    #include <fog_fragment>
 }

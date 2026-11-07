@@ -1,4 +1,5 @@
 import { gsap } from 'gsap';
+import * as THREE from 'three';
 import { CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
 import { State } from '../../state/state';
 import type { CameraState } from '../../state/camera/camera';
@@ -16,6 +17,10 @@ export abstract class InteractiveCard<
     private readonly _options: Options;
     private readonly _object: CSS3DObject;
     private readonly _container: HTMLDivElement;
+    private readonly _scene: THREE.Scene;
+    private readonly _renderCamera: THREE.Camera;
+    private readonly _worldPosition = new THREE.Vector3();
+    private readonly _cameraDirection = new THREE.Vector3();
     private readonly _icon?: HTMLButtonElement;
     private readonly _content: HTMLElement;
     private _hideTween?: gsap.core.Tween;
@@ -28,6 +33,8 @@ export abstract class InteractiveCard<
     ) {
         const view = View.getInstance();
         const state = State.getInstance();
+        this._scene = view.scene;
+        this._renderCamera = view.camera.instance;
         this._camera = state.camera;
         this._terrains = state.Terrains;
         this._options = {
@@ -219,6 +226,24 @@ export abstract class InteractiveCard<
     public update(): void {
         const [qx, qy, qz, qw] = this._camera.quaterion;
         this._object.quaternion.set(qx, qy, qz, qw);
+
+        const fog = this._scene.fog;
+        if (!(fog instanceof THREE.Fog)) {
+            this._container.style.opacity = '1';
+            this._container.style.visibility = 'visible';
+            return;
+        }
+
+        this._object.getWorldPosition(this._worldPosition);
+        this._renderCamera.getWorldDirection(this._cameraDirection);
+        const depth = this._worldPosition
+            .sub(this._renderCamera.position)
+            .dot(this._cameraDirection);
+        const fogOpacity = THREE.MathUtils.smoothstep(depth, fog.near, fog.far);
+        const visibility = 1 - fogOpacity;
+
+        this._container.style.opacity = String(visibility);
+        this._container.style.visibility = visibility > 0 ? 'visible' : 'hidden';
     }
 
     private readonly onPointerEnter = (): void => {

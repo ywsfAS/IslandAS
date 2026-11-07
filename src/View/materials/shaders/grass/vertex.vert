@@ -13,6 +13,7 @@ attribute vec2 center;
 varying vec3 vColor;
 varying float vDebugValue;
 
+#include <fog_pars_vertex>
 #include "../utilities/pivot.glsl";
 #include "../utilities/grassAttenuation.glsl";
 #include "../utilities/getSunReflection.glsl";
@@ -83,5 +84,7 @@ void main()
 
 
 
-    gl_Position = projectionMatrix * viewMatrix * worldPosition;
+    vec4 mvPosition = viewMatrix * worldPosition;
+    gl_Position = projectionMatrix * mvPosition;
+    #include <fog_vertex>
 }

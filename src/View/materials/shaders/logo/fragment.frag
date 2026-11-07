@@ -9,6 +9,7 @@ uniform vec3 uRimColor;
 varying vec3 vWorldNormal;
 varying vec3 vWorldPosition;
 
+#include <fog_pars_fragment>
 #include "../utilities/getSunReflection.glsl";
 
 void main() {
@@ -35,4 +36,5 @@ void main() {
     finalColor += uRimColor * rim * 0.35;
 
     gl_FragColor = vec4(finalColor, 1.0);
+    #include <fog_fragment>
 }

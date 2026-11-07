@@ -6,6 +6,7 @@ uniform float uGrassDistance;
 
 varying vec3 vColor;
 
+#include <fog_pars_vertex>
 #include "../utilities/grassAttenuation.glsl";
 
 void main(){
@@ -37,5 +38,7 @@ void main(){
 
     vColor = color;
 
-    gl_Position = projectionMatrix * viewMatrix * modelPosition;
+    vec4 mvPosition = viewMatrix * modelPosition;
+    gl_Position = projectionMatrix * mvPosition;
+    #include <fog_vertex>
 }

@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import vertexShader from './shaders/bush/vertex.vert';
 import fragmentShader from './shaders/bush/fragment.frag';
+import { createFogUniforms } from './fogUniforms';
 
 export interface BushMaterialParams {
     radius: number;
@@ -14,6 +15,7 @@ export function createBushMaterial(params: BushMaterialParams): THREE.ShaderMate
         vertexShader,
         fragmentShader,
         uniforms: {
+            ...createFogUniforms(),
             uLightDirection: { value: new THREE.Vector3(0, 1, 0) },
             uSunIntensity: { value: 0 },
             uSunColor: { value: new THREE.Vector3(1, 1, 1) },
@@ -22,5 +24,6 @@ export function createBushMaterial(params: BushMaterialParams): THREE.ShaderMate
             uStandardColor: { value: new THREE.Color(params.standardColor) },
             uLightColor: { value: new THREE.Color(params.lightColor) },
         },
+        fog: true,
     });
 }

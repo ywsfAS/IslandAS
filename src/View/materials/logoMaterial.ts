@@ -1,10 +1,12 @@
 import * as THREE from 'three';
 import vertexShader from './shaders/logo/vertex.vert';
 import fragmentShader from './shaders/logo/fragment.frag';
+import { createFogUniforms } from './fogUniforms';
 
 export function createLogoMaterial(baseColor: THREE.ColorRepresentation): THREE.ShaderMaterial {
     return new THREE.ShaderMaterial({
         uniforms: {
+            ...createFogUniforms(),
             uBaseColor: { value: new THREE.Color(baseColor) },
             uLightDirection: { value: new THREE.Vector3() },
             uSunColor: { value: new THREE.Color(0xffffff) },
@@ -16,5 +18,6 @@ export function createLogoMaterial(baseColor: THREE.ColorRepresentation): THREE.
         vertexShader,
         fragmentShader,
         side: THREE.DoubleSide,
+        fog: true,
     });
 }
