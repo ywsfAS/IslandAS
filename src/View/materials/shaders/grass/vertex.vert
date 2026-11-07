@@ -8,10 +8,11 @@ uniform vec3 uCameraPosition;
 uniform sampler2D uHeightMap;
 uniform float uTime;
 uniform vec2 uTerrainCenter;
+uniform float uFresnelOffset;
+uniform float uFresnelPower;
 
 attribute vec2 center;
 varying vec3 vColor;
-varying float vDebugValue;
 
 #include <fog_pars_vertex>
 #include "../utilities/pivot.glsl";
@@ -36,6 +37,7 @@ void main()
     vec4 worldPosition = modelMatrix * vec4(position,1.0);
 
     float angle = atan(spaceCenter.x - uCameraPosition.x , spaceCenter.z - uCameraPosition.z);
+    vec3 bladeNormal = normalize(vec3(sin(angle), 0.0, cos(angle)));
     vec2 rotatedOffset = pivot2D(worldPosition.xz,angle,vec2(0,0));
     
 
@@ -74,9 +76,13 @@ void main()
 
     float brightness = getSunReflection(terrainNormal,uDirectionLight,uSunIntensity);
 
+    color2 *= brightness ;
+    
+    vec3 viewDir = normalize(worldPosition.xyz - cameraPosition);
+    float fresnel = pow(uFresnelOffset + dot(viewDir, bladeNormal), uFresnelPower);
+    color2 += uSunColor * fresnel * 0.25 ;
 
-    vColor = color2 * brightness ;
-
+    vColor = color2;
     // hide distant or high slop places blades
     worldPosition.xyz = mix(spaceCenter.xyz,worldPosition.xyz,scale);
 

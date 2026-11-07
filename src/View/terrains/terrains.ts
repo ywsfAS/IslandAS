@@ -7,7 +7,6 @@ import createTerrainMaterial from "../materials/terrainMaterial";
 import { EventEmitter } from "events";
 import type { PlayerState } from "../../state/player/player";
 import { vec3 } from "gl-matrix";
-import { DEFAULT_GRASS_CONFIG } from "../grass/default";
 import { TupleMap, type ChunksPosition } from "../../state/terrains/types";
 import type { TerrainState } from "../../state/terrain/terrain";
 
@@ -73,10 +72,8 @@ export class Terrains {
         })
     }
     private setMaterial() {
-        const { chunkSize } = DEFAULT_GRASS_CONFIG;
         const material = createTerrainMaterial();
         material.uniforms.uPlayerPosition.value = vec3.fromValues(0, 0, 0);
-        material.uniforms.uGrassDistance.value = chunkSize;
         material.uniforms.uTime.value = 1;
         this._material = material;
 

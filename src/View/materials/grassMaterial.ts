@@ -18,7 +18,10 @@ export default function createGrassMaterial() {
             uDirectionLight: { value: null },
             uSunIntensity: { value: null },
             uSunColor: { value: null },
-            uTerrainCenter: { value: null }
+            uTerrainCenter: { value: null },
+
+            uFresnelPower: { value: 1.0 },
+            uFresnelOffset: { value: 0.0 }
         },
         vertexShader: vertexShader,
         fragmentShader: fragementShader,

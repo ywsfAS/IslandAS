@@ -13,11 +13,13 @@ export default function createTerrainMaterial(): ShaderMaterial {
             uTime: { value: null },
             uHeightMap: { value: null },
             uPlayerPosition: { value: null },
-            uGrassDistance: { value: null },
             uDirectionLight: { value: null },
             uSunIntensity: { value: null },
             uSunColor: { value: null },
-            uDirections: { value: null }
+            uDirections: { value: null },
+
+            uFresnelPower: { value: 3.0 },
+            uFresnelOffset: { value: 1.0 }
 
         },
         vertexShader: vertexShader,
