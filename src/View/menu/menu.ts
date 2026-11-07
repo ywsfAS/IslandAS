@@ -37,7 +37,12 @@ export abstract class Menu extends InteractiveCard<MenuOptions> {
         button.append(square, title);
         gsap.set(icon, { scale: 0 });
         gsap.set(title, { autoAlpha: 0, scale: 0 });
+
+        this.registerEvent(button);
         return button;
+    }
+    private registerEvent(el: HTMLElement) {
+        el.addEventListener('click', () => this.onIconClick());
     }
 
     protected override styleIcon(icon: HTMLButtonElement): void {
@@ -143,6 +148,8 @@ export abstract class Menu extends InteractiveCard<MenuOptions> {
 
 
         this._audio.play("/audio/click.mp3");
+    }
+    public onIconClick = (): void => {
     }
     protected abstract override createContent(options: MenuOptions): HTMLElement;
 }

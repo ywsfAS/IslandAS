@@ -17,7 +17,7 @@ export class Fence {
 
     private _material: THREE.MeshStandardMaterial;
 
-    private readonly _axis = new THREE.Vector3(1, 0, 0);
+    private readonly _up = new THREE.Vector3(0, 1, 0);
     private readonly _state: FenceState;
     private readonly _dummy = new THREE.Object3D();
     private readonly _scene: THREE.Scene;
@@ -142,18 +142,16 @@ export class Fence {
                 );
 
                 direction.subVectors(start, end);
-                const length = direction.length();
+                const length = Math.hypot(direction.x, direction.z);
 
                 if (length === 0) continue;
-
-                direction.normalize();
 
                 // first rail transform matrix 
                 this._dummy.position.copy(start).add(end).multiplyScalar(0.5);
                 this._dummy.position.y += 0.6;
-                this._dummy.quaternion.setFromUnitVectors(
-                    this._axis,
-                    direction,
+                this._dummy.quaternion.setFromAxisAngle(
+                    this._up,
+                    Math.atan2(-direction.z, direction.x),
                 );
                 this._dummy.scale.set(length, 1, 1);
                 this._dummy.updateMatrix();

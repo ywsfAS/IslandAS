@@ -13,6 +13,6 @@ export const DEFAULT_LINKEDIN_OPTIONS: LogoOptions = {
         intro: 'Let’s connect and keep in touch about my work.',
         message: 'Connect with me on LinkedIn.',
         linkText: 'Visit LinkedIn',
-        url: 'https://www.linkedin.com/',
+        url: 'https://www.linkedin.com/in/youssef-akhroub-329595378/',
     },
 };

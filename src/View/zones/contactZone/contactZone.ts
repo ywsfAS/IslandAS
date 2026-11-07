@@ -18,6 +18,7 @@ import { PresentCube } from "../../models/contact/presentCube/presentCube";
 import { PresentRectangle } from "../../models/contact/presentRectangle/presentRectangle";
 import { Wreath } from "../../models/contact/wreath/wreath";
 import { Mailbox } from "../../models/contact/mailbox/mailbox";
+import { EMAIL_OPTIONS } from './default';
 import * as THREE from 'three';
 
 export class ContactZone extends Zone {
@@ -29,6 +30,14 @@ export class ContactZone extends Zone {
 
         const positionAt = (offsetX: number, offsetZ: number, offsetY?: number) => setPosition(state.center, offsetX, offsetZ, offsetY);
 
+        const sayHello = () => {
+            console.log("eeeee");
+            const { email, subject, body } = EMAIL_OPTIONS;
+            const sub = encodeURIComponent(subject);
+            const content = encodeURIComponent(body);
+
+            window.location.href = `mailto:${email}?subject=${sub}&body=${content}`;
+        };
         this._menus = [
             new IntroMenu(createIntroMenuOptions(
                 positionAt(5, 0, 7),
@@ -45,7 +54,7 @@ export class ContactZone extends Zone {
                 'fa-solid fa-envelope',
                 'Have something in mind?',
                 "Drop me a message and let's talk.",
-            )),
+            ), sayHello),
         ];
 
         this._models = [

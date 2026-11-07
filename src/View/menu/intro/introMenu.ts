@@ -2,8 +2,11 @@ import { Menu } from '../menu';
 import type { MenuOptions } from '../types';
 
 export class IntroMenu extends Menu {
-    public constructor(options: Partial<MenuOptions> = {}) {
+    private readonly _cbs: (() => void)[];
+    public constructor(options: Partial<MenuOptions> = {}, ...fn: (() => void)[]) {
         super(options);
+
+        this._cbs = fn;
     }
 
     protected override createContent(options: MenuOptions): HTMLElement {
@@ -48,4 +51,10 @@ export class IntroMenu extends Menu {
         panel.append(header, message);
         return panel;
     }
+    public override onIconClick = () => {
+        for (let fn of this._cbs) {
+            fn();
+        }
+    }
+
 }
