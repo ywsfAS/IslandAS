@@ -19,7 +19,7 @@ export class SignpostSingle extends Model {
     public override onLoad(): void {
         if (this._group.getObjectByName("signpost-labels")) return;
         this._group.add(createSignpostLabels([
-            { text: "WORKSHOP", y: 0.386, rotation: -Math.PI / 50},
+            { text: "INTRO", y: 0.386, rotation: -Math.PI / 50 },
         ]));
     }
 }

@@ -42,11 +42,11 @@ export class ZoneManager {
 
         this._models = [
             new Signpost({
-                position: new THREE.Vector3(20, 0, 0),
-                rotation: new THREE.Euler(0, 4 * Math.PI / 6, 0),
+                position: new THREE.Vector3(20, 0, 10),
+                rotation: new THREE.Euler(0, Math.PI, 0),
             }),
             new SignpostSingle({
-                position: new THREE.Vector3(-20, 0, 0),
+                position: new THREE.Vector3(-20, 0, 10),
                 rotation: new THREE.Euler(0, Math.PI / 2, 0),
             }),
         ];

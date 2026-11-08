@@ -61,6 +61,8 @@ export class Headphone extends Model {
         const sounds = [
             { path: '/audio/exploration-joy.mp3', title: 'Exploration' },
             { path: '/audio/screen-title.mp3', title: 'Screen title' },
+            { path: '/audio/discovery.wav', title: 'Discovery' },
+            { path: '/audio/secret.wav', title: 'Secret' },
         ];
         for (const sound of sounds) {
             const option = document.createElement('option');

@@ -10,9 +10,9 @@ export const DEFAULT_LINKEDIN_OPTIONS: LogoOptions = {
     layerSpacing: 0.015,
     interaction: {
         id: 'linkedin',
-        intro: 'Let’s connect and keep in touch about my work.',
-        message: 'Connect with me on LinkedIn.',
-        linkText: 'Visit LinkedIn',
-        url: 'https://www.linkedin.com/in/youssef-akhroub-329595378/',
+        intro: 'Ah yes, the professional social network.',
+        message: 'Where everyone is passionate, every small achievement is a major milestone. Anyway, here is my LinkedIn.',
+        linkText: 'Enter the cringe',
+        url: 'https://www.linkedin.com/in/youssef-akhroub-329595378/'
     },
 };

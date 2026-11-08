@@ -45,7 +45,7 @@ export class ContactZone extends Zone {
                 'Rest',
                 'fa-solid fa-chair',
                 'A moment to pause',
-                'Take a seat, enjoy the island, and stay awhile.',
+                "Take a seat, enjoy the island, and stay awhile. Or, you know... get out of my island. I'm coming for you!"
             )),
             new IntroMenu(createIntroMenuOptions(
                 positionAt(5, 7.5, 10),
@@ -53,7 +53,7 @@ export class ContactZone extends Zone {
                 'Send',
                 'fa-solid fa-envelope',
                 'Have something in mind?',
-                "Drop me a message and let's talk.",
+                "Got an idea, a question, or just feel like saying hello? Drop me a message! Life gets busy and I might take a little while to reply, but don't worry, your message won't be piped to /dev/null. Just kidding... probably. Send it anyway!"
             ), sayHello),
         ];
 

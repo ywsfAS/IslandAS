@@ -19,8 +19,8 @@ export class Signpost extends Model {
     public override onLoad(): void {
         if (this._group.getObjectByName("signpost-labels")) return;
         this._group.add(createSignpostLabels([
-            { text: "CONNECT", y: 0.27, rotation: -Math.PI / 20 },
-            { text: "INTRO", y: 0.386, rotation: -Math.PI / 56 },
+            { text: "WORKSHOP", y: 0.27, rotation: -Math.PI / 20 },
+            { text: "CONNECT", y: 0.386, rotation: -Math.PI / 56 },
         ]));
     }
 }

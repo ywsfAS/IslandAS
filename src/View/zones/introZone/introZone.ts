@@ -47,11 +47,11 @@ export class IntroZone extends Zone {
 
         this._menus = [new IntroMenu(createIntroMenuOptions(
             positionAt(0, 30, 12),
-            'About my journey',
-            'Journey',
+            'Driven by curiosity',
+            'My Journey',
             'fa-solid fa-book-open',
-            'A little about me',
-            "I'm a software engineering student passionate about building things, exploring technology, and turning ideas into real experiences.",
+            'Understanding beyond the surface',
+            "My interest in software started with a simple curiosity about computers and how the things we use every day actually work. Over time, that curiosity grew into a passion for programming, from building web applications to exploring system programming and low-level concepts. I enjoy understanding the internals behind the abstractions, experimenting with new ideas, building things, and constantly learning through books and hands-on exploration."
         )),
         new IntroMenu(createIntroMenuOptions(
             positionAt(20, 0, 10),
@@ -67,23 +67,48 @@ export class IntroZone extends Zone {
             'Skills',
             'fa-solid fa-toolbox',
             'Tools of the trade',
-            'C#, .NET, TypeScript, React, SQL, and more. These are some of the technologies I use to bring ideas to life.',
+            'From low-level programming to full-stack development, I enjoy working with C, C++, C#, .NET, TypeScript, React, and SQL. Each tool offers a different way to understand problems, build solutions, and turn ideas into working software.'
         )),
         new IntroMenu(createIntroMenuOptions(
             positionAt(0, 0, 8),
             'Beyond the code',
             'More',
-            'fa-solid fa-fire',
+            'fa-solid fa-compass',
             'Beyond the code',
-            'Curiosity drives me. I enjoy experimenting, learning how things work, and creating experiences that people can interact with.',
-        )),
+            'Curiosity drives me. I love experimenting, figuring out how things work, and building experiences people can interact with. The more I learn, the more I realize how much I don\'t know (-_-), and that keeps me going.'
 
+        )),
+        new IntroMenu(createIntroMenuOptions(
+            positionAt(0, -30, 6),
+            'A hidden secret',
+            'Treasure',
+            'fa-solid fa-gem',
+            'Keep it between us...',
+            "Were you really expecting to find treasure here? Hehehe. No gold, no diamonds... just a few things about me that you won't find in the usual (or Claude-vibecoded) portfolio."
+
+        )),
+        new IntroMenu(createIntroMenuOptions(
+            positionAt(20, -8, 6),
+            'A few pages of inspiration',
+            'Favorite Books',
+            'fa-solid fa-bookmark',
+            'Books worth exploring',
+            "Some books that have shaped the way I think about software and problem-solving: Domain-Driven Design by Eric Evans, The Art of Computer Programming by Donald Knuth, and Data Structures and Algorithm Analysis in C++ by Mark Allen Weiss. Always something new to learn between the pages."
+        )),
+        new IntroMenu(createIntroMenuOptions(
+            positionAt(-20, 0, 4),
+            'THE RESTING PLACE',
+            'Rest',
+            'fa-solid fa-bed',
+            'Where 7 hours of sleep across two days is considered a healthy lifestyle.',
+            "A wise man once said that 7 hours of sleep in 48 hours is perfectly normal. Probably an engineering professor. Between calculating A* by hand, listening to AI lectures that somehow have nothing to do with actual AI, and trying to understand how the teacher ended up teaching Computer Science... sleep becomes a luxury. Anyway, I'm sure this is fine."
+        ))
         ];
 
         this._models = [
             new Floor({ position: positionAt(0, 30) }),
             new TentCanvas({ position: positionAt(0, 30) }),
-            new BenchShort({ position: positionAt(0, 20), rotation: new THREE.Euler(0, Math.PI , 0) }),
+            new BenchShort({ position: positionAt(0, 20), rotation: new THREE.Euler(0, Math.PI, 0) }),
 
             new Bedroll({ position: positionAt(-20, 0, 10), rotation: new THREE.Euler(0, Math.PI, 0) }),
             new BedrollPacked({ position: positionAt(-20, 8) }),
