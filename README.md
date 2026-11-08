@@ -1,6 +1,6 @@
-# Tiny Island
+# IslandAS
 
-Tiny Island is a small interactive 3D world built with Three.js, TypeScript, and GLSL.
+IslandAS is a small interactive 3D world built with Three.js, TypeScript, and GLSL.
 
 This was my first time building a project with Three.js. I started with a simple idea and, along the way, learned a lot about creating a 3D scene, working with shaders, and bringing different pieces of an experience together. Every project teaches you something new, and this island is a snapshot of that journey.
 
