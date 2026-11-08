@@ -147,7 +147,9 @@ export abstract class Menu extends InteractiveCard<MenuOptions> {
         });
 
 
-        this._audio.play("/audio/click.mp3");
+        void this._audio.play("/audio/click.mp3").catch((error: unknown) => {
+            console.error("Failed to play menu hover sound:", error);
+        });
     }
     public onIconClick = (): void => {
     }

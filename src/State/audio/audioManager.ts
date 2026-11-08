@@ -1,159 +1,82 @@
+import { Howl, Howler } from "howler";
 import type { AudioControls } from "./types";
 
-
 export class AudioManager {
-    private readonly _context: AudioContext;
-    private readonly _gain: GainNode;
-
-    private readonly _buffers = new Map<string, AudioBuffer>();
-    private readonly _loading = new Map<string, Promise<AudioBuffer>>();
-
-    private readonly _sources = new Set<AudioBufferSourceNode>();
-
+    private readonly _sounds = new Map<string, Howl>();
     private _isDisposed = false;
 
-    constructor() {
-
-        this._context = new AudioContext();
-        this._gain = this._context.createGain();
-        this._gain.gain.value = 1.0;
-
-
-        this._gain.connect(this._context.destination);
-
-    }
     private ensureActive(): void {
         if (this._isDisposed) {
-            throw new Error("can't do this action the Audio Manager is already dispoed");
+            throw new Error("Cannot use the audio manager after it has been disposed.");
         }
     }
+
     public async resume(): Promise<void> {
         this.ensureActive();
-        if (this._context.state !== 'running') {
-            await this._context.resume();
+        const context = Howler.ctx;
+        if (context && context.state !== "running") {
+            await context.resume();
         }
     }
-    public async load(path: string): Promise<AudioBuffer> {
+
+    public async play(path: string, loop = false): Promise<AudioControls> {
         this.ensureActive();
-        const cachedBuffer = this._buffers.get(path);
-        if (cachedBuffer) {
-            return cachedBuffer;
-        }
-        const loadedBuffer = this._loading.get(path);
-        if (loadedBuffer) {
-            return loadedBuffer;
+        if (!path) {
+            throw new Error("An audio path is required.");
         }
 
-        const req = this.fetch(path);
-        this._loading.set(path, req);
-
-        try {
-            return await req;
-        } finally {
-            if (this._loading.get(path) === req) {
-                this._loading.delete(path);
-            }
+        const key = `${path}:${loop}`;
+        let sound = this._sounds.get(key);
+        if (!sound) {
+            sound = new Howl({ src: [path], loop, preload: true });
+            this._sounds.set(key, sound);
         }
 
-
-
-    }
-    public async fetch(path: string): Promise<AudioBuffer> {
-        const response = await fetch(path);
-        if (!response.ok) {
-            throw new Error(`Failed to fetch the file in path ${path}`);
+        if (sound.state() !== "loaded") {
+            await new Promise<void>((resolve, reject) => {
+                sound.once("load", () => resolve());
+                sound.once("loaderror", (_id, error) => {
+                    reject(new Error(`Failed to load audio "${path}": ${String(error)}`));
+                });
+            });
         }
-
-        const data = await response.arrayBuffer();
-        const buffer = await this._context.decodeAudioData(data);
 
         this.ensureActive();
-        this._buffers.set(path, buffer);
-
-        return buffer;
-
-
-    }
-
-    public async play(path: string, loop: boolean = false): Promise<AudioControls> {
-        this.ensureActive();
-        const buffer = await this.load(path);
-        const source = this._context.createBufferSource();
-        source.buffer = buffer;
-        source.loop = loop;
-
-        const localGain = this._context.createGain();
-
-
-        source.connect(localGain);
-        localGain.connect(this._gain);
-
-        this._sources.add(source);
-
-        source.addEventListener('ended', () => {
-            this._sources.delete(source);
-            source.disconnect();
-        }, { once: true });
-
-
-        source.start();
-
+        const id = sound.play();
         return {
-            setVolume: (volume: number) => this.setVolume(volume, localGain),
-            stop: () => source.stop(),
-        }
-
+            setVolume: volume => sound!.volume(this.normalizeVolume(volume), id),
+            stop: () => sound!.stop(id),
+        };
     }
+
     public stopAll(): void {
         this.ensureActive();
-        for (const source of this._sources) {
-            source.stop();
+        for (const sound of this._sounds.values()) {
+            sound.stop();
         }
     }
+
     public dispose(): void {
         if (this._isDisposed) {
             return;
         }
 
         this._isDisposed = true;
-
-        for (const source of this._sources) {
-            source.onended = null;
-
-            try {
-                source.stop();
-            } catch {
-                throw new Error("this source is already stopped");
-            }
-
-            source.disconnect();
+        for (const sound of this._sounds.values()) {
+            sound.unload();
         }
-
-        this._sources.clear();
-        this._buffers.clear();
-        this._loading.clear();
-
-        this._gain.disconnect();
-
-        void this._context.close();
+        this._sounds.clear();
     }
+
     public setMasterVolume(volume: number): void {
-        this.setVolume(volume, this._gain);
-    }
-    private setVolume(volume: number, gain: GainNode): void {
         this.ensureActive();
+        Howler.volume(this.normalizeVolume(volume));
+    }
 
+    private normalizeVolume(volume: number): number {
         if (!Number.isFinite(volume)) {
             throw new RangeError("Volume must be a finite number.");
         }
-
-        const normalized = Math.max(0, Math.min(1, volume));
-        gain.gain.setTargetAtTime(
-            normalized,
-            this._context.currentTime,
-            0.015,
-        );
+        return Math.max(0, Math.min(1, volume));
     }
-
-
 }

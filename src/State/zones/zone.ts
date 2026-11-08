@@ -43,7 +43,7 @@ export abstract class ZoneState {
         this._center = options.center ?? center;
         this._audioUrl = options.audioUrl ?? audioUrl;
 
-        //this.registerAudio();
+        this.registerAudio();
 
     }
     public blend(): number {
@@ -95,9 +95,13 @@ export abstract class ZoneState {
 
     };
     protected registerAudio(): void {
-        this._events.on('onApproachOnce', async () => {
-            this._currentAudioControls = await this._audio.play(this._audioUrl);
-        },)
+        this._events.on('onApproachOnce', () => {
+            this._audio.play(this._audioUrl).then(controls => {
+                this._currentAudioControls = controls;
+            }).catch((error: unknown) => {
+                console.error(`Failed to play zone audio: ${this._audioUrl}`, error);
+            });
+        });
     }
 
     public update(): void {

@@ -175,7 +175,11 @@ export abstract class Logo {
         for (const material of this._materials) {
             material.uniforms.uHover.value = hovered ? 1 : 0;
         }
-        this._audio.play("/audio/click.mp3");
+        if (hovered) {
+            void this._audio.play("/audio/click.mp3").catch((error: unknown) => {
+                console.error("Failed to play logo hover sound:", error);
+            });
+        }
     }
 
     protected onHover(_hovered: boolean): void { }
