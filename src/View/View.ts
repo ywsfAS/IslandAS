@@ -21,10 +21,7 @@ import { Fence } from './fences/fence';
 import { Bush } from './bush/bush';
 import { Tree } from './models/tree/tree';
 import { Cards } from './cards/cards';
-import { Github } from './logos/github/github';
-import { Linkedin } from './logos/linkedin/linkedin';
-import { TypeScriptLogo } from './logos/typescript/typescript';
-import type { Logo } from './logos/logo';
+import { Ribbon } from './ribbon/ribbon';
 export class View {
 
     private static instance: View;
@@ -52,6 +49,7 @@ export class View {
     private readonly _fences: Fence[];
     private readonly _bushes: Bush;
     private readonly _cards: Cards;
+    private readonly _ribbons: Ribbon;
 
 
     public static getInstance(): View {
@@ -84,6 +82,7 @@ export class View {
         const state = State.getInstance();
         this._fences = state.fences.map((fenceState) => new Fence(fenceState));
         this._bushes = new Bush();
+        this._ribbons = new Ribbon();
         this._tree = new Tree();
 
 
@@ -144,6 +143,7 @@ export class View {
         this._raycaster.update();
         this._zoneManager.update();
         this._cards.update();
+        this._ribbons.update();
         this._cssRenderer.update();
         this._renderer.update();
     }
