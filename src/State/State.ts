@@ -38,6 +38,9 @@ export class State {
     private readonly _bushes: BushesState;
     private readonly _rocks: RocksState;
     private _mainAudioControls!: AudioControls;
+    private _mainAudioPath = "/audio/exploration-joy.mp3";
+    private _mainAudioVolume = 1;
+    private _zoneAudioVolume = 1;
 
     public static getInstance(): State {
         return State.instance ?? new State();
@@ -75,8 +78,7 @@ export class State {
     private registerMainSound(button: HTMLButtonElement) {
         button.addEventListener("click", async () => {
             try {
-                await this._audioManager.resume();
-                this._mainAudioControls = await this.audioManager.play("/audio/exploration-joy.mp3", true);
+                await this.playMainAudio(this._mainAudioPath);
 
                 button.remove();
             } catch (error) {
@@ -127,6 +129,36 @@ export class State {
     }
     get mainAudioControls() {
         return this._mainAudioControls;
+    }
+    get mainAudioPath(): string {
+        return this._mainAudioPath;
+    }
+    get mainAudioVolume(): number {
+        return this._mainAudioVolume;
+    }
+    get zoneAudioVolume(): number {
+        return this._zoneAudioVolume;
+    }
+    public async playMainAudio(path: string): Promise<void> {
+        await this._audioManager.resume();
+        const controls = await this._audioManager.play(path, true);
+        controls.setVolume(this._mainAudioVolume);
+        this._mainAudioControls?.stop();
+        this._mainAudioControls = controls;
+        this._mainAudioPath = path;
+    }
+    public setMainAudioVolume(volume: number): void {
+        this._mainAudioVolume = this.normalizeAudioVolume(volume);
+        this._mainAudioControls?.setVolume(this._mainAudioVolume);
+    }
+    public setZoneAudioVolume(volume: number): void {
+        this._zoneAudioVolume = this.normalizeAudioVolume(volume);
+    }
+    private normalizeAudioVolume(volume: number): number {
+        if (!Number.isFinite(volume)) {
+            throw new RangeError("Volume must be a finite number.");
+        }
+        return Math.max(0, Math.min(1, volume));
     }
     get trees() {
         return this._trees;

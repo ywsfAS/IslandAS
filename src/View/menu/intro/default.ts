@@ -9,6 +9,7 @@ export const createIntroMenuOptions = (
     iconClassName: string,
     contentTitle: string,
     contentMessage: string,
+    content?: HTMLElement
 ): MenuOptions => ({
     ...DEFAULT_MENU_OPTIONS,
     position,
@@ -21,4 +22,5 @@ export const createIntroMenuOptions = (
     hideDelayMs: 300,
     contentTitle,
     contentMessage,
+    content
 });

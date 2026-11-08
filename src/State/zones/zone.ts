@@ -74,30 +74,28 @@ export abstract class ZoneState {
     protected onEnter(): void {
     };
     protected onApproach(): void {
-        const mainControls = State.getInstance().mainAudioControls;
+        const state = State.getInstance();
+        const mainControls = state.mainAudioControls;
 
         if (!this._currentAudioControls) return;
-        // the curren sound gets louder
-        const currentVol = (2 * this._blend - 1);
+        const currentVol = this._blend * state.zoneAudioVolume;
         this._currentAudioControls.setVolume(currentVol);
 
         if (!mainControls) return;
-        // the main sound fade using blend value
-        const mainVol = ((1 - this._blend) / 0.5) - 1;
+        const mainVol = (1 - this._blend) * state.mainAudioVolume;
         mainControls.setVolume(mainVol);
     }
     protected onExit(): void {
-        const mainControls = State.getInstance().mainAudioControls;
-        if (!mainControls) return;
-        mainControls.setVolume(1);
-        this._currentAudioControls.stop();
-
+        const state = State.getInstance();
+        state.mainAudioControls?.setVolume(state.mainAudioVolume);
+        this._currentAudioControls?.stop();
 
     };
     protected registerAudio(): void {
         this._events.on('onApproachOnce', () => {
             this._audio.play(this._audioUrl).then(controls => {
                 this._currentAudioControls = controls;
+                controls.setVolume(this._blend * State.getInstance().zoneAudioVolume);
             }).catch((error: unknown) => {
                 console.error(`Failed to play zone audio: ${this._audioUrl}`, error);
             });
@@ -142,6 +140,10 @@ export abstract class ZoneState {
             this._isApproaching = false;
         }
 
+        if (this._isInside) {
+            this._currentAudioControls?.setVolume(State.getInstance().zoneAudioVolume);
+        }
+
     };
 
-}
+};

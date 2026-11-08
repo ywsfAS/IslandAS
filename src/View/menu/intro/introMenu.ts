@@ -3,6 +3,7 @@ import type { MenuOptions } from '../types';
 
 export class IntroMenu extends Menu {
     private readonly _cbs: (() => void)[];
+
     public constructor(options: Partial<MenuOptions> = {}, ...fn: (() => void)[]) {
         super(options);
 
@@ -49,6 +50,10 @@ export class IntroMenu extends Menu {
         });
 
         panel.append(header, message);
+        if (options.content) {
+            console.log("here");
+            panel.append(options.content);
+        };
         return panel;
     }
     public override onIconClick = () => {
